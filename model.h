@@ -42,6 +42,7 @@ public:
 		MODEL_FLAG,
 		MODEL_NAILS,
 		MODEL_GEAR,
+		MODEL_BUTTON,
 
 		MODEL_MAX
 	};

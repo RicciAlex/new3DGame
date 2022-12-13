@@ -26,9 +26,9 @@ std::vector <LPDIRECT3DTEXTURE9>     CModel::m_vModelTexture[CModel::MODEL_MAX];
 
 //モデルのXファイルの相対パス
 char*			CModel::m_pModelPass[MODEL_MAX] =
-{																		
-	{ "data\\MODELS\\NeedleBall\\NeedleBall.x" },		//MODEL_SPIKE_BALL,
-	{ "data\\MODELS\\PlainSphere.x" },		//MODEL_PLAIN_SPHERE,
+{																				
+	{ "data\\MODELS\\NeedleBall\\NeedleBall.x" },				//MODEL_SPIKE_BALL,
+	{ "data\\MODELS\\PlainSphere.x" },							//MODEL_PLAIN_SPHERE,
 
 	{ "data\\MODELS\\Player\\PlayerHead.x" },					//MODEL_PLAYER_HEAD,
 	{ "data\\MODELS\\Player\\PlayerBody.x" },					//MODEL_PLAYER_BODY,
@@ -41,6 +41,8 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\GoalFlag.x" },								//MODEL_FLAG,
 	{ "data\\MODELS\\8InchNails.x" },							//MODEL_NAILS,
 	{ "data\\MODELS\\Gear.x" },									//MODEL_GEAR,
+	{ "data\\MODELS\\Button.x" },								//MODEL_BUTTON,
+
 	
 };
 

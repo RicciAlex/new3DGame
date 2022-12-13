@@ -85,7 +85,8 @@ HRESULT CFirstStage::Init(void)
 
 	CMeshCube::Create(D3DXVECTOR3(-400.0f, -125.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 10.0f, 50.0f));
 	CBoxHitbox::Create(D3DXVECTOR3(-400.0f, -135.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 20.0f, 50.0f), CHitbox::TYPE_NEUTRAL, nullptr);
-
+	
+	
 	return S_OK;
 }
 
