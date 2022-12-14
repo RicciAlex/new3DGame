@@ -304,6 +304,15 @@ void CHitbox::SetOverlapResponse(HITBOX_TYPE type, OVERLAP_RESPONSE_TYPE reactio
 	}
 }
 
+//‘S•”‚ÌÕ“Ë‚ğ–³‹‚·‚é‚æ‚¤‚É‚Ìİ’èˆ—
+void CHitbox::IgnoreAllCollision(void)
+{
+	for(int nCnt = 0; nCnt < RESPONSE_MAX; nCnt++)
+	{
+		m_response[nCnt] = RESPONSE_IGNORE;
+	}
+}
+
 
 
 

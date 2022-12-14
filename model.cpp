@@ -42,6 +42,10 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\8InchNails.x" },							//MODEL_NAILS,
 	{ "data\\MODELS\\Gear.x" },									//MODEL_GEAR,
 	{ "data\\MODELS\\Button.x" },								//MODEL_BUTTON,
+	{ "data\\MODELS\\TrapPillar.x" },							//MODEL_TRAP_PILLAR,
+	{ "data\\MODELS\\Shuriken.x" },								//MODEL_SHURIKEN,
+
+	{ "data\\MODELS\\GoldStar.x" },								//MODEL_ITEM_STAR,
 
 	
 };
@@ -452,11 +456,25 @@ void CModel::StopRotating(void)
 //カーラーの設定処理
 void CModel::SetModelColor(const int nNumMat, const D3DXCOLOR col)
 {
-	ModelColor mCol = {};
-	mCol.nMatNumber = nNumMat;
-	mCol.col = col;
+	if (nNumMat >= (int)m_vCol.size())
+	{
+		ModelColor mCol = {};
+		mCol.nMatNumber = nNumMat;
+		mCol.col = col;
 
-	m_vCol.push_back(mCol);
+		m_vCol.push_back(mCol);
+	}
+	else
+	{
+		ModelColor mCol = {};
+		mCol.nMatNumber = nNumMat;
+		mCol.col = col;
+
+		m_vCol.erase(m_vCol.begin() + nNumMat);
+		m_vCol.emplace(m_vCol.begin() + nNumMat, mCol);
+	}
+
+	m_vCol.shrink_to_fit();
 }
 
 //影が描画されているかどうかの設定処理
@@ -469,6 +487,26 @@ void CModel::SetShadowDraw(const bool bDraw)
 void CModel::SetShadowHeight(const float fHeight)
 {
 	m_fShadowHeight = fHeight;
+}
+
+const float CModel::GetShadowHeight(void)
+{
+	return m_fShadowHeight;
+}
+
+const float CModel::GetScale(void)
+{
+	return m_fScale;
+}
+
+const bool CModel::GetShadowDraw(void)
+{
+	return m_bShadow;
+}
+
+D3DXMATRIX * CModel::GetWorldMatrix(void)
+{
+	return &m_mtxWorld;
 }
 
 
@@ -573,6 +611,7 @@ CModel* CModel::Create(ModelType type, D3DXVECTOR3 pos)
 	pModel->m_pBuffMat = m_pBuffMatAll[type];			//マテリアルへのポインタの取得
 	pModel->m_nNumMat = m_nNumMatAll[type];				//マテリアル数の取得
 	pModel->m_type = type;								//種類の設定
+	pModel->m_fShadowHeight = pos.y + 0.1f;					//影の位置のY座標の設定
 
 	return pModel;										//生成したインスタンスを返す
 }
@@ -594,6 +633,7 @@ CModel* CModel::Create(ModelType type, D3DXVECTOR3 pos, const int nPriority)
 	pModel->m_pBuffMat = m_pBuffMatAll[type];			//マテリアルへのポインタの取得
 	pModel->m_nNumMat = m_nNumMatAll[type];				//マテリアル数の取得
 	pModel->m_type = type;								//種類の設定
+	pModel->m_fShadowHeight = pos.y;					//影の位置のY座標の設定
 
 	return pModel;										//生成したインスタンスを返す
 }

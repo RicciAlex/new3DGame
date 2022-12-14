@@ -288,7 +288,8 @@ void CMeshfield::SetTextureTiling(D3DXVECTOR2 TileSize)
 	for (int nCnt = 0; nCnt < m_nVertexNumber; nCnt++)
 	{
 		//テクスチャ座標の設定
-		pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (TileSize.x * (nCnt % m_nColumnVertex)), 0.0f + (TileSize.y * (nCnt / m_nColumnVertex)));
+		//pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (TileSize.x * (nCnt % m_nColumnVertex)), 0.0f + (TileSize.y * (nCnt / m_nColumnVertex)));
+		pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (TileSize.x * (nCnt % m_nLineVertex)), 0.0f + (TileSize.y * (nCnt / m_nLineVertex)));
 	}
 
 	//頂点バッファのアンロック
@@ -308,7 +309,8 @@ void CMeshfield::SetTextureTiling(float fTileSize)
 	for (int nCnt = 0; nCnt < m_nVertexNumber; nCnt++)
 	{
 		//テクスチャ座標の設定
-		pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (fTileSize * (nCnt % m_nColumnVertex)), 0.0f + (fTileSize * (nCnt / m_nColumnVertex)));
+		//pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (fTileSize * (nCnt % m_nColumnVertex)), 0.0f + (fTileSize * (nCnt / m_nColumnVertex)));
+		pVtx[nCnt].tex = D3DXVECTOR2(0.0f + (fTileSize * (nCnt % m_nLineVertex)), 0.0f + (fTileSize * (nCnt / m_nLineVertex)));
 	}
 
 	//頂点バッファのアンロック

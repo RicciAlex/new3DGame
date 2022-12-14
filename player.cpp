@@ -276,46 +276,7 @@ void CPlayer::Update(void)
 			m_move.y = 0.0f;
 		}
 
-		CHitbox::INTERACTION_EFFECT effect = m_pHitbox->GetEffect();
-
-		switch (effect)
-		{
-		case CHitbox::EFFECT_DAMAGE:
-			break;
-
-		case CHitbox::EFFECT_LAUNCH:
-
-			break;
-
-		case CHitbox::EFFECT_PUSH:
-			break;
-
-		case CHitbox::EFFECT_BOUNCE:
-
-		{
-			D3DXVECTOR3 dir = m_pHitbox->GetDirection();
-
-			m_move.x = dir.x * 20.0f;
-			m_move.y = 15.0f;
-			m_move.z = dir.z * 20.0f;
-
-			if (m_pHitbox->GetScore() < 0)
-			{
-				m_nInvincibilityCnt = 90;
-				m_pHitbox->SetInvincibility(true);
-			}
-
-			m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
-		}
-
-			break;
-
-		case CHitbox::EFFECT_JUMP:
-			break;
-
-		default:
-			break;
-		}
+		HitboxEffectUpdate();
 	}
 
 	if (m_pAnimator != nullptr)
@@ -475,6 +436,8 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
 	if (pModel->m_pHitbox)
 	{
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_OBSTACLE, CHitbox::RESPONSE_OVERLAP);
+		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_BUTTON, CHitbox::RESPONSE_OVERLAP);
+		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_VANISHING, CHitbox::RESPONSE_OVERLAP);
 	}
 
 	return pModel;					//生成したインスタンスを返す
@@ -721,4 +684,65 @@ void CPlayer::RespawnPlayer(void)
 
 	m_nInvincibilityCnt = 90;
 	m_pHitbox->SetInvincibility(true);
+}
+
+void CPlayer::HitboxEffectUpdate(void)
+{
+	CHitbox::INTERACTION_EFFECT effect = m_pHitbox->GetEffect();
+
+	switch (effect)
+	{
+	case CHitbox::EFFECT_DAMAGE:
+
+	{
+		D3DXVECTOR3 dir = m_pHitbox->GetDirection();
+
+		m_move.x = 0.0f;
+		m_move.y = 15.0f;
+		m_move.z = 0.0f;
+
+		if (m_pHitbox->GetScore() < 0)
+		{
+			m_nInvincibilityCnt = 90;
+			m_pHitbox->SetInvincibility(true);
+		}
+
+		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
+	}
+
+	break;
+
+	case CHitbox::EFFECT_LAUNCH:
+
+		break;
+
+	case CHitbox::EFFECT_PUSH:
+		break;
+
+	case CHitbox::EFFECT_BOUNCE:
+
+	{
+		D3DXVECTOR3 dir = m_pHitbox->GetDirection();
+
+		m_move.x = dir.x * 20.0f;
+		m_move.y = 15.0f;
+		m_move.z = dir.z * 20.0f;
+
+		if (m_pHitbox->GetScore() < 0)
+		{
+			m_nInvincibilityCnt = 90;
+			m_pHitbox->SetInvincibility(true);
+		}
+
+		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
+	}
+
+	break;
+
+	case CHitbox::EFFECT_JUMP:
+		break;
+
+	default:
+		break;
+	}
 }

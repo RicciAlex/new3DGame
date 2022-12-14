@@ -14,6 +14,7 @@
 #include "application.h"
 #include <stdio.h>
 #include "debugProc.h"
+#include "membraneLighting.h"
 //#include "fade.h"
 
 //=============================================================================
@@ -24,7 +25,9 @@ CRenderer::CRenderer()
 	//メンバー変数をクリアする
 	m_pD3D = nullptr;						
 	m_pD3DDevice = nullptr;		
-	m_pFont = nullptr;			
+	m_pFont = nullptr;		
+
+	m_pMembrane = nullptr;
 }
 
 //=============================================================================
@@ -100,6 +103,24 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
+	//フォグの有効設定
+	m_pD3DDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
+
+	//フォグカラーの設定
+	m_pD3DDevice->SetRenderState(D3DRS_FOGCOLOR, ColorWhite);
+
+	//フォグモード(範囲指定: D3DFOG_LINEAR, 密度指定: D3DFOG_EXP)
+	m_pD3DDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);
+
+	//範囲指定
+	float fFogStart = 1500.0f, fFogEnd = 3600.0f;
+	m_pD3DDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&fFogStart));
+	m_pD3DDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&fFogEnd));
+
+	m_pMembrane = new CMembraneShading(m_pD3DDevice);
+
+	m_pMembrane->Load();
+
 
 #ifdef _DEBUG
 	// デバッグ情報表示用フォントの生成
@@ -137,6 +158,14 @@ void CRenderer::Uninit()
 	{
 		m_pD3D->Release();
 		m_pD3D = nullptr;
+	}
+
+	//シェーダーのエフェクトの破棄処理
+	if (m_pMembrane)
+	{
+		m_pMembrane->Invalidate();
+		delete m_pMembrane;
+		m_pMembrane = nullptr;
 	}
 }
 
@@ -195,6 +224,12 @@ void CRenderer::Draw()
 LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 {
 	return m_pD3DDevice;
+}
+
+//シェーダーのエフェクトの取得処理
+CMembraneShading * CRenderer::GetMembraneEffect(void)
+{
+	return m_pMembrane;
 }
 
 #ifdef _DEBUG

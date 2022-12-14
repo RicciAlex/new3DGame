@@ -158,6 +158,7 @@
     <ClCompile Include="bg.cpp" />
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="BoxHitbox.cpp" />
+    <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CylinderHitbox.cpp" />
     <ClCompile Include="debugProc.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="light.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="membraneLighting.cpp" />
     <ClCompile Include="meshCube.cpp" />
     <ClCompile Include="meshfield.cpp" />
     <ClCompile Include="mode.cpp" />
@@ -187,8 +189,11 @@
     <ClCompile Include="pointLight.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="results.cpp" />
+    <ClCompile Include="shuriken.cpp" />
+    <ClCompile Include="ShurikenTrap.cpp" />
     <ClCompile Include="silhouette.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="star.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="UIString.cpp" />
   </ItemGroup>
@@ -199,6 +204,7 @@
     <ClInclude Include="bg.h" />
     <ClInclude Include="billboard.h" />
     <ClInclude Include="BoxHitbox.h" />
+    <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CylinderHitbox.h" />
     <ClInclude Include="debugProc.h" />
@@ -215,6 +221,7 @@
     <ClInclude Include="light.h" />
     <ClInclude Include="line.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="membraneLighting.h" />
     <ClInclude Include="meshCube.h" />
     <ClInclude Include="meshfield.h" />
     <ClInclude Include="mode.h" />
@@ -228,10 +235,21 @@
     <ClInclude Include="pointLight.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="results.h" />
+    <ClInclude Include="shuriken.h" />
+    <ClInclude Include="ShurikenTrap.h" />
     <ClInclude Include="silhouette.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="star.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="UIString.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="MembraneShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">2.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

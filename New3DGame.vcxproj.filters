@@ -31,6 +31,12 @@
     <Filter Include="ソース ファイル\Hitbox">
       <UniqueIdentifier>{62ee410e-b65f-4021-b697-54fe61f54472}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Item">
+      <UniqueIdentifier>{ff9ab418-c938-48cb-954b-8a76b2f70da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Item">
+      <UniqueIdentifier>{3776cd1c-fb77-47c2-b3c8-2661456f971b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,12 +141,6 @@
     <ClCompile Include="line.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BoxHitbox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="CylinderHitbox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="meshCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -148,6 +148,27 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="nail.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="shuriken.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShurikenTrap.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxHitbox.cpp">
+      <Filter>ソース ファイル\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="CylinderHitbox.cpp">
+      <Filter>ソース ファイル\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="star.cpp">
+      <Filter>ソース ファイル\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="membraneLighting.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,5 +290,23 @@
     <ClInclude Include="nail.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="shuriken.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ShurikenTrap.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="star.h">
+      <Filter>ヘッダー ファイル\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="membraneLighting.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="MembraneShader.hlsl" />
   </ItemGroup>
 </Project>

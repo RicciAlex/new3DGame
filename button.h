@@ -35,6 +35,9 @@ public:
 
 private:
 
+	D3DXVECTOR3 m_originalPos;			//元の位置
+	D3DXCOLOR m_normalCol;				//普通の色
+	D3DXCOLOR m_triggeredCol;			//押された後の色
 	bool m_bTriggered;					//押されたかどうか
 		
 	CCylinderHitbox* m_pHitbox;			//ヒットボックス

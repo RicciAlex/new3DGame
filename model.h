@@ -43,6 +43,10 @@ public:
 		MODEL_NAILS,
 		MODEL_GEAR,
 		MODEL_BUTTON,
+		MODEL_TRAP_PILLAR,
+		MODEL_SHURIKEN,
+
+		MODEL_ITEM_STAR,
 
 		MODEL_MAX
 	};
@@ -62,9 +66,8 @@ public:
 	void SetRot(const D3DXVECTOR3 ros);													//向きの設定処理
 	const D3DXVECTOR3 GetRot(void);														//向きの取得処理
 
-	void SetScale(const float scale);
+	void SetScale(const float scale);													//拡大率の設定処理
 
-	//const D3DXVECTOR2 GetSize(void) override;											//サイズの取得処理
 	void SetModel(const ModelType type);												//モデルの設定処理
 
 	void StartRotation(const D3DXVECTOR3 frameRot);										//回転開始処理
@@ -73,6 +76,11 @@ public:
 	void SetModelColor(const int nNumMat, const D3DXCOLOR col);							//モデルの色の設定処理
 	void SetShadowDraw(const bool bDraw);												//影の描画フラグの設定処理
 	void SetShadowHeight(const float fHeight);											//影の高さの設定処理
+
+	const float GetShadowHeight(void);													//影の高さの取得処理
+	const float GetScale(void);															//拡大率の取得処理
+	const bool GetShadowDraw(void);														//影を描画するかどうかの取得処理
+	D3DXMATRIX* GetWorldMatrix(void);													//ワールドマトリックスの取得処理
 
 	static void GetModel(ModelType type, LPD3DXMESH* pMesh, LPD3DXBUFFER* pBuffMat, DWORD* numMat);		//モデルのメッシュ情報の取得処理
 	static void GetTextures(std::vector <LPDIRECT3DTEXTURE9>& vTex, CModel::ModelType type);			//マテリアルのテクスチャの取得処理

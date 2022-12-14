@@ -93,7 +93,7 @@ void CCylinderHitbox::Update(void)
 					if (PointBoxHit(pHbx->data()[nCnt]) != CHitbox::NO_COLLISION)
 					{//“–‚½‚Á‚½ê‡
 
-						if (!GetInvincibility())
+						if (pHbx->data()[nCnt]->GetType() != TYPE_OBSTACLE || !GetInvincibility())
 						{//–³“Gó‘Ô‚Å‚Í‚È‚©‚Á‚½‚ç
 
 							if (GetType() == TYPE_PLAYER && (pHbx->data()[nCnt]->GetType() == TYPE_VANISHING || pHbx->data()[nCnt]->GetType() == TYPE_OBSTACLE))
@@ -157,7 +157,7 @@ void CCylinderHitbox::Update(void)
 					if (CylinderCylinderHit(pHbx->data()[nCnt]) != CHitbox::NO_COLLISION)
 					{//“–‚½‚Á‚½ê‡
 
-						if (!GetInvincibility())
+						if (pHbx->data()[nCnt]->GetType() != TYPE_OBSTACLE || !GetInvincibility())
 						{//–³“Gó‘Ô‚Å‚Í‚È‚©‚Á‚½‚ç
 
 							pHbx->data()[nCnt]->SetCollisionState(true);		//“–‚½‚Á‚½ó‘Ô‚É‚·‚é

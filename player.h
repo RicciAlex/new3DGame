@@ -89,6 +89,7 @@ public:
 private:
 
 	void RespawnPlayer(void);
+	void HitboxEffectUpdate(void);
 
 	static D3DXCOLOR m_playerColor[PLAYER_COLOR_MAX];					//プレイヤーの色
 	static const float m_MaxWalkingSpeed;								//最大の歩くスピード

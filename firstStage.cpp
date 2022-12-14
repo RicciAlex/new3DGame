@@ -18,6 +18,9 @@
 #include "nail.h"
 #include "BoxHitbox.h"
 #include "meshCube.h"
+#include "button.h"
+#include "ShurikenTrap.h"
+#include "star.h"
 
 //コンストラクタ
 CFirstStage::CFirstStage()
@@ -55,6 +58,9 @@ HRESULT CFirstStage::Init(void)
 		return -1;
 	}
 
+	pField->SetTexture(CObject::TEXTURE_BLOCK);
+	pField->SetTextureTiling(D3DXVECTOR2(0.3f, 0.35f));
+
 	CGoal* pGoal = CGoal::Create(D3DXVECTOR3(0.0f, -200.0f, 3600.0f));
 
 	if (!pGoal)
@@ -67,7 +73,6 @@ HRESULT CFirstStage::Init(void)
 	if (pBg)
 	{
 		pBg->SetBg(Vec3Null, ColorCyan);
-		pBg->SetBg(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f), CObject::TEXTURE_FOG);
 	}
 
 	CModel* pModel = nullptr;
@@ -86,7 +91,18 @@ HRESULT CFirstStage::Init(void)
 	CMeshCube::Create(D3DXVECTOR3(-400.0f, -125.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 10.0f, 50.0f));
 	CBoxHitbox::Create(D3DXVECTOR3(-400.0f, -135.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 20.0f, 50.0f), CHitbox::TYPE_NEUTRAL, nullptr);
 	
-	
+	CButton::Create(D3DXVECTOR3(-100.0f, -200.0f, 100.0f));
+	CButton::Create(D3DXVECTOR3(100.0f, -200.0f, 100.0f), ColorCyan, ColorYellow);
+
+	pModel = CModel::Create(CModel::MODEL_TRAP_PILLAR, D3DXVECTOR3(-250.0f, -200.0f, 100.0f));
+	pModel->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+	pModel->SetScale(1.5f);
+
+	CShurikenTrap::Create(D3DXVECTOR3(0.0f, -200.0f, 500.0f), -D3DX_PI * 0.75f, 200.0f);
+
+	CGoldStar* pStar = CGoldStar::Create(D3DXVECTOR3(100.0f, -130.0f, 0.0f));
+	pStar->SetShadowHeight(-199.9f);
+
 	return S_OK;
 }
 
