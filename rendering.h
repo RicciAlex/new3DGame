@@ -16,6 +16,7 @@
 // 前方宣言
 //=============================================================================
 class CMembraneShading;
+class CPhongShading;
 
 //=============================================================================
 // レンダリングクラス
@@ -32,6 +33,7 @@ public:
 													
 	LPDIRECT3DDEVICE9 GetDevice(void);				//デバイスの取得処理
 	CMembraneShading* GetMembraneEffect(void);		//シェーダーのエフェクトの取得処理
+	CPhongShading* GetPhongEffect(void);
 
 private:
 	void DrawFPS(void);								//FPSの描画処理
@@ -43,6 +45,7 @@ private:
 	LPD3DXFONT m_pFont;								//フォント
 
 	CMembraneShading* m_pMembrane;					//シェーダーのエフェクトへのポインタ
+	CPhongShading* m_pPhong;
 };
 
 #endif // !RENDERING_H

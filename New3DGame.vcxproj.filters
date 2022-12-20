@@ -171,6 +171,18 @@
     <ClCompile Include="membraneLighting.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="phongShading.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="movingCube.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="triggerablePlatform.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="spikeTrap.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -275,15 +287,6 @@
     <ClInclude Include="line.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BoxHitbox.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CylinderHitbox.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="meshCube.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="bg.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -305,8 +308,30 @@
     <ClInclude Include="membraneLighting.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="phongShading.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxHitbox.h">
+      <Filter>ヘッダー ファイル\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="CylinderHitbox.h">
+      <Filter>ヘッダー ファイル\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="meshCube.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="movingCube.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="triggerablePlatform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="spikeTrap.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="MembraneShader.hlsl" />
+    <FxCompile Include="phongShading.hlsl" />
   </ItemGroup>
 </Project>

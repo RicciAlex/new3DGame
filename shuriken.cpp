@@ -10,6 +10,11 @@
 //=============================================================================
 #include "shuriken.h"
 #include "BoxHitbox.h"
+#include "application.h"
+#include "rendering.h"
+#include "camera.h"
+#include "directionalLight.h"
+#include "phongShading.h"
 
 //コンストラクタ
 CShuriken::CShuriken()
@@ -77,6 +82,46 @@ void CShuriken::Update(void)
 	if (m_nLife <= 0)
 	{
 		Release();
+	}
+}
+
+void CShuriken::Draw(void)
+{
+	CPhongShading* pPhong = CApplication::GetRenderer()->GetPhongEffect();
+
+	if (pPhong)
+	{
+		D3DXVECTOR3 posV = CApplication::GetCamera()->GetPos();		//視点の取得
+
+																	//視点の位置をVector4に変換する
+		D3DXVECTOR4 cameraPos = {};
+
+		cameraPos.x = posV.x;
+		cameraPos.y = posV.y;
+		cameraPos.z = posV.z;
+		cameraPos.w = 1.0f;
+
+		//位置を取得してから、Vector4に変換して、正規化する
+		D3DXVECTOR3 l = CDirectionalLight::GetPrincipalLightDir();
+		D3DXVec3Normalize(&l, &l);
+		D3DXVECTOR4 light = D3DXVECTOR4(posV.x - l.x, posV.y - l.y, posV.z - l.z, 0.0f);
+		D3DXVec3Normalize((D3DXVECTOR3*)&light, (D3DXVECTOR3*)&light);
+
+		pPhong->Begin();											//シェーダーエフェクトの開始処理
+		pPhong->SetAmbient(0.50f);									//環境光の設定
+		pPhong->SetSpecular(40.0f);									//スペキュラーの範囲の設定
+		pPhong->SetSpecularPower(0.75f);							//スペキュラーの強度の設定
+		pPhong->SetMatrix(GetWorldMatrix(), &cameraPos, &light);	//ワールドマトリックスの設定
+		pPhong->BeginPass();										//パスの開始
+	}
+
+	//基本クラスの描画処理
+	CModel::Draw();
+
+	if (pPhong)
+	{
+		pPhong->EndPass();		//パスの終了処理
+		pPhong->End();			//シェーダーエフェクトの終了処理
 	}
 }
 

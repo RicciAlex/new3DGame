@@ -19,6 +19,7 @@ CButton::CButton()
 	m_normalCol = ColorNull;
 	m_triggeredCol = ColorNull;
 	m_bTriggered = false;
+	m_bOnce = false;
 	m_pHitbox = nullptr;
 }
 
@@ -32,15 +33,18 @@ CButton::~CButton()
 //初期化処理
 HRESULT CButton::Init(void)
 {
+	//基本クラスの初期化処理
 	if (FAILED(CModel::Init()))
 	{
 		return -1;
 	}
 
+	//メンバー変数を初期化する
 	m_originalPos = Vec3Null;
 	m_normalCol = ColorRed;
 	m_triggeredCol = ColorGreen;
 	m_bTriggered = false;
+	m_bOnce = false;
 	m_pHitbox = nullptr;
 
 	return S_OK;
@@ -49,33 +53,64 @@ HRESULT CButton::Init(void)
 //終了処理
 void CButton::Uninit(void)
 {
+	//ヒットボックスの破棄
 	if (m_pHitbox)
-	{
-		m_pHitbox->Release();
-		m_pHitbox = false;
+	{//nullチェック
+		m_pHitbox->Release();		//メモリを解放する
+		m_pHitbox = false;			//ポインタをnullにする
 	}
 }
 
 //更新処理
 void CButton::Update(void)
 {
+	//ヒットボックスの更新処理
 	if (m_pHitbox)
-	{
-		if (m_pHitbox->GetCollisionState())
-		{
-			m_pHitbox->SetCollisionState(false);
+	{//nullチェック
 
-			m_bTriggered = true;
-			SetModelColor(0, m_triggeredCol);
-			SetPos(m_originalPos + D3DXVECTOR3(0.0f, -9.0f, 0.0f));
+		if (!m_bOnce)
+		{
+			if (m_pHitbox->GetCollisionState())
+			{//何かと当たったら
+
+				m_pHitbox->SetCollisionState(false);			//当っていない状態に戻す
+
+				m_bTriggered = true;				//押された状態にする
+				SetModelColor(0, m_triggeredCol);	//色を変更する
+				SetPos(m_originalPos + D3DXVECTOR3(0.0f, -9.0f, 0.0f));			//位置を更新する
+			}
+			else
+			{//当っていない状態だったら
+
+				m_bTriggered = false;				//押されていない状態に戻す
+				SetModelColor(0, m_normalCol);		//色を変更する
+				SetPos(m_originalPos);				//位置を更新する
+			}
 		}
 		else
-		{
-			m_bTriggered = false;
-			SetModelColor(0, m_normalCol);
-			SetPos(m_originalPos);
+		{//一回だけ押すことができたら
+
+			if (!m_bTriggered)
+			{//まだ押されていない状態だったら
+
+				if (m_pHitbox->GetCollisionState())
+				{//何かと当たったら
+
+					m_pHitbox->SetCollisionState(false);			//当っていない状態に戻す
+
+					m_bTriggered = true;				//押された状態にする
+					SetModelColor(0, m_triggeredCol);	//色を変更する
+					SetPos(m_originalPos + D3DXVECTOR3(0.0f, -9.0f, 0.0f));			//位置を更新する
+				}
+			}
 		}
 	}
+}
+
+//一回だけ押すことができるかどうかの設定処理
+void CButton::SetTriggerableOnce(const bool bOnce)
+{
+	m_bOnce = bOnce;
 }
 
 //押されたかどうかの取得処理

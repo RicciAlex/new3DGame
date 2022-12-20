@@ -14,7 +14,7 @@
 #include <vector>
 
 //=============================================================================
-//インクルードファイル
+//前方宣言
 //=============================================================================
 class CSolidObject;
 
@@ -85,6 +85,7 @@ public:
 	D3DXVECTOR3  GetPos(void);								//位置の取得処理
 	D3DXVECTOR3  GetRelativePos(void);						//相対位置の取得処理
 	D3DXVECTOR3  GetLastPos(void);							//前回の位置の取得処理
+	D3DXVECTOR3  GetMove(void);								//速度の取得処理
 	D3DXVECTOR3  GetSize(void);								//サイズの取得処理
 	D3DXVECTOR3  GetRot(void);								//向きの取得処理
 	HITBOX_SHAPE GetShape(void);							//形の取得処理
@@ -98,6 +99,7 @@ public:
 	void SetPos(const D3DXVECTOR3 pos);						//位置の設定処理
 	void SetRelativePos(const D3DXVECTOR3 pos);				//相対位置の設定処理
 	void SetLastPos(const D3DXVECTOR3 pos);					//前回の位置の設定処理
+	void SetMove(const D3DXVECTOR3 move);					//速度の設定処理
 	void SetSize(const D3DXVECTOR3 size);					//サイズの設定処理
 	void SetShape(const HITBOX_SHAPE shape);				//形の設定処理
 	void SetType(const HITBOX_TYPE type);					//種類の設定処理
@@ -126,6 +128,7 @@ private:
 	D3DXVECTOR3  m_pos;										//位置
 	D3DXVECTOR3  m_RelativePos;								//相対位置
 	D3DXVECTOR3  m_LastPos;									//前回の位置
+	D3DXVECTOR3  m_move;									//速度
 	D3DXVECTOR3  m_size;									//サイズ
 	D3DXVECTOR3  m_rot;										//向き
 	D3DXVECTOR3  m_dir;										//エフェクトの向き

@@ -25,9 +25,9 @@
 
 const float CPlayer::m_MaxWalkingSpeed = 7.0f;			//最大歩くスピード
 const float CPlayer::m_AccelerationCoeff = 5.0f;		//加速係数
+const D3DXVECTOR3 CPlayer::m_playerSize = D3DXVECTOR3(30.0f, 175.0f, 30.0f);				//プレイヤーのサイズ
 
 //プレイヤーの色
-
 D3DXCOLOR CPlayer::m_playerColor[PLAYER_COLOR_MAX]
 {
 
@@ -45,6 +45,8 @@ D3DXCOLOR CPlayer::m_playerColor[PLAYER_COLOR_MAX]
 CPlayer::CPlayer() : CObject::CObject(1)
 {
 	//メンバー変数をクリアする
+	m_LastPos = Vec3Null;							//前回の位置
+	m_pos = Vec3Null;								//位置
 	m_move = Vec3Null;								//速度の初期化処理
 	m_DestRot = Vec3Null;							//目的の角度の初期化処理
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
@@ -77,6 +79,8 @@ CPlayer::~CPlayer()
 HRESULT CPlayer::Init(void)
 {
 	//メンバー変数の初期化処理
+	m_LastPos = Vec3Null;							//前回の位置
+	m_pos = Vec3Null;								//位置
 	m_move = Vec3Null;								//速度の初期化処理
 	m_DestRot = Vec3Null;							//目的の角度の初期化処理
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
@@ -133,6 +137,8 @@ void CPlayer::Uninit(void)
 //更新処理
 void CPlayer::Update(void)
 {
+	m_LastPos = m_pos;				//前回の位置の更新
+
 	D3DXVECTOR3 cameraRot = CApplication::GetCamera()->GetRot();					//カメラの向きの取得処理
 
 	//プレイヤーの目的角度の正規化処理
@@ -223,8 +229,6 @@ void CPlayer::Update(void)
 					m_bJump = false;		//着地している状態にする
 					m_bLanded = true;
 
-					m_bJump = false;
-
 					if (!m_bMoving)
 					{
 						m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
@@ -276,6 +280,12 @@ void CPlayer::Update(void)
 			m_move.y = 0.0f;
 		}
 
+		if (D3DXVec3Length(&m_pHitbox->GetMove()) != 0.0f)
+		{
+			m_pos += m_pHitbox->GetMove();
+			m_pHitbox->SetMove(Vec3Null);
+		}
+
 		HitboxEffectUpdate();
 	}
 
@@ -324,7 +334,6 @@ void CPlayer::Update(void)
 		D3DXVECTOR3 q = D3DXVECTOR3(0.0f, 0.0f, 300.0f);
 		pCamera->SetPos(m_pos + p, m_pos + q);
 	}
-
 }
 
 //描画処理
@@ -356,6 +365,53 @@ void CPlayer::Draw(void)
 	}
 }
 
+//位置の設定処理
+void CPlayer::SetPos(const D3DXVECTOR3 pos)
+{
+	m_pos = pos;
+}
+
+//向きの設定処理
+void CPlayer::SetRot(const D3DXVECTOR3 rot)
+{
+	m_rot = rot;
+}
+
+//着地しているかどうかの設定処理
+void CPlayer::SetLanded(void)
+{
+	if (m_bJump)
+	{
+		if (m_pAnimator)
+		{
+
+			m_bJump = false;		//着地している状態にする
+			m_bLanded = true;
+
+			if (!m_bMoving)
+			{
+				m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
+			}
+			else
+			{
+				m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
+			}
+		}
+	}
+}
+
+//位置の取得処理
+const D3DXVECTOR3 CPlayer::GetPos(void)
+{
+	return m_pos;
+}
+
+//前回の位置の取得処理
+const D3DXVECTOR3 CPlayer::GetLastPos(void)
+{
+	return m_LastPos;
+}
+
 //=============================================================================
 //
 //								静的関数
@@ -373,7 +429,9 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
 		return nullptr;
 	}
 
-	pModel->m_pos = pos;																											//位置の設定
+	pModel->m_pos = pos;						//位置の設定
+	pModel->m_LastPos = pos;					//前回の位置の設定
+
 	pModel->m_rot = D3DXVECTOR3(0.0f, -D3DX_PI, 0.0f);
 	pModel->m_pModel[BODY] = CModelPart::Create(CModel::MODEL_PLAYER_BODY, D3DXVECTOR3(0.0f, 53.0f, 0.0f), D3DXVECTOR3(0.0f, -2.98f, 0.0f));				//体のモデルを生成する
 

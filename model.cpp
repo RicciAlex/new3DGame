@@ -29,6 +29,7 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 {																				
 	{ "data\\MODELS\\NeedleBall\\NeedleBall.x" },				//MODEL_SPIKE_BALL,
 	{ "data\\MODELS\\PlainSphere.x" },							//MODEL_PLAIN_SPHERE,
+	{ "data\\MODELS\\MetalCube.x" },							//MODEL_METAL_CUBE,
 
 	{ "data\\MODELS\\Player\\PlayerHead.x" },					//MODEL_PLAYER_HEAD,
 	{ "data\\MODELS\\Player\\PlayerBody.x" },					//MODEL_PLAYER_BODY,
@@ -44,6 +45,8 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\Button.x" },								//MODEL_BUTTON,
 	{ "data\\MODELS\\TrapPillar.x" },							//MODEL_TRAP_PILLAR,
 	{ "data\\MODELS\\Shuriken.x" },								//MODEL_SHURIKEN,
+	{ "data\\MODELS\\SpikeBase.x" },							//MODEL_SPIKE_BASE,
+	{ "data\\MODELS\\SpikeTrap.x" },							//MODEL_SPIKE_TRAP,
 
 	{ "data\\MODELS\\GoldStar.x" },								//MODEL_ITEM_STAR,
 
@@ -136,46 +139,6 @@ void CModel::Update(void)
 	if (m_frameRot != nullptr)
 	{//âÒì]ë¨ìxÇ™0Ç≈ÇÕÇ»Ç©Ç¡ÇΩÇÁ
 		m_rot += m_frameRot;			//âÒì]äpìxÇçXêVÇ∑ÇÈ
-	}
-
-	if (m_type == MODEL_PLAIN_SPHERE)
-	{
-		D3DXVECTOR3 move = Vec3Null;
-
-		if (CInputKeyboard::GetKeyboardPress(DIK_UP))
-		{
-			move.z += 1.0f;
-
-			//m_rot.x += 0.05f;
-		}
-		else if (CInputKeyboard::GetKeyboardPress(DIK_DOWN))
-		{
-			move.z += -1.0f;
-
-			//m_rot.x += -0.05f;
-		}
-		if (CInputKeyboard::GetKeyboardPress(DIK_LEFT))
-		{
-			move.x += -1.0f;
-
-			//m_rot.z += 0.05f;
-		}
-		else if (CInputKeyboard::GetKeyboardPress(DIK_RIGHT))
-		{
-			move.x += 1.0f;
-
-			//m_rot.z += -0.05f;
-		}
-
-		D3DXVec3Normalize(&move, &move);
-
-		m_rotAxis.x = move.z;
-		m_rotAxis.z = -move.x;
-
-		m_fRotAngle = 2.5f / (10.0f * m_fScale);
-
-		m_pos.x += move.x * 2.5f;
-		m_pos.z += move.z * 2.5f;
 	}
 }
 

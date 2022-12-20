@@ -28,7 +28,9 @@ public:
 	void Uninit(void) override;		//終了処理
 	void Update(void) override;		//更新処理
 
-	bool GetTrigger(void);			//押されたかどうかの取得処理
+	void SetTriggerableOnce(const bool bOnce);		//一回だけ押すことができるかどうかの設定処理
+
+	bool GetTrigger(void);							//押されたかどうかの取得処理
 
 	static CButton* Create(const D3DXVECTOR3 pos);															//生成処理	
 	static CButton* Create(const D3DXVECTOR3 pos, const D3DXCOLOR normalCol, const D3DXCOLOR pressedCol);	//生成処理	
@@ -39,6 +41,7 @@ private:
 	D3DXCOLOR m_normalCol;				//普通の色
 	D3DXCOLOR m_triggeredCol;			//押された後の色
 	bool m_bTriggered;					//押されたかどうか
+	bool m_bOnce;						//一回だけ押すことができるかどうか
 		
 	CCylinderHitbox* m_pHitbox;			//ヒットボックス
 

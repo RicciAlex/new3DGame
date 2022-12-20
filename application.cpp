@@ -95,51 +95,9 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 
 	m_pCamera = CCamera::Create(D3DXVECTOR3(0.0f, 0.0f, -500.0f), D3DXVECTOR3(0.0f, -200.0f, 100.0f));			//カメラの生成
 
-	//CObject_3D* pObj = CObject_3D::Create();
-	//pObj->SetPos(D3DXVECTOR3(D3DXVECTOR3(0.0f, -220.0f, 100.0f)));
-	//pObj->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	//pObj->SetTexture(CObject::TEXTURE_NULL);
-	//pObj->SetSize(50.0f, 50.0f);
-	//pObj->SetVtxColor(0, ColorRed);
-	//pObj->SetVtxColor(1, ColorGreen);
-	//pObj->SetVtxColor(2, ColorBlue);
-	//pObj->SetVtxColor(3, ColorWhite);
-
-	//CModel* pModel = CModel::Create(CModel::MODEL_SPIKE_BALL, D3DXVECTOR3(D3DXVECTOR3(0.0f, -175.0f, 50.0f)));
-	//pModel->SetScale(3.0f);
-	//pModel->SetModelColor(0, ColorGreen);
-	//pModel->SetModelColor(1, ColorRed);
-	//pModel->StartRotation(D3DXVECTOR3((float)CObject::random(-100, 100) * 0.0001f, (float)CObject::random(-100, 100) * 0.0001f, (float)CObject::random(-100, 100) * 0.0001f));
-
-	//pModel = CModel::Create(CModel::MODEL_SPIKE_BALL, D3DXVECTOR3(D3DXVECTOR3(100.0f, -175.0f, 50.0f)));
-	////pModel->SetScale(D3DXVECTOR3(2.0f, 2.0f, 2.0f));
-
-	//pModel = CModel::Create(CModel::MODEL_SPIKE_BALL, D3DXVECTOR3(D3DXVECTOR3(50.0f, -175.0f, 50.0f)));
-	//pModel->SetScale(0.5f);
-
-	//pModel = CModel::Create(CModel::MODEL_PLAIN_SPHERE, D3DXVECTOR3(0.0f, -150.0f, 50.0f));
-	//pModel->SetScale(5.0f);
-	//pModel->SetModelColor(1, ColorBlue);
-	//pModel->SetShadowDraw(false);
-
-	//CMeshfield* pField = CMeshfield::Create(D3DXVECTOR3(-500.0f, -200.0f, 500.0f), Vec3Null, D3DXVECTOR2(50.0f, 20.0f), 20, 40);
-	////pField->SetSinusoidalHeight(50.0f, 0.2f);
-	//pField->SetAnimation(true, D3DX_PI * 0.005f, 35.0f);
-
-	//CPlayer::Create(D3DXVECTOR3(0.0f, -200.0f, 0.0f), 0);
-
 	m_pMode = CTitle::Create();
 
 	m_pFade = CFade::Create(0.01f);
-
-	/*pModel = CModel::Create(CModel::MODEL_FLAG, D3DXVECTOR3(100.0f, -200.0f, 400.0f));
-	pModel->SetShadowDraw(false);*/
-
-	// モードインスタンスの生成処理
-	/*m_pMode = CTitle::Create();
-	m_mode = Mode_Title;
-	m_modeNext = Mode_Title;
-	m_pSound->Play(CSound::SOUND_LABEL_BGM_TITLE);*/
 
 	//キーボードインスタンスの生成処理 
 	m_pKeyboard = new CInputKeyboard;
@@ -400,10 +358,7 @@ void CApplication::SetMode(Mode mode)
 
 	{
 		m_pMode = CFirstStage::Create();
-		CBoxHitbox::Create(D3DXVECTOR3(300.0f, -190.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 50.0f, 50.0f), CHitbox::TYPE_NEUTRAL, nullptr);
-		/*CMeshfield* pField = CMeshfield::Create(D3DXVECTOR3(-1000.0f, -180.0f, 1000.0f), Vec3Null, D3DXVECTOR2(50.0f, 50.0f), 30, 30);
-		pField->SetAnimation(true);
-		pField->SetColor(D3DXCOLOR(0.2f, 1.0f, 1.0f, 0.5f));*/
+
 		CSilhouette::Create();
 	}
 

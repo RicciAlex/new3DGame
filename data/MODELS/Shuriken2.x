@@ -347,13 +347,10 @@ Mesh {
   0,
   0;;
   Material {
-   0.800000;0.800000;0.800000;1.000000;;
+   0.316800;0.316800;0.316800;1.000000;;
    5.000000;
+   0.600000;0.600000;0.600000;;
    0.000000;0.000000;0.000000;;
-   0.000000;0.000000;0.000000;;
-   TextureFilename {
-    "C:\\Users\\student\\Desktop\\new3DGameGitCopy\\new3DGame\\data\\TEXTURE\\Materials\\Steel.jpg";
-   }
   }
  }
  MeshNormals {

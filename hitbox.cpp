@@ -24,6 +24,7 @@ CHitbox::CHitbox()
 	m_pos = Vec3Null;							//位置
 	m_RelativePos = Vec3Null;					//相対位置
 	m_LastPos = Vec3Null;						//前回の位置
+	m_move = Vec3Null;							//速度
 	m_size = Vec3Null;							//サイズ
 	m_rot = Vec3Null;							//向き
 	m_shape = (HITBOX_SHAPE)0;					//エフェクトの向き
@@ -58,6 +59,7 @@ HRESULT CHitbox::Init(void)
 	m_pos = Vec3Null;				//位置
 	m_LastPos = Vec3Null;			//相対位置
 	m_RelativePos = Vec3Null;		//前回の位置
+	m_move = Vec3Null;				//速度
 	m_size = Vec3Null;				//サイズ
 	m_rot = Vec3Null;				//向き
 	m_shape = (HITBOX_SHAPE)0;		//エフェクトの向き
@@ -128,6 +130,12 @@ D3DXVECTOR3 CHitbox::GetRelativePos(void)
 D3DXVECTOR3 CHitbox::GetLastPos(void)
 {
 	return m_LastPos;
+}
+
+//速度の取得処理
+D3DXVECTOR3 CHitbox::GetMove(void)
+{
+	return m_move;
 }
 
 //サイズの取得処理
@@ -204,6 +212,12 @@ void CHitbox::SetRelativePos(const D3DXVECTOR3 pos)
 void CHitbox::SetLastPos(const D3DXVECTOR3 pos)
 {
 	m_LastPos = pos;
+}
+
+//速度の設定処理
+void CHitbox::SetMove(const D3DXVECTOR3 move)
+{
+	m_move = move;
 }
 
 //サイズの設定処理

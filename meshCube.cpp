@@ -13,18 +13,22 @@
 #include "application.h"
 #include "rendering.h"
 #include "directionalLight.h"
+#include "BoxHitbox.h"
 
 std::vector <CMeshCube*> CMeshCube::m_vMeshCube;		//メッシュへのポインタのベクトル
 
 //コンストラクタ
 CMeshCube::CMeshCube()
 {
+	//メンバー変数をクリアする
 	m_pVtxBuff = nullptr;
 	m_pIdxBuff = nullptr;
 	m_pTexture = nullptr;
 	m_pos = Vec3Null;
+	m_OriginalPos = Vec3Null;
 	m_rot = Vec3Null;
 	m_size = Vec3Null;
+	m_move = Vec3Null;
 	D3DXMatrixIdentity(&m_mtxWorld);
 	m_nVertexNumber = 0;
 	m_nIndexNumber = 0;
@@ -32,6 +36,9 @@ CMeshCube::CMeshCube()
 	m_fFriction = 0.0f;
 	m_nPriority = 3;
 	m_fShadowHeight = 0.0f;
+	m_fRange = 0.0f;
+
+	m_pHitbox = nullptr;
 
 	m_vMeshCube.push_back(this);
 }
@@ -39,18 +46,24 @@ CMeshCube::CMeshCube()
 //コンストラクタ
 CMeshCube::CMeshCube(const int nPriority) : m_nPriority(nPriority)
 {
+	//メンバー変数をクリアする
 	m_pVtxBuff = nullptr;
 	m_pIdxBuff = nullptr;
 	m_pTexture = nullptr;
 	m_pos = Vec3Null;
+	m_OriginalPos = Vec3Null;
 	m_rot = Vec3Null;
 	m_size = Vec3Null;
+	m_move = Vec3Null;
 	D3DXMatrixIdentity(&m_mtxWorld);
 	m_nVertexNumber = 0;
 	m_nIndexNumber = 0;
 	m_nPolygonNumber = 0;
 	m_fFriction = 0.0f;
 	m_fShadowHeight = 0.0f;
+	m_fRange = 0.0f;
+
+	m_pHitbox = nullptr;
 
 	m_vMeshCube.push_back(this);
 }
@@ -64,18 +77,24 @@ CMeshCube::~CMeshCube()
 //初期化処理
 HRESULT CMeshCube::Init(void)
 {
+	//メンバー変数を初期化する
 	m_pVtxBuff = nullptr;
 	m_pIdxBuff = nullptr;
 	m_pTexture = nullptr;
 	m_pos = Vec3Null;
+	m_OriginalPos = Vec3Null;
 	m_rot = Vec3Null;
 	m_size = Vec3Null;
+	m_move = Vec3Null;
 	D3DXMatrixIdentity(&m_mtxWorld);
 	m_nVertexNumber = 0;
 	m_nIndexNumber = 0;
 	m_nPolygonNumber = 0;
 	m_fFriction = 0.0f;
 	m_fShadowHeight = -199.0f;
+	m_fRange = 0.0f;
+
+	m_pHitbox = nullptr;
 
 	return S_OK;
 }
@@ -83,20 +102,28 @@ HRESULT CMeshCube::Init(void)
 //終了処理
 void CMeshCube::Uninit(void)
 {
+	//頂点バッファの破棄処理
 	if (m_pVtxBuff != nullptr)
-	{
-		m_pVtxBuff->Release();
-		m_pVtxBuff = nullptr;
+	{//nullチェック
+		m_pVtxBuff->Release();			//メモリを解放する
+		m_pVtxBuff = nullptr;			//ポインタをnullにする
 	}
+	//インデックスバッファの破棄処理
 	if (m_pIdxBuff != nullptr)
-	{
-		m_pIdxBuff->Release();
-		m_pIdxBuff = nullptr;
+	{//nullチェック
+		m_pIdxBuff->Release();			//メモリを解放する
+		m_pIdxBuff = nullptr;			//ポインタをnullにする
 	}
+	//テクスチャへのポインタをnullにする
 	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		m_pTexture = nullptr;
+	{//nullチェック
+		m_pTexture = nullptr;			//ポインタをnullにする
+	}
+	//ヒットボックスの破棄処理
+	if (m_pHitbox != nullptr)
+	{//nullチェック
+		m_pHitbox->Release();			//メモリを解放する
+		m_pHitbox = nullptr;			//ポインタをnullにする
 	}
 
 	int a = m_vMeshCube.size();
@@ -117,6 +144,20 @@ void CMeshCube::Update(void)
 {
 	/*m_rot.y += D3DX_PI * 0.005f;
 	m_rot.x += D3DX_PI * 0.001f;*/
+
+	if (D3DXVec3Length(&m_move) > 0.0f)
+	{//速度が0ではなかったら
+
+		m_pos += m_move;				//位置の更新
+
+		//ヒットボックスの更新
+		if (m_pHitbox)
+		{//nullチェック
+			m_pHitbox->SetPos(m_pos);	//ヒットボックスの位置の更新
+		}
+
+		ClampMove();				//移動を制限する処理
+	}
 }
 
 //描画処理
@@ -235,16 +276,25 @@ void CMeshCube::Draw(void)
 	//ステンシルバッファを無効にする
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
 
-	pDevice->SetTexture(0, NULL);
+	//テクスチャの設定
+	pDevice->SetTexture(0, m_pTexture);
 
 	//ポリゴンの描画処理
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nVertexNumber, 0, 20);
+
+	pDevice->SetTexture(0, NULL);
 }
 
 //位置の設定処理
 void CMeshCube::SetPos(const D3DXVECTOR3 pos)
 {
 	m_pos = pos;
+}
+
+//速度の設定処理
+void CMeshCube::SetMove(const D3DXVECTOR3 move)
+{
+	m_move = move;
 }
 
 //プライオリティの設定処理
@@ -281,10 +331,11 @@ void CMeshCube::SetTexture(CObject::TextType texture)
 
 
 
-
-
-
-
+//=============================================================================
+//
+//								静的関数	
+//
+//=============================================================================
 
 
 
@@ -292,20 +343,54 @@ void CMeshCube::SetTexture(CObject::TextType texture)
 //生成処理
 CMeshCube* CMeshCube::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 size)
 {
-	CMeshCube* pCube = new CMeshCube;
+	CMeshCube* pCube = new CMeshCube;			//インスタンスの生成
 
 	if (FAILED(pCube->Init()))
-	{
+	{//初期化処理
 		return nullptr;
 	}
 
-	pCube->m_pos = pos;
-	pCube->m_rot = rot;
-	pCube->m_size = size;
+	pCube->m_pos = pos;				//位置の設定
+	pCube->m_rot = rot;				//向きの設定
+	pCube->m_size = size;			//サイズの設定
 
-	pCube->SetVertex();
+	pCube->SetVertex();				//頂点の設定処理
 
-	return pCube;
+	pCube->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -size.y, 0.0f),
+		D3DXVECTOR3(size.x, size.y * 2.0f, size.z), CHitbox::TYPE_NEUTRAL, pCube);				//ヒットボックスの生成
+
+	return pCube;					//生成したインスタンスを返す
+}
+
+//生成処理
+CMeshCube* CMeshCube::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 size, const D3DXVECTOR3 move, const float fRange)
+{
+	CMeshCube* pCube = new CMeshCube;			//インスタンスの生成
+
+	if (FAILED(pCube->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pCube->m_pos = pos;				//位置の設定
+	pCube->m_rot = rot;				//向きの設定
+	pCube->m_size = size;			//サイズの設定
+	pCube->m_move = move;			//速度の設定
+	pCube->m_OriginalPos = pos;		//元の位置の設定
+	pCube->m_fRange = fRange;		//移動の限界の設定
+
+	pCube->SetVertex();				//頂点の設定処理
+
+	pCube->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -size.y, 0.0f),
+		D3DXVECTOR3(size.x, size.y * 2.0f, size.z), CHitbox::TYPE_NEUTRAL, pCube);				//ヒットボックスの生成
+
+	if (pCube->m_pHitbox)
+	{//ヒットボックスが生成出来たら
+
+		pCube->m_pHitbox->SetMove(move);				//ヒットボックスの速度の設定
+	}
+
+	return pCube;					//生成したインスタンスを返す
 }
 
 //当たり判定の処理
@@ -327,8 +412,11 @@ void CMeshCube::ClearCubes(void)
 
 
 
-
-
+//=============================================================================
+//
+//							プライベート関数	
+//
+//=============================================================================
 
 
 
@@ -373,14 +461,14 @@ void CMeshCube::SetVertex(void)
 	pVtx[6].pos = D3DXVECTOR3(-m_size.x, -m_size.y, -m_size.z);
 	pVtx[7].pos = D3DXVECTOR3(m_size.x, -m_size.y, -m_size.z);
 
-	D3DXCOLOR C[6] = { ColorRed, ColorGreen, ColorBlue, ColorYellow, ColorCyan, ColorMagenta };
+	//D3DXCOLOR C[6] = { ColorRed, ColorGreen, ColorBlue, ColorYellow, ColorCyan, ColorMagenta };
 
 	for (int nCnt = 0; nCnt < 8; nCnt++)
 	{
 		D3DXVECTOR3 N = pVtx[nCnt].pos;
 		D3DXVec3Normalize(&N, &N);
 		pVtx[nCnt].nor = N;
-		pVtx[nCnt].col = C[random(0, 5)];
+		pVtx[nCnt].col = /*C[random(0, 5)]*/ColorWhite;
 		pVtx[nCnt].tex = Vec2Null;
 
 	}
@@ -420,4 +508,82 @@ void CMeshCube::SetVertex(void)
 	pIdx[21] = 7;
 
 	m_pIdxBuff->Unlock();
+}
+
+//移動を制限する
+void CMeshCube::ClampMove(void)
+{
+	if (m_pos.x <= m_OriginalPos.x - m_fRange)
+	{
+		m_pos.x = m_OriginalPos.x - m_fRange;
+		m_move.x *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.x *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
+	if (m_pos.y <= m_OriginalPos.y - m_fRange)
+	{
+		m_pos.y = m_OriginalPos.y - m_fRange;
+		m_move.y *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.y *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
+	if (m_pos.z <= m_OriginalPos.z - m_fRange)
+	{
+		m_pos.z = m_OriginalPos.z - m_fRange;
+		m_move.z *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.z *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
+
+	if (m_pos.x >= m_OriginalPos.x + m_fRange)
+	{
+		m_pos.x = m_OriginalPos.x + m_fRange;
+		m_move.x *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.x *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
+	if (m_pos.y >= m_OriginalPos.y + m_fRange)
+	{
+		m_pos.y = m_OriginalPos.y + m_fRange;
+		m_move.y *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.y *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
+	if (m_pos.z >= m_OriginalPos.z + m_fRange)
+	{
+		m_pos.z = m_OriginalPos.z + m_fRange;
+		m_move.z *= -1.0f;
+
+		if (m_pHitbox)
+		{
+			D3DXVECTOR3 move = m_pHitbox->GetMove();
+			move.z *= -1.0f;
+			m_pHitbox->SetMove(move);
+		}
+	}
 }

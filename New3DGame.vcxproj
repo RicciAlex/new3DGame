@@ -181,10 +181,12 @@
     <ClCompile Include="mode.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="modelPart.cpp" />
+    <ClCompile Include="movingCube.cpp" />
     <ClCompile Include="nail.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="phongShading.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="pointLight.cpp" />
     <ClCompile Include="rendering.cpp" />
@@ -193,8 +195,10 @@
     <ClCompile Include="ShurikenTrap.cpp" />
     <ClCompile Include="silhouette.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="spikeTrap.cpp" />
     <ClCompile Include="star.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="triggerablePlatform.cpp" />
     <ClCompile Include="UIString.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -227,10 +231,12 @@
     <ClInclude Include="mode.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="modelPart.h" />
+    <ClInclude Include="movingCube.h" />
     <ClInclude Include="nail.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object2D.h" />
     <ClInclude Include="object3D.h" />
+    <ClInclude Include="phongShading.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="pointLight.h" />
     <ClInclude Include="rendering.h" />
@@ -239,12 +245,20 @@
     <ClInclude Include="ShurikenTrap.h" />
     <ClInclude Include="silhouette.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="spikeTrap.h" />
     <ClInclude Include="star.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="triggerablePlatform.h" />
     <ClInclude Include="UIString.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="MembraneShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="phongShading.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>

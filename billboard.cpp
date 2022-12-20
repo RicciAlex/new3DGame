@@ -114,6 +114,10 @@ void CBillboard::Update(void)
 	
 }
 
+//#include "camera.h"
+//#include "directionalLight.h"
+//#include "membraneLighting.h"
+
 //描画処理
 void CBillboard::Draw(void)
 {
@@ -156,8 +160,48 @@ void CBillboard::Draw(void)
 	//ワルドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
+	//CMembraneShading* pMembrane = CApplication::GetRenderer()->GetMembraneEffect();
+
+	//if (pMembrane)
+	//{
+	//	D3DXVECTOR3 light = CDirectionalLight::GetPrincipalLightDir();
+	//	D3DXVec3Normalize(&light, &light);
+	//	D3DXVECTOR4 vecLight = (D3DXVECTOR4)light;
+	//	D3DXVECTOR3 posV = CApplication::GetCamera()->GetPos();
+	//	D3DXVECTOR4 cameraPos = D3DXVECTOR4(posV.x, posV.y, posV.z, 1.0f);
+
+	//	vecLight.w = 1.0f;
+
+	//	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	//	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+	//	pMembrane->Begin();
+	//	pMembrane->SetMatrix(&m_mtxWorld, &cameraPos, &vecLight);
+	//	pMembrane->SetAmbient(0.0f);
+	//	pMembrane->SetSpecular(60.0f);
+	//	pMembrane->SetSpecularPower(5.0f);
+
+	//	//薄膜の透明度を設定
+	//	pMembrane->SetAlpha(0.4f);
+	//	pMembrane->BeginPass();
+	//}
+
 	//四角形を描画する
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+	//if (pMembrane)
+	//{
+	//	//レンダーステートの設定
+	//	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	//	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	//	pMembrane->EndPass();
+	//	pMembrane->End();
+	//}
 
 	//元の設定に戻す
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);

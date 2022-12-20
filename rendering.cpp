@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "debugProc.h"
 #include "membraneLighting.h"
+#include "phongShading.h"
 //#include "fade.h"
 
 //=============================================================================
@@ -121,6 +122,10 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 
 	m_pMembrane->Load();
 
+	m_pPhong = new CPhongShading(m_pD3DDevice);
+
+	m_pPhong->Load();
+
 
 #ifdef _DEBUG
 	// デバッグ情報表示用フォントの生成
@@ -166,6 +171,12 @@ void CRenderer::Uninit()
 		m_pMembrane->Invalidate();
 		delete m_pMembrane;
 		m_pMembrane = nullptr;
+	}
+	if (m_pPhong)
+	{
+		m_pPhong->Invalidate();
+		delete m_pPhong;
+		m_pPhong = nullptr;
 	}
 }
 
@@ -230,6 +241,11 @@ LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 CMembraneShading * CRenderer::GetMembraneEffect(void)
 {
 	return m_pMembrane;
+}
+
+CPhongShading * CRenderer::GetPhongEffect(void)
+{
+	return m_pPhong;
 }
 
 #ifdef _DEBUG

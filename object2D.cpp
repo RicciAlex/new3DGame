@@ -23,6 +23,9 @@ char* CObject_2D::m_paTextPass[CObject::TEXTURE_TYPE_MAX] =
 	"data\\TEXTURE\\Characters.png",						//TEXTURE_CHARACTERS,
 	"data\\TEXTURE\\TemporaryTitle.png",					//TEXTURE_CHARACTERS,
 	"data\\TEXTURE\\Fog.png",								//TEXTURE_FOG,
+	"data\\TEXTURE\\Materials\\Steel.jpg",					//TEXTURE_METAL,
+	"data\\TEXTURE\\Green.png",								//TEXTURE_GREEN,
+	"data\\TEXTURE\\Blue.png",								//TEXTURE_BLUE,
 };
 
 //=============================================================================

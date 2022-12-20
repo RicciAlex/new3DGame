@@ -24,6 +24,8 @@ class CPlayer : public CObject
 {
 public:
 
+	static const D3DXVECTOR3 m_playerSize;								//プレイヤーのサイズ
+
 	enum Parts
 	{
 		BODY = 0,								//体
@@ -74,11 +76,12 @@ public:
 	void Update(void) override;											//更新処理
 	void Draw(void) override;											//描画処理
 
-	void SetPos(const D3DXVECTOR3 pos) override { m_pos = pos; }		//位置の設定処理
-	void SetRot(const D3DXVECTOR3 rot) { m_rot = rot; }					//位置の設定処理
+	void SetPos(const D3DXVECTOR3 pos) override;						//位置の設定処理
+	void SetRot(const D3DXVECTOR3 rot);									//向きの設定処理
+	void SetLanded(void);												//着地しているかどうかの設定処理
 
-	//const D3DXVECTOR2 GetSize(void) override { return Vec2Null; }		//サイズの取得処理
-	const D3DXVECTOR3 GetPos(void) override { return m_pos; }			//位置の取得処理
+	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理
+	const D3DXVECTOR3 GetLastPos(void);									//前回の位置の取得処理
 
 	static CPlayer* Create(const D3DXVECTOR3 pos,int nCntPlayer);		//生成処理
 	static D3DXCOLOR* GetPlayerColors(void);							//プレイヤーの色の取得処理
@@ -96,6 +99,7 @@ private:
 	static const float m_AccelerationCoeff;								//加速係数
 
 	D3DXVECTOR3 m_pos;													//位置
+	D3DXVECTOR3 m_LastPos;												//前回の位置
 	D3DXVECTOR3 m_move;													//速度
 	D3DXVECTOR3 m_rot;													//向き
 	D3DXVECTOR3 m_DestRot;												//目的の角度

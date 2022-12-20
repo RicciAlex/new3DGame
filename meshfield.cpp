@@ -222,8 +222,12 @@ void CMeshfield::Draw(void)
 	//テクスチャの設定
 	pDevice->SetTexture(0, m_pTexture);
 
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 	//ポリゴンの描画処理
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nVertexNumber, 0, m_nPolygonNumber);
+
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 	pDevice->SetTexture(0, NULL);
 }

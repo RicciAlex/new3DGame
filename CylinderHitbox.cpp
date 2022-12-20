@@ -145,6 +145,11 @@ void CCylinderHitbox::Update(void)
 								SetDirection(pHbx->data()[nCnt]->GetDirection());
 							}
 						}
+
+						if (pHbx->data()[nCnt]->GetMove() != Vec3Null)
+						{
+							SetMove(GetMove() + pHbx->data()[nCnt]->GetMove());
+						}
 					}
 				}
 

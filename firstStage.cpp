@@ -21,6 +21,10 @@
 #include "button.h"
 #include "ShurikenTrap.h"
 #include "star.h"
+#include "movingCube.h"
+#include "triggerablePlatform.h"
+#include "billboard.h"
+#include "spikeTrap.h"
 
 //コンストラクタ
 CFirstStage::CFirstStage()
@@ -37,6 +41,7 @@ CFirstStage::~CFirstStage()
 //初期化処理
 HRESULT CFirstStage::Init(void)
 {
+	//基本クラスの初期化処理
 	if (FAILED(CGame::Init()))
 	{
 		return -1;
@@ -88,20 +93,42 @@ HRESULT CFirstStage::Init(void)
 	pModel->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.25f, 0.0f));
 	pModel->StartRotation(D3DXVECTOR3(-D3DX_PI * 0.01f, 0.0f, 0.0f));
 
-	CMeshCube::Create(D3DXVECTOR3(-400.0f, -125.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 10.0f, 50.0f));
-	CBoxHitbox::Create(D3DXVECTOR3(-400.0f, -135.0f, 100.0f), Vec3Null, D3DXVECTOR3(50.0f, 20.0f, 50.0f), CHitbox::TYPE_NEUTRAL, nullptr);
-	
-	CButton::Create(D3DXVECTOR3(-100.0f, -200.0f, 100.0f));
-	CButton::Create(D3DXVECTOR3(100.0f, -200.0f, 100.0f), ColorCyan, ColorYellow);
+	CMeshCube* pCube = CMeshCube::Create(D3DXVECTOR3(-600.0f, -125.0f, 100.0f), Vec3Null, 
+		D3DXVECTOR3(50.0f, 10.0f, 50.0f), D3DXVECTOR3(1.0f, 0.0f, 2.0f), 200.0f);
 
-	pModel = CModel::Create(CModel::MODEL_TRAP_PILLAR, D3DXVECTOR3(-250.0f, -200.0f, 100.0f));
-	pModel->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-	pModel->SetScale(1.5f);
+	CButton::Create(D3DXVECTOR3(-100.0f, -200.0f, 100.0f));
+	CButton* pButton = CButton::Create(D3DXVECTOR3(100.0f, -200.0f, 100.0f), ColorCyan, ColorYellow);
+	pButton->SetTriggerableOnce(true);
 
 	CShurikenTrap::Create(D3DXVECTOR3(0.0f, -200.0f, 500.0f), -D3DX_PI * 0.75f, 200.0f);
 
 	CGoldStar* pStar = CGoldStar::Create(D3DXVECTOR3(100.0f, -130.0f, 0.0f));
 	pStar->SetShadowHeight(-199.9f);
+
+	CTriggerablePlatform::Create(D3DXVECTOR3(600.0f, -100.0f, 0.0f), 
+		D3DXVECTOR3(-350.0f, -200.0f, 650.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 100.0f);
+
+	pField = CMeshfield::Create(D3DXVECTOR3(700.0f, 120.0f, 100.0f), Vec3Null, D3DXVECTOR2(100.0f, 100.0f), 20, 3);
+
+	/*CBillboard* pBillboard = CBillboard::Create(D3DXVECTOR3(0.0f, -150.0f, 250.0f), D3DXVECTOR2(50.0f, 50.0f));
+	pBillboard->SetColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.5f));
+	pBillboard->SetTexture(CObject::TEXTURE_GREEN);
+	pBillboard = CBillboard::Create(D3DXVECTOR3(25.0f, -150.0f, 200.0f), D3DXVECTOR2(50.0f, 50.0f));
+	pBillboard->SetColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.5f));
+	pBillboard->SetTexture(CObject::TEXTURE_BLUE);*/
+
+	CSpikeTrap::Create(D3DXVECTOR3(-400.0f, -200.0f, 200.0f), 2.0f, 120);
+	CSpikeTrap::Create(D3DXVECTOR3(-300.0f, -200.0f, 200.0f), 2.0f, 60);
+	CSpikeTrap::Create(D3DXVECTOR3(-200.0f, -200.0f, 200.0f), 2.0f, 30);
+
+	CSpikeTrap::Create(D3DXVECTOR3(-400.0f, -200.0f, 300.0f), 2.0f, 120, 40);
+	CSpikeTrap::Create(D3DXVECTOR3(-400.0f, -200.0f, 400.0f), 2.0f, 120, 80);
+
+	CSpikeTrap::Create(D3DXVECTOR3(-300.0f, -200.0f, 300.0f), 2.0f, 60, -20);
+	CSpikeTrap::Create(D3DXVECTOR3(-300.0f, -200.0f, 400.0f), 2.0f, 60, -40);
+
+	CSpikeTrap::Create(D3DXVECTOR3(-200.0f, -200.0f, 300.0f), 2.0f, 30, 10);
+	CSpikeTrap::Create(D3DXVECTOR3(-200.0f, -200.0f, 400.0f), 2.0f, 30, 20);
 
 	return S_OK;
 }
@@ -109,12 +136,14 @@ HRESULT CFirstStage::Init(void)
 //終了処理
 void CFirstStage::Uninit(void)
 {
+	//基本クラスの終了処理
 	CGame::Uninit();
 }
 
 //更新処理
 void CFirstStage::Update(void)
 {
+	//基本クラスの更新処理
 	CGame::Update();
 
 #ifdef _DEBUG
@@ -141,12 +170,12 @@ void CFirstStage::Update(void)
 //生成処理
 CFirstStage* CFirstStage::Create(void)
 {
-	CFirstStage* pStage = new CFirstStage;
+	CFirstStage* pStage = new CFirstStage;		//インスタンスを生成する
 
 	if (FAILED(pStage->Init()))
-	{
+	{//初期化処理
 		return nullptr;
 	}
 
-	return pStage;
+	return pStage;								//生成したインスタンスを返す
 }
