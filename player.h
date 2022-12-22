@@ -79,9 +79,11 @@ public:
 	void SetPos(const D3DXVECTOR3 pos) override;						//位置の設定処理
 	void SetRot(const D3DXVECTOR3 rot);									//向きの設定処理
 	void SetLanded(void);												//着地しているかどうかの設定処理
+	void SetMove(const D3DXVECTOR3 move);								//速度の設定処理
 
 	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理
 	const D3DXVECTOR3 GetLastPos(void);									//前回の位置の取得処理
+	const D3DXVECTOR3 GetMove(void);									//速度の取得処理
 
 	static CPlayer* Create(const D3DXVECTOR3 pos,int nCntPlayer);		//生成処理
 	static D3DXCOLOR* GetPlayerColors(void);							//プレイヤーの色の取得処理
@@ -114,6 +116,7 @@ private:
 	bool		m_bRot;													//回転したかどうか
 	bool		m_bHit;													//当たったかどうか
 	bool		m_bAttacking;											//アタックしたかどうか
+	bool		m_bFall;												//落下しているかどうか
 
 	STATE m_State;														//プレイヤーの状態
 

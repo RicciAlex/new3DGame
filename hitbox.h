@@ -38,6 +38,7 @@ public:
 		TYPE_NEUTRAL,
 		TYPE_VANISHING,
 		TYPE_BUTTON,
+		TYPE_FALL,
 
 		TYPE_MAX
 	};
@@ -59,6 +60,7 @@ public:
 		EFFECT_PUSH,
 		EFFECT_BOUNCE,
 		EFFECT_JUMP,
+		EFFECT_FALL,
 
 		EFFECT_MAX
 	};
@@ -86,6 +88,7 @@ public:
 	D3DXVECTOR3  GetRelativePos(void);						//相対位置の取得処理
 	D3DXVECTOR3  GetLastPos(void);							//前回の位置の取得処理
 	D3DXVECTOR3  GetMove(void);								//速度の取得処理
+	D3DXVECTOR3  GetAcceleration(void);						//加速の取得処理
 	D3DXVECTOR3  GetSize(void);								//サイズの取得処理
 	D3DXVECTOR3  GetRot(void);								//向きの取得処理
 	HITBOX_SHAPE GetShape(void);							//形の取得処理
@@ -100,7 +103,9 @@ public:
 	void SetRelativePos(const D3DXVECTOR3 pos);				//相対位置の設定処理
 	void SetLastPos(const D3DXVECTOR3 pos);					//前回の位置の設定処理
 	void SetMove(const D3DXVECTOR3 move);					//速度の設定処理
+	void SetAcceleration(const D3DXVECTOR3 acc);			//加速の設定処理
 	void SetSize(const D3DXVECTOR3 size);					//サイズの設定処理
+	void SetRot(const D3DXVECTOR3 rot);						//向きの設定処理
 	void SetShape(const HITBOX_SHAPE shape);				//形の設定処理
 	void SetType(const HITBOX_TYPE type);					//種類の設定処理
 	void SetParent(CObject* pParent);						//親の設定処理
@@ -129,6 +134,7 @@ private:
 	D3DXVECTOR3  m_RelativePos;								//相対位置
 	D3DXVECTOR3  m_LastPos;									//前回の位置
 	D3DXVECTOR3  m_move;									//速度
+	D3DXVECTOR3  m_acceleration;							//加速
 	D3DXVECTOR3  m_size;									//サイズ
 	D3DXVECTOR3  m_rot;										//向き
 	D3DXVECTOR3  m_dir;										//エフェクトの向き

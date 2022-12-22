@@ -59,6 +59,9 @@ public:
 	void SetColor(const D3DXCOLOR col);												//カーラーの設定処理
 	void SetVtxColor(const int nVtxIdx, const D3DXCOLOR col);						//頂点１つのカーラー設定処理
 	void MoveTexCoordinates(const D3DXVECTOR2 move);								//テクスチャの移動量の設定処理
+	virtual void SetTextureTiling(const D3DXVECTOR2 tiling);						//テクスチャの大きさの設定処理
+	virtual void SetTextureTiling(const float fTiling);								//テクスチャの大きさの設定処理
+	virtual void SetTextureTiling(const float fTilingX, const float fTilingY);		//テクスチャの大きさの設定処理
 
 	void SetTexture(TextType textType);												//テクスチャの種類の設定処理
 	void SetAnimationBase(const int FirstPattern);									//アニメーションの最初のパターンの設定処理
@@ -96,6 +99,8 @@ private:
 	int m_nFirstPattern;										//アニメーションの最初のパターン
 	int m_nAnimFrame;											//アニメーションパターンの変更フレーム数
 	D3DXVECTOR2 m_textureTranslation;							//テクスチャの移動量
+	D3DXVECTOR2 m_textureAnimSpeed;								//テクスチャの移動速度
+	D3DXVECTOR2 m_textureTiling;								//テクスチャの大きさ
 	bool m_bFlipX;												//テクスチャのX座標が反転しているかどうか
 	bool m_bFlipY;												//テクスチャのY座標が反転しているかどうか
 	D3DXCOLOR m_col;											//カーラー

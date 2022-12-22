@@ -150,6 +150,10 @@ void CCylinderHitbox::Update(void)
 						{
 							SetMove(GetMove() + pHbx->data()[nCnt]->GetMove());
 						}
+						if (pHbx->data()[nCnt]->GetAcceleration() != Vec3Null)
+						{
+							SetAcceleration(GetAcceleration() + pHbx->data()[nCnt]->GetAcceleration());
+						}
 					}
 				}
 

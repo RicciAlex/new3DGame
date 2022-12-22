@@ -61,7 +61,8 @@ CPlayer::CPlayer() : CObject::CObject(1)
 	m_bAttacking = false;							//攻撃しているかどうか
 	m_nCntAttack = 0;								//攻撃カウンター
 	m_fFrictionCoeff = 0.0f;						//摩擦係数
-	m_pHitbox = nullptr;
+	m_bFall = false;								//落下しているかどうか
+	m_pHitbox = nullptr;							//ヒットボックス
 
 	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{//モデルの部分へのポインタ
@@ -95,7 +96,8 @@ HRESULT CPlayer::Init(void)
 	m_bAttacking = false;							//攻撃しているかどうか
 	m_nCntAttack = 0;								//攻撃カウンター
 	m_fFrictionCoeff = 0.1f;						//摩擦係数
-	m_pHitbox = nullptr;
+	m_bFall = false;								//落下しているかどうか
+	m_pHitbox = nullptr;							//ヒットボックス
 
 	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{//モデルの部分へのポインタ
@@ -127,6 +129,7 @@ void CPlayer::Uninit(void)
 		m_pAnimator = nullptr;
 	}
 
+	//ヒットボックスの破棄処理
 	if (m_pHitbox != nullptr)
 	{
 		m_pHitbox->Release();
@@ -150,7 +153,7 @@ void CPlayer::Update(void)
 		fA *= -1.0f;
 	}
 
-	if (!CApplication::GetFade())
+	if (!CApplication::GetFade() && !m_bFall)
 	{//フェードしていなかったら
 		PlayerController(0);		//プレイヤーを動かす
 	}
@@ -215,41 +218,44 @@ void CPlayer::Update(void)
 	{
 		float fHeight = 0.0f;
 
-		//メッシュフィールドとの当たり判定
-		CMeshfield* pField = CMeshfield::FieldInteraction(this, &fHeight);
-
-		//地面との当たり判定
-		if (pField != nullptr)
+		if (!m_bFall)
 		{
-			if (m_bJump)
+			//メッシュフィールドとの当たり判定
+			CMeshfield* pField = CMeshfield::FieldInteraction(this, &fHeight);
+
+			//地面との当たり判定
+			if (pField != nullptr)
 			{
-				if (m_pAnimator)
+				if (m_bJump)
 				{
-
-					m_bJump = false;		//着地している状態にする
-					m_bLanded = true;
-
-					if (!m_bMoving)
+					if (m_pAnimator)
 					{
-						m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
-					}
-					else
-					{
-						m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
+
+						m_bJump = false;		//着地している状態にする
+						m_bLanded = true;
+
+						if (!m_bMoving)
+						{
+							m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
+						}
+						else
+						{
+							m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
+						}
 					}
 				}
-			}
 
-			m_bHit = false;			//当たってない状態にする
-			//摩擦係数の取得
-			m_fFrictionCoeff = pField->GetFriction();
+				m_bHit = false;			//当たってない状態にする
+				//摩擦係数の取得
+				m_fFrictionCoeff = pField->GetFriction();
 
-			//影の高さの設定
-			for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
-			{
-				if (m_pModel[nCnt] != nullptr)
+				//影の高さの設定
+				for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 				{
-					m_pModel[nCnt]->SetShadowHeight(fHeight);
+					if (m_pModel[nCnt] != nullptr)
+					{
+						m_pModel[nCnt]->SetShadowHeight(fHeight);
+					}
 				}
 			}
 		}
@@ -284,6 +290,12 @@ void CPlayer::Update(void)
 		{
 			m_pos += m_pHitbox->GetMove();
 			m_pHitbox->SetMove(Vec3Null);
+		}
+
+		if (D3DXVec3Length(&m_pHitbox->GetAcceleration()) != 0.0f)
+		{
+			m_move += m_pHitbox->GetAcceleration();
+			m_pHitbox->SetAcceleration(Vec3Null);
 		}
 
 		HitboxEffectUpdate();
@@ -324,6 +336,7 @@ void CPlayer::Update(void)
 	if (m_pos.y <= -1000.0f)
 	{
 		RespawnPlayer();
+		m_bFall = false;
 	}
 
 	CCamera* pCamera = CApplication::GetCamera();
@@ -334,6 +347,8 @@ void CPlayer::Update(void)
 		D3DXVECTOR3 q = D3DXVECTOR3(0.0f, 0.0f, 300.0f);
 		pCamera->SetPos(m_pos + p, m_pos + q);
 	}
+
+	CDebugProc::Print("\n\n Pos: %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 }
 
 //描画処理
@@ -400,6 +415,12 @@ void CPlayer::SetLanded(void)
 	}
 }
 
+//速度の設定処理
+void CPlayer::SetMove(const D3DXVECTOR3 move)
+{
+	m_move = move;
+}
+
 //位置の取得処理
 const D3DXVECTOR3 CPlayer::GetPos(void)
 {
@@ -410,6 +431,12 @@ const D3DXVECTOR3 CPlayer::GetPos(void)
 const D3DXVECTOR3 CPlayer::GetLastPos(void)
 {
 	return m_LastPos;
+}
+
+//速度の取得処理
+const D3DXVECTOR3 CPlayer::GetMove(void)
+{
+	return m_move;
 }
 
 //=============================================================================
@@ -496,6 +523,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_OBSTACLE, CHitbox::RESPONSE_OVERLAP);
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_BUTTON, CHitbox::RESPONSE_OVERLAP);
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_VANISHING, CHitbox::RESPONSE_OVERLAP);
+		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_FALL, CHitbox::RESPONSE_OVERLAP);
 	}
 
 	return pModel;					//生成したインスタンスを返す
@@ -798,6 +826,19 @@ void CPlayer::HitboxEffectUpdate(void)
 	break;
 
 	case CHitbox::EFFECT_JUMP:
+		break;
+
+	case CHitbox::EFFECT_FALL:
+
+	{
+		m_bFall = true;
+
+		m_move.x = 0.0f;
+		m_move.z = 0.0f;
+
+		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
+	}
+
 		break;
 
 	default:

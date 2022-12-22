@@ -47,6 +47,8 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\Shuriken.x" },								//MODEL_SHURIKEN,
 	{ "data\\MODELS\\SpikeBase.x" },							//MODEL_SPIKE_BASE,
 	{ "data\\MODELS\\SpikeTrap.x" },							//MODEL_SPIKE_TRAP,
+	{ "data\\MODELS\\Lever\\LeverBase.x" },						//MODEL_LEVER_BASE,
+	{ "data\\MODELS\\Lever\\Lever.x" },							//MODEL_LEVER,
 
 	{ "data\\MODELS\\GoldStar.x" },								//MODEL_ITEM_STAR,
 

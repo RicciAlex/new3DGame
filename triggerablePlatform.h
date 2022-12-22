@@ -30,6 +30,7 @@ public:
 	void Draw(void) override;											//描画処理
 
 	void SetPos(const D3DXVECTOR3 pos) override;						//位置の設定処理
+	void SetOriginalPos(const D3DXVECTOR3 oPos);						//元の位置の設定処理
 	void SetButtonPos(const D3DXVECTOR3 pos);							//ボタンの位置の設定処理
 
 	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理

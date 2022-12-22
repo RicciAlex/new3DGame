@@ -55,6 +55,8 @@ public:
 		const D3DXVECTOR2 unitSize, const int NumberLines, const int NumberColumns, const float fFriction);							//生成処理
 	static CMeshfield* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, 
 		const D3DXVECTOR2 unitSize, const int NumberLines, const int NumberColumns, const int nPriority, const float fFriction);		//生成処理
+	
+	static CMeshfield* CMeshfield::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, char* pPass, const int nPriority);
 
 	static bool FieldInteraction(CObject* pObj);							//当たり判定の処理
 	static CMeshfield* FieldInteraction(CObject* pObj, float* fHeight);		//当たり判定の処理
@@ -62,7 +64,8 @@ public:
 	static void ClearFields(void);
 
 private:
-	void SetVertex(void);								//頂点インデックスの設定処理
+	void SetVertex(void);								//頂点座標とインデックスの設定処理
+	void LoadVertex(char* pPass);								//頂点情報のロード処理
 
 	static const int MAX_FIELD_PRIORITY = 2;
 

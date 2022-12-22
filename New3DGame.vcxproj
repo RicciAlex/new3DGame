@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="accelerationFloor.cpp" />
     <ClCompile Include="AnimateUI.cpp" />
     <ClCompile Include="animator.cpp" />
     <ClCompile Include="application.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="UIString.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="accelerationFloor.h" />
     <ClInclude Include="AnimateUI.h" />
     <ClInclude Include="animator.h" />
     <ClInclude Include="application.h" />

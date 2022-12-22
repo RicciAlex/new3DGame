@@ -188,8 +188,9 @@ CShurikenTrap* CShurikenTrap::Create(const D3DXVECTOR3 pos, const float Yrot, co
 	unit.x *= fDistance;
 	unit.z *= fDistance;
 
-	CModel* pModel = CModel::Create(CModel::MODEL_TRAP_PILLAR, pos);
-	pModel->SetRot(D3DXVECTOR3(0.0f, -Yrot, 0.0f));
+	CModel* pModel = CModel::Create(CModel::MODEL_TRAP_PILLAR, pos + unit);
+	pModel->SetRot(D3DXVECTOR3(0.0f, -Yrot + D3DX_PI * 0.5f, 0.0f));
+	pModel->SetScale(1.5f);
 
 	pTrap->m_pHitbox = CCylinderHitbox::Create(pos + unit, Vec3Null, D3DXVECTOR3(15.0f, 130.0f, 15.0f), CHitbox::TYPE_NEUTRAL, pTrap);
 

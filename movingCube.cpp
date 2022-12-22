@@ -140,6 +140,12 @@ void CMovingCube::SetPos(const D3DXVECTOR3 pos)
 	CModel::SetPos(pos);
 }
 
+//元の位置の設定処理
+void CMovingCube::SetOriginalPos(const D3DXVECTOR3 oPos)
+{
+	m_OriginalPos = oPos;
+}
+
 //速度の設定処理
 void CMovingCube::SetMove(const D3DXVECTOR3 move)
 {
@@ -195,7 +201,12 @@ CMovingCube* CMovingCube::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 move, 
 
 	//ヒットボックスの生成
 	pCube->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -m_metalBoxSize.y * 0.5f, 0.0f), 
-		D3DXVECTOR3(m_metalBoxSize.x * 0.5f, m_metalBoxSize.y * 0.5f, m_metalBoxSize.z * 0.5f), CHitbox::TYPE_NEUTRAL, pCube);
+		D3DXVECTOR3(m_metalBoxSize.x * 0.5f, m_metalBoxSize.y, m_metalBoxSize.z * 0.5f), CHitbox::TYPE_NEUTRAL, pCube);
+
+	if (pCube->m_pHitbox)
+	{
+		pCube->m_pHitbox->SetMove(move);
+	}
 
 	return pCube;					//生成したインスタンスを返す
 }

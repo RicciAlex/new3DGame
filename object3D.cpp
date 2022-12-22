@@ -42,7 +42,9 @@ CObject_3D::CObject_3D()
 	m_nTexLine = 0;										//テクスチャの列数
 	m_nFirstPattern = 0;								//アニメーションの最初のパターン
 	m_nAnimFrame = 0;									//アニメーションパターンの変更フレーム数
-	m_textureTranslation = D3DXVECTOR2(0.0f, 0.0f);		//テクスチャの移動量
+	m_textureTranslation = Vec2Null;					//テクスチャの移動量
+	m_textureAnimSpeed = Vec2Null;						//テクスチャアニメーションの速度
+	m_textureTiling = Vec2Null;							//テクスチャの大きさ
 	m_bFlipX = false;									//テクスチャのX座標が反転しているかどうか
 	m_bFlipY = false;									//テクスチャのY座標が反転しているかどうか
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);			//カラー
@@ -74,6 +76,8 @@ CObject_3D::CObject_3D(const int nPriority) : CObject::CObject(nPriority)
 	m_nFirstPattern = 0;								//アニメーションの最初のパターン
 	m_nAnimFrame = 0;									//アニメーションパターンの変更フレーム数
 	m_textureTranslation = D3DXVECTOR2(0.0f, 0.0f);		//テクスチャの移動量
+	m_textureAnimSpeed = Vec2Null;						//テクスチャアニメーションの速度
+	m_textureTiling = Vec2Null;							//テクスチャの大きさ
 	m_bFlipX = false;									//テクスチャのX座標が反転しているかどうか
 	m_bFlipY = false;									//テクスチャのY座標が反転しているかどうか
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);			//カラー
@@ -117,6 +121,8 @@ HRESULT CObject_3D::Init(void)
 	m_nTexLine = 1;												//テクスチャの列数
 	m_nFirstPattern = 0;										//アニメーションの最初のパターン
 	m_textureTranslation = D3DXVECTOR2(0.0f, 0.0f);				//テクスチャの移動量
+	m_textureAnimSpeed = Vec2Null;								//テクスチャアニメーションの速度
+	m_textureTiling = D3DXVECTOR2(1.0f, 1.0f);									//テクスチャの大きさ
 	m_bFlipX = false;											//テクスチャのX座標が反転しているかどうか
 	m_bFlipY = false;											//テクスチャのY座標が反転しているかどうか
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);					//カラー
@@ -183,10 +189,12 @@ void CObject_3D::Uninit()
 //=============================================================================
 void CObject_3D::Update()
 {
-	if (m_textureTranslation != Vec2Null)
+	if (m_textureAnimSpeed != Vec2Null)
 	{
 		VERTEX_3D* pVtx = nullptr;					//頂点情報へのポインタ
 		VERTEX_3D  Vtx = {};
+
+		//m_textureTranslation += m_textureAnimSpeed;
 
 		//頂点バッファのロック
 		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -194,7 +202,7 @@ void CObject_3D::Update()
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
 			Vtx = pVtx[nCnt];
-			Vtx.tex += m_textureTranslation;
+			Vtx.tex += m_textureAnimSpeed;
 			pVtx[nCnt] = Vtx;
 		}
 
@@ -501,7 +509,27 @@ void CObject_3D::SetVtxColor(const int nVtxIdx, const D3DXCOLOR col)
 //テクスチャの移動量の設定処理
 void CObject_3D::MoveTexCoordinates(const D3DXVECTOR2 move)
 {
-	m_textureTranslation = move;
+	m_textureAnimSpeed = move;
+}
+
+//テクスチャの大きさの設定処理
+void CObject_3D::SetTextureTiling(const D3DXVECTOR2 tiling)
+{
+	m_textureTiling = tiling;
+}
+
+//テクスチャの大きさの設定処理
+void CObject_3D::SetTextureTiling(const float fTiling)
+{
+	m_textureTiling = D3DXVECTOR2(fTiling, fTiling);
+}
+
+//テクスチャの大きさの設定処理
+void CObject_3D::SetTextureTiling(const float fTilingX, const float fTilingY)
+{
+	m_textureTiling = D3DXVECTOR2(fTilingX, fTilingY);
+
+	UpdateTexture();
 }
 
 //テクスチャの種類の設定処理
@@ -557,31 +585,31 @@ void CObject_3D::UpdateTexture(void)
 
 	if (!m_bFlipX && !m_bFlipY)
 	{
-		pVtx[0].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[1].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[2].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[3].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[0].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[1].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[2].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
+		pVtx[3].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
 	}
 	else if (m_bFlipX && !m_bFlipY)
 	{
-		pVtx[1].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[0].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[3].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[2].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[1].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[0].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x,   0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[3].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
+		pVtx[2].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x,   (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
 	}
 	else if (!m_bFlipX && m_bFlipY)
 	{
-		pVtx[2].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[3].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[0].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[1].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[2].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[3].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[0].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
+		pVtx[1].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
 	}
 	else
 	{
-		pVtx[3].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[2].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + 0.0f + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[1].tex = D3DXVECTOR2(m_textureTranslation.x + 0.0f + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
-		pVtx[0].tex = D3DXVECTOR2(m_textureTranslation.x + fX + fX * (m_nAnimPattern % m_nTexLine), m_textureTranslation.y + fY + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[3].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[2].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, 0.0f + fY * (m_nAnimPattern / m_nTexLine));
+		pVtx[1].tex = D3DXVECTOR2(0.0f + fX * (m_nAnimPattern % m_nTexLine), (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
+		pVtx[0].tex = D3DXVECTOR2((fX + fX * (m_nAnimPattern % m_nTexLine))  * m_textureTiling.x, (fY + fY * (m_nAnimPattern / m_nTexLine)) * m_textureTiling.y);
 	}
 
 	//頂点バッファをアンロックする

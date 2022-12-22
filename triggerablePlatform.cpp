@@ -95,6 +95,16 @@ void CTriggerablePlatform::SetPos(const D3DXVECTOR3 pos)
 	}
 }
 
+//元の位置の設定処理
+void CTriggerablePlatform::SetOriginalPos(const D3DXVECTOR3 oPos)
+{
+	if (m_pPlatform)
+	{//プラットフォームのnullチェック
+				
+		m_pPlatform->SetOriginalPos(oPos);
+	}
+}
+
 //ボタンの位置の設定処理
 void CTriggerablePlatform::SetButtonPos(const D3DXVECTOR3 pos)
 {

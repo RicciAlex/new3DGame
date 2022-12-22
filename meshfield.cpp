@@ -764,6 +764,23 @@ CMeshfield* CMeshfield::FieldInteraction(CObject* pObj, float* fHeight)
 	return nullptr;
 }
 
+//生成処理
+CMeshfield* CMeshfield::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, char* pPass, const int nPriority)
+{
+	CMeshfield* pField = new CMeshfield(nPriority);
+
+	if (FAILED(pField->Init()))
+	{
+		return nullptr;
+	}
+
+	pField->m_pos = pos;
+	pField->m_rot = rot;
+	pField->LoadVertex(pPass);
+
+	return pField;
+}
+
 
 void CMeshfield::ClearFields(void)
 {
@@ -919,4 +936,139 @@ void CMeshfield::SetVertex(void)
 
 	//頂点バッファのアンロック
 	m_pVtxBuff->Unlock();
+}
+
+
+//頂点インデックスのロード処理
+void CMeshfield::LoadVertex(char* pPass)
+{
+	FILE*pFile;				//ファイルポインタを宣言する
+
+	int nVtxNum = 0;
+	int nLine = 0;
+	int nColumn = 0;
+
+	//ファイルを開く
+	pFile = fopen(pPass, "r");
+
+	if (pFile != NULL)
+	{//ファイルが開けた場合
+	 //ファイルにランキング情報を読み込む
+
+		fscanf(pFile, "%d", &nVtxNum);
+		fscanf(pFile, "%d", &nColumn);
+		fscanf(pFile, "%d", &nLine);
+
+		m_nVertexNumber = nVtxNum;
+		m_nLineVertex = nLine;
+		m_nColumnVertex = nColumn;
+
+		//ポリゴン数の計算
+		m_nIndexNumber = ((m_nLineVertex * 2) * (m_nColumnVertex - 1)) + (2 * (m_nColumnVertex - 2));
+		m_nPolygonNumber = m_nIndexNumber - 2;
+
+		LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();		//デバイスの取得
+
+																					//頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * m_nVertexNumber,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_3D,
+			D3DPOOL_MANAGED,
+			&m_pVtxBuff,
+			NULL);
+
+		//インデックスバッファの生成
+		pDevice->CreateIndexBuffer(sizeof(WORD) * m_nIndexNumber,
+			D3DUSAGE_WRITEONLY,
+			D3DFMT_INDEX16,
+			D3DPOOL_MANAGED,
+			&m_pIdxBuff,
+			NULL);
+
+		//頂点情報へのポインタ
+		VERTEX_3D*pVtx = nullptr;
+
+		std::vector <VERTEX_3D> vVtx;
+		vVtx.clear();
+
+		//頂点バッファをロック
+		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		for (int nCnt = 0; nCnt < nVtxNum; nCnt++)
+		{
+
+			fscanf(pFile, "%f", &pVtx[nCnt].pos.x);
+			fscanf(pFile, "%f", &pVtx[nCnt].pos.y);
+			fscanf(pFile, "%f", &pVtx[nCnt].pos.z);
+
+			fscanf(pFile, "%f", &pVtx[nCnt].nor.x);
+			fscanf(pFile, "%f", &pVtx[nCnt].nor.y);
+			fscanf(pFile, "%f", &pVtx[nCnt].nor.z);
+
+			D3DXCOLOR col = ColorNull;
+
+			fscanf(pFile, "%f", &col.r);
+			fscanf(pFile, "%f", &col.g);
+			fscanf(pFile, "%f", &col.b);
+			fscanf(pFile, "%f", &col.a);
+
+			pVtx[nCnt].col = D3DXCOLOR(col.r, col.g, col.b, col.a);
+
+			float x = 0.0f;
+			float y = 0.0f;
+
+			fscanf(pFile, "%f", &x);
+			fscanf(pFile, "%f", &y);
+
+			pVtx[nCnt].tex = D3DXVECTOR2(x, y);
+
+		}
+
+		//頂点バッファのアンロック
+		m_pVtxBuff->Unlock();
+
+		//ファイルを閉じる
+		fclose(pFile);
+
+	}
+	else
+	{//ファイルが開けなかった場合
+		Release();
+		return;
+	}
+
+	WORD*pIdx;		//インデックス情報へのポインタ
+
+					//インデックスバッファをロック
+	m_pIdxBuff->Lock(0, 0, (void**)&pIdx, 0);
+
+	int nStart = 0;		//計算用のローカル変数
+	int nCtrl = 0;
+
+	for (int Z = 0; Z < m_nColumnVertex - 1; Z++)
+	{
+		for (int X = 0; X < m_nLineVertex; X++)
+		{
+			int a = ((Z + 1) * m_nLineVertex) + (X), b = ((Z)* m_nLineVertex) + (X);
+
+			pIdx[nCtrl + 0] = a;
+			pIdx[nCtrl + 1] = b;
+
+			nCtrl += 2;
+			nStart++;
+
+			if (nStart == m_nLineVertex && Z < m_nColumnVertex - 2)
+			{
+				a = ((Z + 2) * m_nLineVertex);
+				pIdx[nCtrl + 0] = b;
+				pIdx[nCtrl + 1] = a;
+
+				nCtrl += 2;
+				nStart = 0;
+			}
+		}
+	}
+
+	m_pIdxBuff->Unlock();
+
 }
