@@ -11,6 +11,10 @@
 #include "triggerablePlatform.h"
 #include "button.h"
 #include "movingCube.h"
+#include "application.h"
+#include "game.h"
+#include "player.h"
+#include "animationFade.h"
 
 //コンストラクタ
 CTriggerablePlatform::CTriggerablePlatform()
@@ -75,6 +79,10 @@ void CTriggerablePlatform::Update(void)
 				m_bTriggered = true;				//押された状態にする
 
 				m_pPlatform->SetMove(m_move);		//プラットフォームの速度を設定する
+
+				CApplication::GetGame()->GetPlayer()->SetCameraAnim(true);
+
+				CAnimationFade::Create(m_pPlatform->GetPos() + D3DXVECTOR3(0.0f, 250.0f, -500.0f), m_pPlatform->GetPos(), CAnimationFade::TYPE_PLATFORM);
 			}
 		}
 	}

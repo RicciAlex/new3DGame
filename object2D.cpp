@@ -24,6 +24,8 @@ char* CObject_2D::m_paTextPass[CObject::TEXTURE_TYPE_MAX] =
 	"data\\TEXTURE\\TemporaryTitle.png",					//TEXTURE_CHARACTERS,
 	"data\\TEXTURE\\Fog.png",								//TEXTURE_FOG,
 	"data\\TEXTURE\\Materials\\Steel.jpg",					//TEXTURE_METAL,
+	"data\\TEXTURE\\Materials\\Iron.jpg",					//TEXTURE_IRON,
+	"data\\TEXTURE\\Materials\\OldWood.png",				//TEXTURE_OLD_WOOD,
 	"data\\TEXTURE\\Green.png",								//TEXTURE_GREEN,
 	"data\\TEXTURE\\Blue.png",								//TEXTURE_BLUE,
 	"data\\TEXTURE\\Grass.jpg",								//TEXTURE_GRASS,
@@ -31,6 +33,13 @@ char* CObject_2D::m_paTextPass[CObject::TEXTURE_TYPE_MAX] =
 	"data\\TEXTURE\\ArrowTileRight.png",					//TEXTURE_ARROW_TILE_RIGHT,
 	"data\\TEXTURE\\ArrowTileDown.png",						//TEXTURE_ARROW_TILE_DOWN,
 	"data\\TEXTURE\\ArrowTileLeft.png",						//TEXTURE_ARROW_TILE_LEFT,
+
+	"data\\TEXTURE\\GearBg.png",							//TEXTURE_GEAR_BG,
+
+	"data\\TEXTURE\\Star.png",								//TEXTURE_STAR_UI,
+
+	"data\\TEXTURE\\Effect\\Particle02.png",				//TEXTURE_CIRCLE_EFFECT,
+	"data\\TEXTURE\\Effect\\Circle.png",					//TEXTURE_CIRCLE,
 };
 
 //=============================================================================
@@ -316,6 +325,30 @@ void CObject_2D::Draw()
 void CObject_2D::SetPos(const D3DXVECTOR3 pos)
 {
 	m_posPolygon = pos;
+
+	VERTEX_2D* pVtx = nullptr;					//頂点情報へのポインタ
+
+												//頂点バッファをロックする
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	float dim = sqrtf((m_size.x * m_size.x) + (m_size.y * m_size.y));
+
+	//頂点座標の更新
+	pVtx[0].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[0].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[0].pos.z = 0.0f;
+	pVtx[1].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (dim);
+	pVtx[1].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (dim);
+	pVtx[1].pos.z = 0.0f;
+	pVtx[2].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[2].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[2].pos.z = 0.0f;
+	pVtx[3].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (dim);
+	pVtx[3].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (dim);
+	pVtx[3].pos.z = 0.0f;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //ポリゴンの幅と高さの設定処理
@@ -323,6 +356,30 @@ void CObject_2D::SetSize(const D3DXVECTOR2 dim)
 {
 	m_size = dim;
 	m_fAngle = atan2f(m_size.y, m_size.x);
+
+	VERTEX_2D* pVtx = nullptr;					//頂点情報へのポインタ
+
+												//頂点バッファをロックする
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	float fDim = sqrtf((m_size.x * m_size.x) + (m_size.y * m_size.y));
+
+	//頂点座標の更新
+	pVtx[0].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (fDim);
+	pVtx[0].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (fDim);
+	pVtx[0].pos.z = 0.0f;
+	pVtx[1].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (fDim);
+	pVtx[1].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (fDim);
+	pVtx[1].pos.z = 0.0f;
+	pVtx[2].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (fDim);
+	pVtx[2].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (fDim);
+	pVtx[2].pos.z = 0.0f;
+	pVtx[3].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (fDim);
+	pVtx[3].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (fDim);
+	pVtx[3].pos.z = 0.0f;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //ポリゴンの幅と高さの設定処理
@@ -331,6 +388,30 @@ void CObject_2D::SetSize(const float x, const float y)
 	m_size.x = x;
 	m_size.y = y;
 	m_fAngle = atan2f(m_size.y, m_size.x);
+
+	VERTEX_2D* pVtx = nullptr;					//頂点情報へのポインタ
+
+												//頂点バッファをロックする
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	float dim = sqrtf((m_size.x * m_size.x) + (m_size.y * m_size.y));
+
+	//頂点座標の更新
+	pVtx[0].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[0].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[0].pos.z = 0.0f;
+	pVtx[1].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (dim);
+	pVtx[1].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot + m_fAngle) * (dim);
+	pVtx[1].pos.z = 0.0f;
+	pVtx[2].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[2].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - (m_fAngle + 2.0f * (D3DX_PI * 0.5f - m_fAngle))) * (dim);
+	pVtx[2].pos.z = 0.0f;
+	pVtx[3].pos.x = (m_posPolygon.x) + sinf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (dim);
+	pVtx[3].pos.y = (m_posPolygon.y) + cosf(D3DX_PI * 0.5f + m_fRot - m_fAngle) * (dim);
+	pVtx[3].pos.z = 0.0f;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //速度の取得処理

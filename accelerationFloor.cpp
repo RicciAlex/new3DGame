@@ -70,6 +70,22 @@ void CAccelerationFloor::Update(void)
 	CObject_3D::Update();
 }
 
+//速度の設定処理
+void CAccelerationFloor::SetSpeed(const D3DXVECTOR2 speed)
+{
+	m_speed = speed;
+}
+
+//速度の設定処理
+void CAccelerationFloor::SetSpeed(const float speedX, const float speedY)
+{
+	m_speed = D3DXVECTOR2(speedX, speedY);
+
+	D3DXVECTOR2 tiling = GetTextureTiling();
+
+	MoveTexCoordinates(D3DXVECTOR2(m_speed.x * -0.01f * tiling.x, m_speed.y * 0.01f * tiling.y));
+}
+
 //テクスチャの移動量の設定処理
 void CAccelerationFloor::SetTextureTiling(const D3DXVECTOR2 tiling)
 {
@@ -135,7 +151,7 @@ CAccelerationFloor* CAccelerationFloor::Create(const D3DXVECTOR3 pos, const D3DX
 		pFloor->SetTexture(CObject::TEXTURE_ARROW_TILE_DOWN);
 	}
 
-	pFloor->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -9.0f, 0.0f), D3DXVECTOR3(size.x, 10.0f, size.y), CHitbox::TYPE_NEUTRAL, pFloor);
+	pFloor->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -9.0f, 0.0f), D3DXVECTOR3(size.x, 10.0f, size.y), CHitbox::TYPE_OVERLAPPABLE, pFloor);
 
 	if (pFloor->m_pHitbox)
 	{
@@ -163,11 +179,12 @@ CAccelerationFloor * CAccelerationFloor::Create(const D3DXVECTOR3 pos, const D3D
 	pFloor->MoveTexCoordinates(D3DXVECTOR2(pFloor->m_speed.x * -0.01f, pFloor->m_speed.y * 0.01f));
 	pFloor->SetTexture(texture);
 
-	pFloor->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -9.0f, 0.0f), D3DXVECTOR3(size.x, 10.0f, size.y), CHitbox::TYPE_NEUTRAL, pFloor);
+	pFloor->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -9.0f, 0.0f), D3DXVECTOR3(size.x, 10.0f, size.y), CHitbox::TYPE_OVERLAPPABLE, pFloor);
 
 	if (pFloor->m_pHitbox)
 	{
 		pFloor->m_pHitbox->SetAcceleration(D3DXVECTOR3(speed.x, 0.0f, speed.y));
+		pFloor->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
 	}
 
 	return pFloor;

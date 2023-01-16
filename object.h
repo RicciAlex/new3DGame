@@ -57,6 +57,8 @@ public:
 		TEXTURE_TITLE,
 		TEXTURE_FOG,
 		TEXTURE_METAL,
+		TEXTURE_IRON,
+		TEXTURE_OLD_WOOD,
 		TEXTURE_GREEN,
 		TEXTURE_BLUE,
 		TEXTURE_GRASS,
@@ -64,6 +66,13 @@ public:
 		TEXTURE_ARROW_TILE_RIGHT,
 		TEXTURE_ARROW_TILE_DOWN,
 		TEXTURE_ARROW_TILE_LEFT,
+
+		TEXTURE_GEAR_BG,
+
+		TEXTURE_STAR_UI,
+
+		TEXTURE_CIRCLE_EFFECT,
+		TEXTURE_CIRCLE,
 
 		TEXTURE_TYPE_MAX
 	};
@@ -82,7 +91,6 @@ public:
 	virtual void SetPos(const D3DXVECTOR3 pos) = 0;		//位置の設定処理
 	
 	void Release(void);									//インスタンス一つの終了処理
-	//virtual const D3DXVECTOR2 GetSize(void) = 0;		//サイズの取得処理
 	virtual const D3DXVECTOR3 GetPos(void) = 0;			//位置の取得処理
 	void SetPriority(int nPriority);					//プライオリティの設定処理
 														

@@ -96,7 +96,7 @@ void CCylinderHitbox::Update(void)
 						if (pHbx->data()[nCnt]->GetType() != TYPE_OBSTACLE || !GetInvincibility())
 						{//–³“Gó‘Ô‚Å‚Í‚È‚©‚Á‚½‚ç
 
-							if (GetType() == TYPE_PLAYER && (pHbx->data()[nCnt]->GetType() == TYPE_VANISHING || pHbx->data()[nCnt]->GetType() == TYPE_OBSTACLE))
+							if (GetType() == TYPE_PLAYER && (pHbx->data()[nCnt]->GetType() == TYPE_VANISHING || pHbx->data()[nCnt]->GetType() == TYPE_OBSTACLE || pHbx->data()[nCnt]->GetType() == TYPE_NEUTRAL))
 							{
 								pHbx->data()[nCnt]->SetCollisionState(true);
 							}
@@ -179,6 +179,7 @@ void CCylinderHitbox::Update(void)
 							if (pHbx->data()[nCnt]->GetEffect() == CHitbox::EFFECT_BOUNCE)
 							{
 								D3DXVECTOR3 dir = GetParent()->GetPos() - pHbx->data()[nCnt]->GetPos();
+								D3DXVec3Normalize(&dir, &dir);
 								pHbx->data()[nCnt]->SetDirection(dir);
 							}
 

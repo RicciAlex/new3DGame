@@ -39,6 +39,9 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\Player\\PlayerFoot.x" },					//MODEL_PLAYER_FOOT,
 	{ "data\\MODELS\\Player\\Saya.x" },							//MODEL_SAYA,
 	{ "data\\MODELS\\Player\\Katana.x" },						//MODEL_KATANA,
+
+	{ "data\\MODELS\\Enemy\\FogBot\\FogBot.x" },				//MODEL_ENEMY_FOGBOT,
+
 	{ "data\\MODELS\\GoalFlag.x" },								//MODEL_FLAG,
 	{ "data\\MODELS\\8InchNails.x" },							//MODEL_NAILS,
 	{ "data\\MODELS\\Gear.x" },									//MODEL_GEAR,
@@ -49,6 +52,9 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\SpikeTrap.x" },							//MODEL_SPIKE_TRAP,
 	{ "data\\MODELS\\Lever\\LeverBase.x" },						//MODEL_LEVER_BASE,
 	{ "data\\MODELS\\Lever\\Lever.x" },							//MODEL_LEVER,
+	{ "data\\MODELS\\CheckPointAura.x" },						//MODEL_CHECKPOINT_AURA,
+	{ "data\\MODELS\\WoodenBoard.x" },							//MODEL_WOODEN_BOARD,
+	{ "data\\MODELS\\Pipe.x" },									//MODEL_PIPE,
 
 	{ "data\\MODELS\\GoldStar.x" },								//MODEL_ITEM_STAR,
 
@@ -421,22 +427,34 @@ void CModel::StopRotating(void)
 //ƒJ[ƒ‰[‚ÌÝ’èˆ—
 void CModel::SetModelColor(const int nNumMat, const D3DXCOLOR col)
 {
-	if (nNumMat >= (int)m_vCol.size())
+	for (int nCnt = 0; nCnt < (int)m_vCol.size(); nCnt++)
+	{
+		if (nNumMat == m_vCol.data()[nCnt].nMatNumber)
+		{
+			ModelColor mCol = {};
+			mCol.nMatNumber = nNumMat;
+			mCol.col = col;
+
+			m_vCol.erase(m_vCol.begin() + nCnt);
+			m_vCol.emplace(m_vCol.begin() + nCnt, mCol);
+		}
+		else
+		{
+			ModelColor mCol = {};
+			mCol.nMatNumber = nNumMat;
+			mCol.col = col;
+
+			m_vCol.push_back(mCol);
+		}
+	}
+
+	if ((int)m_vCol.size() == 0)
 	{
 		ModelColor mCol = {};
 		mCol.nMatNumber = nNumMat;
 		mCol.col = col;
 
 		m_vCol.push_back(mCol);
-	}
-	else
-	{
-		ModelColor mCol = {};
-		mCol.nMatNumber = nNumMat;
-		mCol.col = col;
-
-		m_vCol.erase(m_vCol.begin() + nNumMat);
-		m_vCol.emplace(m_vCol.begin() + nNumMat, mCol);
 	}
 
 	m_vCol.shrink_to_fit();

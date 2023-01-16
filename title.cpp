@@ -12,7 +12,7 @@
 #include "object2D.h"
 #include "inputKeyboard.h"
 #include "application.h"
-//#include "UIString.h"
+#include "menuButton.h"
 #include "AnimateUI.h"
 
 //コンストラクタ

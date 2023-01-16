@@ -5,9 +5,9 @@
 //
 //=============================================================================
 
-//*****************************************************************************
+//=============================================================================
 // インクルードファイル
-//*****************************************************************************
+//=============================================================================
 #include "rendering.h"
 #include "object.h"
 #include "camera.h"
@@ -19,6 +19,14 @@
 //#include "fade.h"
 
 //=============================================================================
+//								静的変数の初期化
+//=============================================================================
+const float CRenderer::DEFAULT_FOG_NEAR = 1500.0f;				//フォグの開始距離
+const float CRenderer::DEFAULT_FOG_FAR = 3600.0f;				//フォグの終了距離
+const float CRenderer::DEEP_FOG_NEAR = 300.0f;					//フォグの開始距離(密度高い)
+const float CRenderer::DEEP_FOG_FAR = 600.0f;					//フォグの終了距離(密度高い)
+
+//=============================================================================
 // コンストラクタ
 //=============================================================================
 CRenderer::CRenderer()
@@ -27,6 +35,14 @@ CRenderer::CRenderer()
 	m_pD3D = nullptr;						
 	m_pD3DDevice = nullptr;		
 	m_pFont = nullptr;		
+
+	m_nCntFog = 0;
+	m_fFrameFog = Vec2Null;
+	m_fFogNear = 0.0f;
+	m_fFogFar = 0.0f;
+	m_fFogTarget = 0.0f;
+	m_bChangeFog = false;
+	m_bActive = false;
 
 	m_pMembrane = nullptr;
 }
@@ -114,7 +130,10 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 	m_pD3DDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);
 
 	//範囲指定
-	float fFogStart = 1500.0f, fFogEnd = 3600.0f;
+	float fFogStart = DEFAULT_FOG_NEAR, fFogEnd = DEFAULT_FOG_FAR;
+	m_fFogNear = DEFAULT_FOG_NEAR;
+	m_fFogFar = DEFAULT_FOG_FAR;
+	m_fFogTarget = DEFAULT_FOG_NEAR;
 	m_pD3DDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&fFogStart));
 	m_pD3DDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&fFogEnd));
 
@@ -185,6 +204,8 @@ void CRenderer::Uninit()
 //=============================================================================
 void CRenderer::Update()
 {
+	UpdateFog();
+
 	CObject::UpdateAll();			//オブジェクトの更新処理
 }
 
@@ -248,6 +269,57 @@ CPhongShading * CRenderer::GetPhongEffect(void)
 	return m_pPhong;
 }
 
+void CRenderer::ChangeFog(void)
+{
+	m_bChangeFog = !m_bChangeFog;
+	m_bActive = true;
+
+	if (m_fFogTarget == DEFAULT_FOG_NEAR)
+	{
+		m_fFogTarget = DEEP_FOG_NEAR;
+		m_fFrameFog.x = (DEEP_FOG_NEAR - m_fFogNear) / (float)DEFAULT_FOG_CHANGE_TIME;
+		m_fFrameFog.y = (DEEP_FOG_FAR - m_fFogFar) / (float)DEFAULT_FOG_CHANGE_TIME;
+	}
+	else
+	{
+		m_fFogTarget = DEFAULT_FOG_NEAR;
+
+		m_fFrameFog.x = (DEFAULT_FOG_NEAR - m_fFogNear) / (float)DEFAULT_FOG_CHANGE_TIME;
+		m_fFrameFog.y = (DEFAULT_FOG_FAR - m_fFogFar) / (float)DEFAULT_FOG_CHANGE_TIME;
+	}
+}
+
+void CRenderer::UpdateFog(void)
+{
+	if (m_bActive)
+	{
+		m_nCntFog++;
+
+		m_fFogNear += m_fFrameFog.x;
+		m_fFogFar += m_fFrameFog.y;
+
+		if (m_nCntFog >= DEFAULT_FOG_CHANGE_TIME)
+		{
+			if (m_fFogTarget == DEFAULT_FOG_NEAR)
+			{
+				m_fFogNear = DEFAULT_FOG_NEAR;
+				m_fFogFar  = DEFAULT_FOG_FAR;
+			}
+			else
+			{
+				m_fFogNear = DEEP_FOG_NEAR;
+				m_fFogFar  = DEEP_FOG_FAR;
+			}
+
+			m_nCntFog = 0;
+			m_bActive = false;
+		}
+
+		m_pD3DDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&m_fFogNear));
+		m_pD3DDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&m_fFogFar));
+	}
+}
+
 #ifdef _DEBUG
 
 //=============================================================================
@@ -264,4 +336,5 @@ void CRenderer::DrawFPS(void)
 	// テキスト描画
 	m_pFont->DrawText(NULL, str, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 }
+
 #endif // _DEBUG

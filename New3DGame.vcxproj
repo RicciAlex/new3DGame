@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="accelerationFloor.cpp" />
     <ClCompile Include="AnimateUI.cpp" />
+    <ClCompile Include="animationFade.cpp" />
     <ClCompile Include="animator.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="bg.cpp" />
@@ -161,11 +162,21 @@
     <ClCompile Include="BoxHitbox.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="cameraSetter.cpp" />
+    <ClCompile Include="checkpoint.cpp" />
     <ClCompile Include="CylinderHitbox.cpp" />
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="directionalLight.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="fade.cpp" />
+    <ClCompile Include="fallBoard.cpp" />
+    <ClCompile Include="fireEffect.cpp" />
+    <ClCompile Include="fireParticle.cpp" />
+    <ClCompile Include="FirePipe.cpp" />
     <ClCompile Include="firstStage.cpp" />
+    <ClCompile Include="fogBot.cpp" />
+    <ClCompile Include="fogEffect.cpp" />
+    <ClCompile Include="fogParticle.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="hitbox.cpp" />
@@ -177,6 +188,7 @@
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="membraneLighting.cpp" />
+    <ClCompile Include="menuButton.cpp" />
     <ClCompile Include="meshCube.cpp" />
     <ClCompile Include="meshfield.cpp" />
     <ClCompile Include="mode.cpp" />
@@ -197,7 +209,9 @@
     <ClCompile Include="silhouette.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="spikeTrap.cpp" />
+    <ClCompile Include="stageSelect.cpp" />
     <ClCompile Include="star.cpp" />
+    <ClCompile Include="starUI.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="triggerablePlatform.cpp" />
     <ClCompile Include="UIString.cpp" />
@@ -205,6 +219,7 @@
   <ItemGroup>
     <ClInclude Include="accelerationFloor.h" />
     <ClInclude Include="AnimateUI.h" />
+    <ClInclude Include="animationFade.h" />
     <ClInclude Include="animator.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="bg.h" />
@@ -212,11 +227,21 @@
     <ClInclude Include="BoxHitbox.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="cameraSetter.h" />
+    <ClInclude Include="checkpoint.h" />
     <ClInclude Include="CylinderHitbox.h" />
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="directionalLight.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="fade.h" />
+    <ClInclude Include="fallBoard.h" />
+    <ClInclude Include="fireEffect.h" />
+    <ClInclude Include="fireParticle.h" />
+    <ClInclude Include="FirePipe.h" />
     <ClInclude Include="firstStage.h" />
+    <ClInclude Include="fogBot.h" />
+    <ClInclude Include="fogEffect.h" />
+    <ClInclude Include="fogParticle.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="hitbox.h" />
@@ -228,6 +253,7 @@
     <ClInclude Include="line.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="membraneLighting.h" />
+    <ClInclude Include="menuButton.h" />
     <ClInclude Include="meshCube.h" />
     <ClInclude Include="meshfield.h" />
     <ClInclude Include="mode.h" />
@@ -248,7 +274,9 @@
     <ClInclude Include="silhouette.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="spikeTrap.h" />
+    <ClInclude Include="stageSelect.h" />
     <ClInclude Include="star.h" />
+    <ClInclude Include="starUI.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="triggerablePlatform.h" />
     <ClInclude Include="UIString.h" />

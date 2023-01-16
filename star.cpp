@@ -15,6 +15,8 @@
 #include "membraneLighting.h"
 #include "camera.h"
 #include "directionalLight.h"
+#include "game.h"
+#include "player.h"
 
 //コンストラクタ
 CGoldStar::CGoldStar()
@@ -62,6 +64,14 @@ void CGoldStar::Update(void)
 	{
 		if (m_pHitbox->GetCollisionState())
 		{
+			CPlayer * pPlayer = CApplication::GetGame()->GetPlayer();		//プレイヤーの取得
+
+			if (pPlayer)
+			{//nullチェック
+
+				pPlayer->AddStar();
+			}
+
 			Release();
 		}
 	}

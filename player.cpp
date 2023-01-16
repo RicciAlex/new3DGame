@@ -18,13 +18,19 @@
 #include "animator.h"
 #include "rendering.h"
 #include "CylinderHitbox.h"
+#include "starUI.h"
+
+#include "animationFade.h"
 
 //=============================================================================
 //							静的変数の初期化
 //=============================================================================
 
+const D3DXVECTOR3 CPlayer::m_baseCameraPos = D3DXVECTOR3(0.0f, 250.0f, -400.0f);							//普通のカメラの位置
+const D3DXVECTOR3 CPlayer::m_baseFocalPointPos = D3DXVECTOR3(0.0f, 0.0f, 300.0f);						//普通の注視点の位置
+const D3DXVECTOR3 CPlayer::m_BackCameraPos = D3DXVECTOR3(0.0f, 250.0f, -550.0f);							//後ろのカメラの位置
 const float CPlayer::m_MaxWalkingSpeed = 7.0f;			//最大歩くスピード
-const float CPlayer::m_AccelerationCoeff = 5.0f;		//加速係数
+const float CPlayer::m_AccelerationCoeff = 8.0f;		//加速係数
 const D3DXVECTOR3 CPlayer::m_playerSize = D3DXVECTOR3(30.0f, 175.0f, 30.0f);				//プレイヤーのサイズ
 
 //プレイヤーの色
@@ -52,6 +58,9 @@ CPlayer::CPlayer() : CObject::CObject(1)
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
 	m_rot = Vec3Null;								//向き
 	m_bRot = false;									//回転したかどうか
+	m_respawnPoint = Vec3Null;
+	m_cameraPos = Vec3Null;							//カメラの相対位置
+	m_cameraTarget = Vec3Null;						//カメラの目的の位置
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
 	m_State = (STATE)0;								//アニメーション状態
 	m_bJump = false;								//ジャンプしているかどうか
@@ -63,6 +72,8 @@ CPlayer::CPlayer() : CObject::CObject(1)
 	m_fFrictionCoeff = 0.0f;						//摩擦係数
 	m_bFall = false;								//落下しているかどうか
 	m_pHitbox = nullptr;							//ヒットボックス
+	m_bMoveCamera = false;							//カメラの位置を更新するかどうか
+	m_bCameraAnim = false;
 
 	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{//モデルの部分へのポインタ
@@ -86,6 +97,9 @@ HRESULT CPlayer::Init(void)
 	m_DestRot = Vec3Null;							//目的の角度の初期化処理
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
 	m_rot = D3DXVECTOR3(0.0f, D3DX_PI, 0.0f);		//向き
+	m_respawnPoint = Vec3Null;
+	m_cameraPos = m_baseCameraPos;					//カメラの相対位置
+	m_cameraTarget = m_baseCameraPos;				//カメラの目的の位置
 	m_bRot = false;									//回転したかどうか
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
 	m_State = STATE_NEUTRAL;						//アニメーション状態
@@ -98,10 +112,19 @@ HRESULT CPlayer::Init(void)
 	m_fFrictionCoeff = 0.1f;						//摩擦係数
 	m_bFall = false;								//落下しているかどうか
 	m_pHitbox = nullptr;							//ヒットボックス
+	m_bMoveCamera = false;							//カメラの位置を更新するかどうか
+	m_bCameraAnim = false;
 
 	for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
 	{//モデルの部分へのポインタ
 		m_pModel[nCnt] = nullptr;
+	}
+
+	m_pUI = CStarUI::Create(10);
+
+	if (!m_pUI)
+	{
+		return -1;
 	}
 
 	return S_OK;
@@ -135,218 +158,62 @@ void CPlayer::Uninit(void)
 		m_pHitbox->Release();
 		m_pHitbox = nullptr;
 	}
+
+	//UIの破棄処理
+	if (m_pUI != nullptr)
+	{
+		m_pUI->Release();
+		m_pUI = nullptr;
+	}
 }
 
 //更新処理
 void CPlayer::Update(void)
 {
-	m_LastPos = m_pos;				//前回の位置の更新
-
-	D3DXVECTOR3 cameraRot = CApplication::GetCamera()->GetRot();					//カメラの向きの取得処理
-
-	//プレイヤーの目的角度の正規化処理
-	D3DXVECTOR3 cR = D3DXVECTOR3(-cosf(cameraRot.y), 0.0f, sinf(cameraRot.y));
-	float fA = acosf(cR.x);
-
-	if (cR.z < 0.0f)
+	if (!m_bCameraAnim)
 	{
-		fA *= -1.0f;
-	}
+		TransformUpdate();
 
-	if (!CApplication::GetFade() && !m_bFall)
-	{//フェードしていなかったら
-		PlayerController(0);		//プレイヤーを動かす
-	}
+		FieldUpdate();
 
-	//位置の更新
-	m_pos += m_move;				
-	CDebugProc::Print("\n%f %f %f", m_move.x, m_move.y, m_move.z);
-	
-	m_move.x += (0.0f - m_move.x) * m_fFrictionCoeff;		//移動量のXコンポネントの更新
-	m_move.y += (0.0f - m_move.y) * 0.1f;					//移動量のYコンポネントの更新
-	m_move.z += (0.0f - m_move.z) * m_fFrictionCoeff;		//移動量のZコンポネントの更新
-
-
-	//目的の角度の正規化処理
-	if (m_DestRot.y - (m_rot.y) > D3DX_PI)
-	{
-		m_DestRot.y -= 2 * D3DX_PI;
-	}
-	else if (m_DestRot.y - (m_rot.y) < -D3DX_PI)
-	{
-		m_DestRot.y += 2 * D3DX_PI;
-	}
-
-
-	//回転角度の計算
-	D3DXVECTOR3 rot = m_rot + ((m_DestRot - m_rot) * 0.1f);
-
-	//回転角度の設定処理
-	//m_pModel[BODY]->SetRot(rot);		
-
-	//回転角度の正規化処理
-	m_rot = rot;
-
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y = -D3DX_PI + (m_rot.y - D3DX_PI);
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y = D3DX_PI - (D3DX_PI + m_rot.y);
-	}
-
-	if (m_rot.y < D3DX_PI * -2.0f)
-	{
-		m_rot.y += D3DX_PI * 2.0f;
-	}
-	else if (m_rot.y > D3DX_PI * 2.0f)
-	{
-		m_rot.y += D3DX_PI * -2.0f;
-	}
-
-	//回転の設定処理
-	//m_pModel[BODY]->SetRot(D3DXVECTOR3(m_pModel[BODY]->GetRot().x, fRot, m_pModel[BODY]->GetRot().z));
-
-	//重量を追加する
-	if (m_move.y >= -10.0f)
-	{
-		m_move.y -= 0.65f;
-	}
-
-	if (m_move.y <= 0.0f)
-	{
-		float fHeight = 0.0f;
-
-		if (!m_bFall)
+		if (m_nInvincibilityCnt > 0)
 		{
-			//メッシュフィールドとの当たり判定
-			CMeshfield* pField = CMeshfield::FieldInteraction(this, &fHeight);
+			m_nInvincibilityCnt--;
 
-			//地面との当たり判定
-			if (pField != nullptr)
+			if (m_nInvincibilityCnt <= 0)
 			{
-				if (m_bJump)
-				{
-					if (m_pAnimator)
-					{
-
-						m_bJump = false;		//着地している状態にする
-						m_bLanded = true;
-
-						if (!m_bMoving)
-						{
-							m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
-						}
-						else
-						{
-							m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
-						}
-					}
-				}
-
-				m_bHit = false;			//当たってない状態にする
-				//摩擦係数の取得
-				m_fFrictionCoeff = pField->GetFriction();
-
-				//影の高さの設定
-				for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
-				{
-					if (m_pModel[nCnt] != nullptr)
-					{
-						m_pModel[nCnt]->SetShadowHeight(fHeight);
-					}
-				}
-			}
-		}
-	}
-
-	if (m_nInvincibilityCnt > 0)
-	{
-		m_nInvincibilityCnt--;
-
-		if (m_nInvincibilityCnt <= 0)
-		{
-			m_nInvincibilityCnt = 0;
-			m_pHitbox->SetInvincibility(false);
-		}
-	}
-
-	if (m_pHitbox)
-	{
-		m_pHitbox->SetPos(m_pos);
-		m_pHitbox->Update();
-
-		if (m_pHitbox->GetCollisionDirection() == CHitbox::FROM_ABOVE)
-		{
-			m_bLanded = true;
-		}
-		else if (m_pHitbox->GetCollisionDirection() == CHitbox::FROM_BELOW)
-		{
-			m_move.y = 0.0f;
-		}
-
-		if (D3DXVec3Length(&m_pHitbox->GetMove()) != 0.0f)
-		{
-			m_pos += m_pHitbox->GetMove();
-			m_pHitbox->SetMove(Vec3Null);
-		}
-
-		if (D3DXVec3Length(&m_pHitbox->GetAcceleration()) != 0.0f)
-		{
-			m_move += m_pHitbox->GetAcceleration();
-			m_pHitbox->SetAcceleration(Vec3Null);
-		}
-
-		HitboxEffectUpdate();
-	}
-
-	if (m_pAnimator != nullptr)
-	{
-		//アニメーションの更新
-		m_pAnimator->Update();
-
-		if (!m_bJump && m_bMoving)
-		{
-			D3DXVECTOR3 residualMove = m_move;
-			residualMove.y = 0.0f;
-
-			if (D3DXVec3Length(&residualMove) <= 0.1f)
-			{
-				m_pAnimator->SetPresentAnim(STATE_NEUTRAL);
-				m_bMoving = false;
+				m_nInvincibilityCnt = 0;
+				m_pHitbox->SetInvincibility(false);
 			}
 		}
 
-		if (m_bJump && m_bLanded)
-		{
-			m_bJump = false;
+		UpdateHitbox();
 
-			if (!m_bMoving)
-			{
-				m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
-			}
-			else
-			{
-				m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
-			}
+		UpdateAnimation();
+
+		if (m_pos.y <= -1000.0f)
+		{
+			RespawnPlayer();
+			m_bFall = false;
+		}
+
+		UpdatePlayerCamera();
+
+		if (CInputKeyboard::GetKeyboardTrigger(DIK_U))
+		{
+			m_bCameraAnim = true;
+			CAnimationFade::Create(D3DXVECTOR3(-1500.0f, -200.0f, 500.0f) + m_cameraPos, D3DXVECTOR3(-1500.0f, -200.0f, 500.0f) + m_baseFocalPointPos, CAnimationFade::TYPE_PLATFORM);
 		}
 	}
 
-	if (m_pos.y <= -1000.0f)
+	/*if (CInputKeyboard::GetKeyboardTrigger(DIK_M))
 	{
-		RespawnPlayer();
-		m_bFall = false;
+		SetTargetCameraPos(CAMERA_POS_BACK);
 	}
-
-	CCamera* pCamera = CApplication::GetCamera();
-
-	if (pCamera != nullptr)
+	else if (CInputKeyboard::GetKeyboardTrigger(DIK_N))
 	{
-		D3DXVECTOR3 p = D3DXVECTOR3(0.0f, 250.0f, -350.0f);
-		D3DXVECTOR3 q = D3DXVECTOR3(0.0f, 0.0f, 300.0f);
-		pCamera->SetPos(m_pos + p, m_pos + q);
-	}
+		SetTargetCameraPos(CAMERA_POS_NORMAL);
+	}*/
 
 	CDebugProc::Print("\n\n Pos: %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 }
@@ -377,6 +244,15 @@ void CPlayer::Draw(void)
 				m_pModel[nCnt]->Draw();
 			}
 		}
+	}
+}
+
+//星1つの加算処理
+void CPlayer::AddStar(void)
+{
+	if (m_pUI)
+	{
+		m_pUI->AddStar();
 	}
 }
 
@@ -421,6 +297,46 @@ void CPlayer::SetMove(const D3DXVECTOR3 move)
 	m_move = move;
 }
 
+//カメラの目的の位置の設定処理
+void CPlayer::SetTargetCameraPos(CAMERA_POS pos)
+{
+	switch (pos)
+	{
+	case CPlayer::CAMERA_POS_NORMAL:
+
+	{
+		m_cameraTarget = m_baseCameraPos;
+	}
+
+		break;
+
+	case CPlayer::CAMERA_POS_BACK:
+
+	{
+		m_cameraTarget = m_BackCameraPos;
+	}
+
+		break;
+
+	default:
+		break;
+	}
+
+	m_bMoveCamera = true;
+}
+
+//リスポーンの位置の設定処理
+void CPlayer::SetRespawnPoint(const D3DXVECTOR3 pos)
+{
+	m_respawnPoint = pos;
+}
+
+//カメラアニメーションの設定処理
+void CPlayer::SetCameraAnim(const bool bAnim)
+{
+	m_bCameraAnim = bAnim;
+}
+
 //位置の取得処理
 const D3DXVECTOR3 CPlayer::GetPos(void)
 {
@@ -458,6 +374,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
 
 	pModel->m_pos = pos;						//位置の設定
 	pModel->m_LastPos = pos;					//前回の位置の設定
+	pModel->m_respawnPoint = pos;				//リスポーンの位置の設定
 
 	pModel->m_rot = D3DXVECTOR3(0.0f, -D3DX_PI, 0.0f);
 	pModel->m_pModel[BODY] = CModelPart::Create(CModel::MODEL_PLAYER_BODY, D3DXVECTOR3(0.0f, 53.0f, 0.0f), D3DXVECTOR3(0.0f, -2.98f, 0.0f));				//体のモデルを生成する
@@ -524,6 +441,7 @@ CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_BUTTON, CHitbox::RESPONSE_OVERLAP);
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_VANISHING, CHitbox::RESPONSE_OVERLAP);
 		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_FALL, CHitbox::RESPONSE_OVERLAP);
+		pModel->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_OVERLAPPABLE, CHitbox::RESPONSE_OVERLAP);
 	}
 
 	return pModel;					//生成したインスタンスを返す
@@ -764,9 +682,193 @@ void CPlayer::SetFriction(const float fFriction)
 	m_fFrictionCoeff = fFriction;
 }
 
+void CPlayer::TransformUpdate(void)
+{
+	m_LastPos = m_pos;				//前回の位置の更新
+
+	if (!CApplication::GetFade() && !m_bFall)
+	{//フェードしていなかったら
+		PlayerController(0);		//プレイヤーを動かす
+	}
+
+	//位置の更新
+	m_pos += m_move;
+
+	m_move.x += (0.0f - m_move.x) * m_fFrictionCoeff;		//移動量のXコンポネントの更新
+	m_move.y += (0.0f - m_move.y) * 0.1f;					//移動量のYコンポネントの更新
+	m_move.z += (0.0f - m_move.z) * m_fFrictionCoeff;		//移動量のZコンポネントの更新
+
+	UpdateRotation();
+
+	//重量を追加する
+	if (m_move.y >= -15.0f)
+	{
+		m_move.y -= 0.8f;
+	}
+}
+
+void CPlayer::UpdateRotation(void)
+{
+	//目的の角度の正規化処理
+	if (m_DestRot.y - (m_rot.y) > D3DX_PI)
+	{
+		m_DestRot.y -= 2 * D3DX_PI;
+	}
+	else if (m_DestRot.y - (m_rot.y) < -D3DX_PI)
+	{
+		m_DestRot.y += 2 * D3DX_PI;
+	}
+
+
+	//回転角度の計算
+	D3DXVECTOR3 rot = m_rot + ((m_DestRot - m_rot) * 0.1f);
+
+	//回転角度の設定処理
+	//m_pModel[BODY]->SetRot(rot);		
+
+	//回転角度の正規化処理
+	m_rot = rot;
+
+	if (m_rot.y > D3DX_PI)
+	{
+		m_rot.y = -D3DX_PI + (m_rot.y - D3DX_PI);
+	}
+	else if (m_rot.y < -D3DX_PI)
+	{
+		m_rot.y = D3DX_PI - (D3DX_PI + m_rot.y);
+	}
+
+	if (m_rot.y < D3DX_PI * -2.0f)
+	{
+		m_rot.y += D3DX_PI * 2.0f;
+	}
+	else if (m_rot.y > D3DX_PI * 2.0f)
+	{
+		m_rot.y += D3DX_PI * -2.0f;
+	}
+}
+
+//ヒットボックスの更新処理
+void CPlayer::UpdateHitbox(void)
+{
+	if (m_pHitbox)
+	{
+		m_pHitbox->SetPos(m_pos);
+		m_pHitbox->Update();
+
+		if (m_pHitbox->GetCollisionDirection() == CHitbox::FROM_ABOVE)
+		{
+			m_bLanded = true;
+		}
+		else if (m_pHitbox->GetCollisionDirection() == CHitbox::FROM_BELOW)
+		{
+			m_move.y = 0.0f;
+		}
+
+		if (D3DXVec3Length(&m_pHitbox->GetMove()) != 0.0f)
+		{
+			m_pos += m_pHitbox->GetMove();
+			m_pHitbox->SetMove(Vec3Null);
+		}
+
+		if (D3DXVec3Length(&m_pHitbox->GetAcceleration()) != 0.0f)
+		{
+			m_move += m_pHitbox->GetAcceleration();
+			m_pHitbox->SetAcceleration(Vec3Null);
+		}
+
+		HitboxEffectUpdate();
+	}
+}
+
+void CPlayer::UpdateAnimation(void)
+{
+	if (m_pAnimator != nullptr)
+	{
+		//アニメーションの更新
+		m_pAnimator->Update();
+
+		if (!m_bJump && m_bMoving)
+		{
+			D3DXVECTOR3 residualMove = m_move;
+			residualMove.y = 0.0f;
+
+			if (D3DXVec3Length(&residualMove) <= 0.1f)
+			{
+				m_pAnimator->SetPresentAnim(STATE_NEUTRAL);
+				m_bMoving = false;
+			}
+		}
+
+		if (m_bJump && m_bLanded)
+		{
+			m_bJump = false;
+
+			if (!m_bMoving)
+			{
+				m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
+			}
+			else
+			{
+				m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
+			}
+		}
+	}
+}
+
+void CPlayer::FieldUpdate(void)
+{
+	if (m_move.y <= 0.0f)
+	{
+		float fHeight = 0.0f;
+
+		if (!m_bFall)
+		{
+			//メッシュフィールドとの当たり判定
+			CMeshfield* pField = CMeshfield::FieldInteraction(this, &fHeight);
+
+			//地面との当たり判定
+			if (pField != nullptr)
+			{
+				if (m_bJump)
+				{
+					if (m_pAnimator)
+					{
+
+						m_bJump = false;		//着地している状態にする
+						m_bLanded = true;
+
+						if (!m_bMoving)
+						{
+							m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
+						}
+						else
+						{
+							m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
+						}
+					}
+				}
+
+				m_bHit = false;			//当たってない状態にする
+										//摩擦係数の取得
+				m_fFrictionCoeff = pField->GetFriction();
+
+				//影の高さの設定
+				for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
+				{
+					if (m_pModel[nCnt] != nullptr)
+					{
+						m_pModel[nCnt]->SetShadowHeight(fHeight);
+					}
+				}
+			}
+		}
+	}
+}
+
 void CPlayer::RespawnPlayer(void)
 {
-	m_pos = D3DXVECTOR3(0.0f, -100.0f, 0.0f);
+	m_pos = m_respawnPoint;
 
 	m_nInvincibilityCnt = 90;
 	m_pHitbox->SetInvincibility(true);
@@ -844,4 +946,38 @@ void CPlayer::HitboxEffectUpdate(void)
 	default:
 		break;
 	}
+}
+
+void CPlayer::UpdatePlayerCamera(void)
+{
+	CCamera* pCamera = CApplication::GetCamera();
+
+	if (pCamera != nullptr)
+	{
+		pCamera->SetPos(m_pos + m_cameraPos, m_pos + m_baseFocalPointPos);
+
+		if (m_bMoveCamera)
+		{
+			MoveCamera();
+		}
+	}
+}
+
+void CPlayer::MoveCamera(void)
+{
+
+	D3DXVECTOR3 distance = m_cameraTarget - m_cameraPos;			//目的の位置までの距離を計算する
+
+	if (D3DXVec3Length(&distance) > 1.0f)
+	{
+		D3DXVec3Normalize(&distance, &distance);
+
+		m_cameraPos += distance;
+	}
+	else
+	{
+		m_bMoveCamera = false;
+	}
+
+	m_cameraTarget = m_baseCameraPos;
 }

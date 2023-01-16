@@ -62,6 +62,7 @@ public:
 	virtual void SetTextureTiling(const D3DXVECTOR2 tiling);						//テクスチャの大きさの設定処理
 	virtual void SetTextureTiling(const float fTiling);								//テクスチャの大きさの設定処理
 	virtual void SetTextureTiling(const float fTilingX, const float fTilingY);		//テクスチャの大きさの設定処理
+	const D3DXVECTOR2 GetTextureTiling(void);										//テクスチャの大きさの取得処理
 
 	void SetTexture(TextType textType);												//テクスチャの種類の設定処理
 	void SetAnimationBase(const int FirstPattern);									//アニメーションの最初のパターンの設定処理

@@ -147,7 +147,7 @@ CUIString* CUIString::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, cons
 	letterSize.y = size.y;						
 
 	//êÊì™ÇÃï∂éöÇê∂ê¨Ç∑ÇÈ
-	pStr->m_pTop = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f, pos.y, 0.0f), letterSize, pString[0], 3);
+	pStr->m_pTop = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f, pos.y, 0.0f), letterSize, pString[0], 5);
 	CLetter* pLetter = nullptr;
 
 	if (pStr->m_pTop != nullptr)
@@ -160,7 +160,7 @@ CUIString* CUIString::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, cons
 			if (pString[nCnt] != ' ')
 			{
 				//ï∂éöÇÃê∂ê¨èàóù
-				pLetter = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f + letterSize.x * nCnt, pos.y, 0.0f), letterSize, pString[nCnt], 3);
+				pLetter = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f + letterSize.x * nCnt, pos.y, 0.0f), letterSize, pString[nCnt], 5);
 
 				if (pLetter != nullptr)
 				{

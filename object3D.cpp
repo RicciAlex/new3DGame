@@ -516,12 +516,16 @@ void CObject_3D::MoveTexCoordinates(const D3DXVECTOR2 move)
 void CObject_3D::SetTextureTiling(const D3DXVECTOR2 tiling)
 {
 	m_textureTiling = tiling;
+
+	UpdateTexture();
 }
 
 //テクスチャの大きさの設定処理
 void CObject_3D::SetTextureTiling(const float fTiling)
 {
 	m_textureTiling = D3DXVECTOR2(fTiling, fTiling);
+
+	UpdateTexture();
 }
 
 //テクスチャの大きさの設定処理
@@ -530,6 +534,12 @@ void CObject_3D::SetTextureTiling(const float fTilingX, const float fTilingY)
 	m_textureTiling = D3DXVECTOR2(fTilingX, fTilingY);
 
 	UpdateTexture();
+}
+
+//テクスチャの大きさの取得処理
+const D3DXVECTOR2 CObject_3D::GetTextureTiling(void)
+{
+	return m_textureTiling;
 }
 
 //テクスチャの種類の設定処理

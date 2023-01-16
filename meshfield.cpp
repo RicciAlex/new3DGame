@@ -239,16 +239,12 @@ void CMeshfield::SetPos(const D3DXVECTOR3 pos)
 }
 
 //プライオリティの設定処理
-void CMeshfield::SetPriority(const int nPriority)
+void CMeshfield::SetFieldPriority(const int nPriority)
 {
 	m_nPriority = nPriority;
 
 	//範囲外の値がないように確認する
-	if (m_nPriority < 0)
-	{
-		m_nPriority = 0;
-	}
-	else if (m_nPriority >= MAX_FIELD_PRIORITY)
+	if (m_nPriority >= MAX_FIELD_PRIORITY)
 	{
 		m_nPriority = MAX_FIELD_PRIORITY - 1;
 	}
