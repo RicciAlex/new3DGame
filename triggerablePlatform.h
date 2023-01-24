@@ -35,6 +35,7 @@ public:
 
 	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理
 	const D3DXVECTOR3 GetButtonPos(void);								//ボタンの位置の取得処理
+	const bool GetTriggeredState(void);									//ボタンが押されたらかどうかの取得処理
 
 	static CTriggerablePlatform* Create(const D3DXVECTOR3 pos, 
 		const D3DXVECTOR3 buttonPos, const D3DXVECTOR3 move, const float fRange);		//生成処理

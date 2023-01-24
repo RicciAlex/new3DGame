@@ -101,6 +101,16 @@ void CNail::Draw(void)
 	}
 }
 
+void CNail::SetPos(const D3DXVECTOR3 pos)
+{
+	CModel::SetPos(pos);
+
+	if (m_pHitbox)
+	{
+		m_pHitbox->SetPos(pos);
+	}
+}
+
 
 
 //=============================================================================

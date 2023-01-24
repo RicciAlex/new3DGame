@@ -10,6 +10,8 @@
 //=============================================================================
 #include "fireParticle.h"
 #include "fireEffect.h"
+#include "application.h"
+#include "camera.h"
 
 
 //コンストラクタ
@@ -48,11 +50,16 @@ void CFireParticle::Update(void)
 {
 	if (m_bActive)
 	{
-		CFireEffect* pEffect = nullptr;
+		D3DXVECTOR3 dist = CApplication::GetCamera()->GetPos() - GetPos();
 
-		for (int nCnt = 0; nCnt < DEFAULT_EFFECT_NUMBER; nCnt++)
+		if (D3DXVec3Length(&dist) <= 2500.0f)
 		{
-			CFireEffect::Create(m_pos + D3DXVECTOR3((nCnt * 5.0f) - 15, 0.0f, 0.0f), D3DXVECTOR3((float)CObject::random(-50, 50) * 0.01f, (float)CObject::random(10, 100) * 0.025f, (float)CObject::random(-50, 50) * 0.01f));
+			CFireEffect* pEffect = nullptr;
+
+			for (int nCnt = 0; nCnt < DEFAULT_EFFECT_NUMBER; nCnt++)
+			{
+				CFireEffect::Create(m_pos + D3DXVECTOR3((nCnt * 5.0f) - 15, 0.0f, 0.0f), D3DXVECTOR3((float)CObject::random(-50, 50) * 0.01f, (float)CObject::random(10, 100) * 0.025f, (float)CObject::random(-50, 50) * 0.01f));
+			}
 		}
 	}
 }

@@ -44,6 +44,12 @@ public:
 
 private:
 
+	static const D3DXVECTOR3 DEFAULT_STAR_POS;			//ディフォルトの画像の位置
+	static const D3DXVECTOR2 DEFAULT_STAR_SIZE;			//ディフォルトの画像のサイズ
+	static const D3DXVECTOR3 DEFAULT_STRING_POS;		//文字列のディフォルトの位置
+	static const D3DXVECTOR2 DEFAULT_STRING_SIZE;		//文字列のディフォルトのサイズ
+	static const D3DXCOLOR	 DEFAULT_STRING_COLOR;		//文字列のディフォルトの色
+
 	int m_nStarNumber;					//現在の星数
 	int m_nTargetStar;					//目的の星数
 	bool m_bDone;						//目的についたかどうか

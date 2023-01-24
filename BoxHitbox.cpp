@@ -83,7 +83,7 @@ void CBoxHitbox::Update(void)
 
 			{//矩形の場合
 
-				if (BoxBoxHit(pHbx->data()[nCnt]->GetPos(), pHbx->data()[nCnt]->GetRot(), pHbx->data()[nCnt]->GetSize()))
+				if (BoxBoxHit(pHbx->data()[nCnt]))
 				{//当たった場合
 
 					if (GetEffect() != EFFECT_MAX && pHbx->data()[nCnt]->GetEffect() == EFFECT_MAX)
@@ -100,7 +100,7 @@ void CBoxHitbox::Update(void)
 
 			{//シリンダーの場合
 
-				if (BoxBoxHit(pHbx->data()[nCnt]->GetPos(), Vec3Null, pHbx->data()[nCnt]->GetSize()))
+				if (BoxBoxHit(pHbx->data()[nCnt]))
 				{//当たった場合
 
 					if (GetEffect() != EFFECT_MAX && pHbx->data()[nCnt]->GetEffect() == EFFECT_MAX)
@@ -316,11 +316,13 @@ CBoxHitbox* CBoxHitbox::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 Relative
 
 
 //当たり判定の処理
-bool CBoxHitbox::BoxBoxHit(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
+bool CBoxHitbox::BoxBoxHit(CHitbox* pOther)
 {
 	D3DXVECTOR3 thisPos = GetPos();						//このヒットボックスの位置の取得
 	D3DXVECTOR3 thisSize = GetSize();					//このヒットボックスのサイズの取得
 	D3DXVECTOR3 thisLastPos = GetLastPos();				//このヒットボックスの前回の位置の取得
+
+	D3DXVECTOR3 pos = pOther->GetPos(), size = pOther->GetSize(), rot = pOther->GetRot();
 
 	if (thisPos.y + thisSize.y > pos.y && thisPos.y < pos.y + size.y)
 	{//Y座標が重なった場合
@@ -330,17 +332,17 @@ bool CBoxHitbox::BoxBoxHit(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
 		float fResult;												//計算用の変数
 
 		//頂点の相対座標の設定
-		Vtx[0] = D3DXVECTOR3(-size.x, 0.0f, size.z);				
+		Vtx[0] = D3DXVECTOR3(-size.x, 0.0f, size.z);
 		Vtx[1] = D3DXVECTOR3(size.x, 0.0f, size.z);
 		Vtx[2] = D3DXVECTOR3(size.x, 0.0f, -size.z);
 		Vtx[3] = D3DXVECTOR3(-size.x, 0.0f, -size.z);
 
 		//絶対座標に変換する
-		D3DXMatrixIdentity(&mtxOut);										
-		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);		
-		D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxRot);						
-		D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);				
-		D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxTrans);					
+		D3DXMatrixIdentity(&mtxOut);
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+		D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxRot);
+		D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
+		D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxTrans);
 
 		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
@@ -368,94 +370,105 @@ bool CBoxHitbox::BoxBoxHit(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size)
 		if (R[0].y * R[1].y >= 0 && R[1].y * R[2].y >= 0 && R[2].y * R[3].y >= 0 && R[3].y * R[0].y >= 0)
 		{//全部の外積の符号が同じだったら、当たったという意味です
 
+
 			if (thisLastPos.y >= pos.y + size.y && thisPos.y < pos.y + size.y)
 			{//上から当たった場合
 
-				thisPos.y = pos.y + size.y;								//上に押し出す
-				GetParent()->SetPos(thisPos - GetRelativePos());		//親も押し出す
+				if (GetOverlapResponse(pOther->GetType()) == CHitbox::RESPONSE_EXTRUDE)
+				{
+					thisPos.y = pos.y + size.y;								//上に押し出す
+					GetParent()->SetPos(thisPos - GetRelativePos());		//親も押し出す
+				}
 
 				return true;											//trueを返す
 			}
 			else if (thisLastPos.y + thisSize.y <= pos.y && thisPos.y + thisSize.y <= pos.y)
 			{//下から当たった場合
 
-				thisPos.y = pos.y - thisSize.y;							//下に押し出す
-				GetParent()->SetPos(thisPos - GetRelativePos());		//親も押し出す
+				if (GetOverlapResponse(pOther->GetType()) == CHitbox::RESPONSE_EXTRUDE)
+				{
+					thisPos.y = pos.y - thisSize.y;							//下に押し出す
+					GetParent()->SetPos(thisPos - GetRelativePos());		//親も押し出す
+				}
 
 				return true;											//trueを返す
 			}
 			else
 			{//横から当たった場合
-				for (int Count = 0; Count < 4; Count++)
-				{//前回の位置と比べて、どこから当たったか求める
 
-					PCtrl = D3DXVECTOR3(thisLastPos.x - Vtx[Count].x, 0.0f, thisLastPos.z - Vtx[Count].z);
-					D3DXVec3Cross(&RCtrl, &V[Count], &PCtrl);
+				if (GetOverlapResponse(pOther->GetType()) == CHitbox::RESPONSE_EXTRUDE)
+				{
+					for (int Count = 0; Count < 4; Count++)
+					{//前回の位置と比べて、どこから当たったか求める
 
-					D3DXVECTOR3 Ctrl;
+						PCtrl = D3DXVECTOR3(thisLastPos.x - Vtx[Count].x, 0.0f, thisLastPos.z - Vtx[Count].z);
+						D3DXVec3Cross(&RCtrl, &V[Count], &PCtrl);
 
-					if (RCtrl.y * R[Count].y <= 0)
-					{//交点座標の計算
-						P[0] = D3DXVECTOR3(thisPos.x - thisLastPos.x, 0.0f, thisPos.z - thisLastPos.z);			//前回の位置から現在の位置までのベクトル
-						P[1] = D3DXVECTOR3(Vtx[Count].x - thisLastPos.x, 0.0f, Vtx[Count].z - thisLastPos.z);	//頂点から前回の位置までのベクトル
-						D3DXVec3Normalize(&N, &P[0]);															//前回の位置から現在の位置までのベクトルを正規化する
+						D3DXVECTOR3 Ctrl;
 
-						D3DXVec3Cross(&R[0], &P[1], &V[Count]);		//頂点から前回の位置までのベクトルと矩形の辺のベクトルの外積
-						D3DXVec3Cross(&R[1], &N, &V[Count]);		//前回の位置から現在の位置までの単位ベクトルと矩形の辺のベクトルの外積
+						if (RCtrl.y * R[Count].y <= 0)
+						{//交点座標の計算
+							P[0] = D3DXVECTOR3(thisPos.x - thisLastPos.x, 0.0f, thisPos.z - thisLastPos.z);			//前回の位置から現在の位置までのベクトル
+							P[1] = D3DXVECTOR3(Vtx[Count].x - thisLastPos.x, 0.0f, Vtx[Count].z - thisLastPos.z);	//頂点から前回の位置までのベクトル
+							D3DXVec3Normalize(&N, &P[0]);															//前回の位置から現在の位置までのベクトルを正規化する
 
-						if (R[1].y == 0)
-						{
+							D3DXVec3Cross(&R[0], &P[1], &V[Count]);		//頂点から前回の位置までのベクトルと矩形の辺のベクトルの外積
+							D3DXVec3Cross(&R[1], &N, &V[Count]);		//前回の位置から現在の位置までの単位ベクトルと矩形の辺のベクトルの外積
+
+							if (R[1].y == 0)
+							{
+								break;
+							}
+
+							fResult = R[0].y / R[1].y;					//前回の位置から交点までのベクトルの長さ
+
+							if (fResult > 0)
+							{
+								fResult -= 0.1f;
+							}
+							else if (fResult < 0)
+							{
+								fResult += 0.1f;
+							}
+
+							D3DXVECTOR3 Cross, VtxtoPos, VtxtoCross;			//計算用のベクトル
+							float Dot, Lenght1, Lenght2, Alpha;					//計算用の変数
+
+							//滑る処理
+							Cross = D3DXVECTOR3(thisLastPos.x + (N.x * fResult), 0.0f, thisLastPos.z + (N.z * fResult));		//交点座標
+							VtxtoPos = D3DXVECTOR3(thisPos.x - Vtx[Count].x, 0.0f, thisPos.z - Vtx[Count].z);					//頂点から現在の位置までのベクトル
+							VtxtoCross = D3DXVECTOR3(Cross.x - Vtx[Count].x, 0.0f, Cross.z - Vtx[Count].z);						//頂点から交点までのベクトル
+
+							D3DXVec3Normalize(&N, &VtxtoCross);			//頂点から交点までのベクトルを正規化する
+
+							Dot = D3DXVec3Dot(&VtxtoCross, &VtxtoPos);											//内積を計算する
+							Lenght1 = sqrtf((VtxtoCross.x * VtxtoCross.x) + (VtxtoCross.z * VtxtoCross.z));		//頂点から交点までのベクトルの長さ
+							Lenght2 = sqrtf((VtxtoPos.x * VtxtoPos.x) + (VtxtoPos.z * VtxtoPos.z));				//頂点から現在の位置までのベクトルの長さ
+
+							if ((Lenght1 * Lenght2) * (Lenght1 * Lenght2) >= Dot * Dot && Lenght1 * Lenght2 != 0)
+							{
+								Alpha = acosf((Dot) / (Lenght1 * Lenght2));				//上のベクトルの間の角度を計算する
+
+								fResult = (Lenght2 * cosf(Alpha));
+
+								//新しい座標の計算
+								thisPos.x = Vtx[Count].x + (N.x * fResult);
+								thisPos.z = Vtx[Count].z + (N.z * fResult);
+							}
+							else
+							{//エラーが起きたら、新しい座標を公転と同じにする
+								thisPos.x = thisLastPos.x + (N.x * fResult);
+								thisPos.z = thisLastPos.z + (N.z * fResult);
+							}
+
 							break;
 						}
-
-						fResult = R[0].y / R[1].y;					//前回の位置から交点までのベクトルの長さ
-
-						if (fResult > 0)
-						{
-							fResult -= 0.1f;
-						}
-						else if (fResult < 0)
-						{
-							fResult += 0.1f;
-						}
-
-						D3DXVECTOR3 Cross, VtxtoPos, VtxtoCross;			//計算用のベクトル
-						float Dot, Lenght1, Lenght2, Alpha;					//計算用の変数
-
-						//滑る処理
-						Cross = D3DXVECTOR3(thisLastPos.x + (N.x * fResult), 0.0f, thisLastPos.z + (N.z * fResult));		//交点座標
-						VtxtoPos = D3DXVECTOR3(thisPos.x - Vtx[Count].x, 0.0f, thisPos.z - Vtx[Count].z);					//頂点から現在の位置までのベクトル
-						VtxtoCross = D3DXVECTOR3(Cross.x - Vtx[Count].x, 0.0f, Cross.z - Vtx[Count].z);						//頂点から交点までのベクトル
-
-						D3DXVec3Normalize(&N, &VtxtoCross);			//頂点から交点までのベクトルを正規化する
-
-						Dot = D3DXVec3Dot(&VtxtoCross, &VtxtoPos);											//内積を計算する
-						Lenght1 = sqrtf((VtxtoCross.x * VtxtoCross.x) + (VtxtoCross.z * VtxtoCross.z));		//頂点から交点までのベクトルの長さ
-						Lenght2 = sqrtf((VtxtoPos.x * VtxtoPos.x) + (VtxtoPos.z * VtxtoPos.z));				//頂点から現在の位置までのベクトルの長さ
-
-						if ((Lenght1 * Lenght2) * (Lenght1 * Lenght2) >= Dot * Dot && Lenght1 * Lenght2 != 0)
-						{
-							Alpha = acosf((Dot) / (Lenght1 * Lenght2));				//上のベクトルの間の角度を計算する
-
-							fResult = (Lenght2 * cosf(Alpha));
-
-							//新しい座標の計算
-							thisPos.x = Vtx[Count].x + (N.x * fResult);
-							thisPos.z = Vtx[Count].z + (N.z * fResult);
-						}
-						else
-						{//エラーが起きたら、新しい座標を公転と同じにする
-							thisPos.x = thisLastPos.x + (N.x * fResult);
-							thisPos.z = thisLastPos.z + (N.z * fResult);
-						}
-
-						break;
 					}
-				}
 
-				if (GetParent() != nullptr)
-				{//親の位置の設定
-					GetParent()->SetPos(thisPos - GetRelativePos());
+					if (GetParent() != nullptr)
+					{//親の位置の設定
+						GetParent()->SetPos(thisPos - GetRelativePos());
+					}
 				}
 
 				return true;				//trueを返す

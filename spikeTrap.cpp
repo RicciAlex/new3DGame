@@ -17,6 +17,13 @@
 #include "phongShading.h"
 
 
+//=============================================================================
+//								静的変数の初期化
+//=============================================================================
+const float CSpikeTrap::DEFAULT_SPEED = 1.0f;											//ディフォルトの速度
+const D3DXVECTOR3 CSpikeTrap::DEFAULT_HITBOX_SIZE = D3DXVECTOR3(32.0f, 35.0f, 32.0f);	//ディフォルトのヒットボックスサイズ
+const float CSpikeTrap::DEFAULT_SPIKE_HEIGHT = 40.0f;									//はじめのスパイクのY座標
+
 //コンストラクタ
 CSpikeTrap::CSpikeTrap()
 {
@@ -27,6 +34,7 @@ CSpikeTrap::CSpikeTrap()
 	m_fStartingHeight = 0.0f;
 	m_bMoving = false;
 
+	m_pModel = nullptr;
 	m_pHitbox = nullptr;
 }
 
@@ -46,12 +54,13 @@ HRESULT CSpikeTrap::Init(void)
 	}
 
 	//メンバー変数を初期化する
-	m_nDelay = 60;
+	m_nDelay = DEFAULT_DELAY;
 	m_nCntTime = 0;
-	m_fSpeed = 1.0f;
+	m_fSpeed = DEFAULT_SPEED;
 	m_fStartingHeight = 0.0f;
 	m_bMoving = false;
 
+	m_pModel = nullptr;
 	m_pHitbox = nullptr;
 
 	return S_OK;
@@ -65,6 +74,13 @@ void CSpikeTrap::Uninit(void)
 	{//nullチェック
 		m_pHitbox->Release();			//メモリを解放する
 		m_pHitbox = nullptr;			//ポインタをnullにする
+	}
+
+	//モデルの破棄
+	if (m_pModel)
+	{//nullチェック
+		m_pModel->Release();			//メモリを解放する
+		m_pModel = nullptr;			//ポインタをnullにする
 	}
 
 	//基本クラスの終了処理
@@ -83,10 +99,10 @@ void CSpikeTrap::Update(void)
 		pos.y += m_fSpeed;				//高さの更新
 
 		//限界を超えたら、戻してから、速度を逆にして、動かないように設定する
-		if (pos.y >= m_fStartingHeight + 40.0f)
+		if (pos.y >= m_fStartingHeight + DEFAULT_SPIKE_HEIGHT)
 		{
 			m_fSpeed *= -1.0f;
-			pos.y = m_fStartingHeight + 40.0f;
+			pos.y = m_fStartingHeight + DEFAULT_SPIKE_HEIGHT;
 			m_bMoving = false;
 		}
 		else if (pos.y <= m_fStartingHeight)
@@ -96,7 +112,7 @@ void CSpikeTrap::Update(void)
 			m_bMoving = false;
 		}
 
-		SetPos(pos);				//位置の設定
+		CModel::SetPos(pos);				//位置の設定
 	}
 	else
 	{//動いていなかったら
@@ -166,6 +182,19 @@ void CSpikeTrap::SetStartingDelay(const int nDelay)
 	m_nCntTime = -nDelay;
 }
 
+//位置の設定処理
+void CSpikeTrap::SetPos(const D3DXVECTOR3 pos)
+{
+	m_fStartingHeight = pos.y - DEFAULT_SPIKE_HEIGHT;
+
+	CModel::SetPos(pos);
+	
+	if (m_pModel)
+	{
+		m_pModel->SetPos(pos + D3DXVECTOR3(0.0f, 0.1f, 0.0f));
+	}
+}
+
 
 //=============================================================================
 //
@@ -187,13 +216,22 @@ CSpikeTrap * CSpikeTrap::Create(const D3DXVECTOR3 pos)
 
 	pTrap->SetPos(pos);								//位置の設定
 	pTrap->SetModel(CModel::MODEL_SPIKE_TRAP);		//モデルの設定
-	pTrap->m_fStartingHeight = pos.y - 40.0f;		//初期時の高さの設定
+	pTrap->m_fStartingHeight = pos.y - DEFAULT_SPIKE_HEIGHT;		//初期時の高さの設定
 
 													//ヒットボックスの生成
-	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - 40.0f, pos.z), Vec3Null, D3DXVECTOR3(32.0f, 35.0f, 32.0f), CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
+	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - DEFAULT_SPIKE_HEIGHT, pos.z), Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
 
-	CModel* pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
-	pModel->SetShadowDraw(false);
+	if (pTrap->m_pHitbox)
+	{
+		pTrap->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
+	pTrap->m_pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
+	
+	if (pTrap->m_pModel)
+	{
+		pTrap->m_pModel->SetShadowDraw(false);
+	}
 
 	return pTrap;					//生成したインスタンスを返す
 }
@@ -211,13 +249,22 @@ CSpikeTrap* CSpikeTrap::Create(const D3DXVECTOR3 pos, const float fSpeed)
 	pTrap->SetPos(pos);								//位置の設定
 	pTrap->SetModel(CModel::MODEL_SPIKE_TRAP);		//モデルの設定
 	pTrap->m_fSpeed = fSpeed;						//速度の設定
-	pTrap->m_fStartingHeight = pos.y - 40.0f;		//初期時の高さの設定
+	pTrap->m_fStartingHeight = pos.y - DEFAULT_SPIKE_HEIGHT;		//初期時の高さの設定
 
 	//ヒットボックスの生成
-	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - 40.0f, pos.z), Vec3Null, D3DXVECTOR3(32.0f, 35.0f, 32.0f), CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
+	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - DEFAULT_SPIKE_HEIGHT, pos.z), Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
 
-	CModel* pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
-	pModel->SetShadowDraw(false);
+	if (pTrap->m_pHitbox)
+	{
+		pTrap->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
+	pTrap->m_pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
+	
+	if (pTrap->m_pModel)
+	{
+		pTrap->m_pModel->SetShadowDraw(false);
+	}
 
 	return pTrap;					//生成したインスタンスを返す
 
@@ -236,7 +283,7 @@ CSpikeTrap* CSpikeTrap::Create(const D3DXVECTOR3 pos, const float fSpeed, const 
 	pTrap->SetPos(pos);								//位置の設定
 	pTrap->SetModel(CModel::MODEL_SPIKE_TRAP);		//モデルの設定
 	pTrap->m_fSpeed = fSpeed;						//速度の設定
-	pTrap->m_fStartingHeight = pos.y - 40.0f;		//初期時の高さの設定
+	pTrap->m_fStartingHeight = pos.y - DEFAULT_SPIKE_HEIGHT;		//初期時の高さの設定
 
 	if (nDelay <= 0)
 	{
@@ -248,10 +295,19 @@ CSpikeTrap* CSpikeTrap::Create(const D3DXVECTOR3 pos, const float fSpeed, const 
 	}
 
 	//ヒットボックスの生成
-	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - 40.0f, pos.z), Vec3Null, D3DXVECTOR3(32.0f, 35.0f, 32.0f), CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
+	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - DEFAULT_SPIKE_HEIGHT, pos.z), Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
 
-	CModel* pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
-	pModel->SetShadowDraw(false);
+	if (pTrap->m_pHitbox)
+	{
+		pTrap->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
+	pTrap->m_pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
+	
+	if (pTrap->m_pModel)
+	{
+		pTrap->m_pModel->SetShadowDraw(false);
+	}
 
 	return pTrap;				//生成したインスタンスを返す
 }
@@ -268,7 +324,7 @@ CSpikeTrap * CSpikeTrap::Create(const D3DXVECTOR3 pos, const float fSpeed, const
 	pTrap->SetPos(pos);								//位置の設定
 	pTrap->SetModel(CModel::MODEL_SPIKE_TRAP);		//モデルの設定
 	pTrap->m_fSpeed = fSpeed;						//速度の設定
-	pTrap->m_fStartingHeight = pos.y - 40.0f;		//初期時の高さの設定
+	pTrap->m_fStartingHeight = pos.y - DEFAULT_SPIKE_HEIGHT;		//初期時の高さの設定
 	pTrap->m_nCntTime = -nStartDelay;				//初期時のディレイの設定
 
 	if (nDelay <= 0)
@@ -281,10 +337,19 @@ CSpikeTrap * CSpikeTrap::Create(const D3DXVECTOR3 pos, const float fSpeed, const
 	}
 
 	//ヒットボックスの生成
-	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - 40.0f, pos.z), Vec3Null, D3DXVECTOR3(32.0f, 35.0f, 32.0f), CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
+	pTrap->m_pHitbox = CBoxHitbox::Create(D3DXVECTOR3(pos.x, pos.y - DEFAULT_SPIKE_HEIGHT, pos.z), Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, pTrap, -1, CHitbox::EFFECT_BOUNCE);
 
-	CModel* pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
-	pModel->SetShadowDraw(false);
+	if (pTrap->m_pHitbox)
+	{
+		pTrap->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
+	pTrap->m_pModel = CModel::Create(CModel::MODEL_SPIKE_BASE, D3DXVECTOR3(pos.x, pos.y + 0.1f, pos.z));			//下のモデルの生成
+	
+	if (pTrap->m_pModel)
+	{
+		pTrap->m_pModel->SetShadowDraw(false);
+	}
 
 	return pTrap;				//生成したインスタンスを返す
 }

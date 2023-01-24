@@ -31,6 +31,10 @@ public:
 
 	static CFogbot* Create(const D3DXVECTOR3 pos, const float shadowPos);		//生成処理
 
+protected:
+
+	void CreateDefaultBot(void);			//ディフォルトのボットの生成処理(派生クラス用)
+
 private:
 
 	void UpdateParticle(void);
@@ -39,6 +43,7 @@ private:
 	static D3DXVECTOR3 DEFAULT_PARTICLE_RELATIVE_POS;		//パーティクルのディフォルトの相対位置
 	static const float DEFAULT_FRAME_ANGLE;	//アニメーション用の角度
 	static const float DEFAULT_ANIM_AMPLITUDE;
+	static const D3DXVECTOR3 DEFAULT_HITBOX_SIZE;		//ヒットボックスのディフォルトサイズ
 
 	float m_fAnimAngle;						//アニメーション用の角度
 	float m_fRange;							//見える範囲の半径

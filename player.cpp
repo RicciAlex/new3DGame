@@ -19,6 +19,7 @@
 #include "rendering.h"
 #include "CylinderHitbox.h"
 #include "starUI.h"
+#include "game.h"
 
 #include "animationFade.h"
 
@@ -871,7 +872,13 @@ void CPlayer::RespawnPlayer(void)
 	m_pos = m_respawnPoint;
 
 	m_nInvincibilityCnt = 90;
-	m_pHitbox->SetInvincibility(true);
+
+	if (m_pHitbox)
+	{
+		m_pHitbox->SetInvincibility(true);
+	}
+
+	CApplication::GetGame()->AddTime(10000);
 }
 
 void CPlayer::HitboxEffectUpdate(void)
@@ -893,6 +900,8 @@ void CPlayer::HitboxEffectUpdate(void)
 		{
 			m_nInvincibilityCnt = 90;
 			m_pHitbox->SetInvincibility(true);
+
+			CApplication::GetGame()->AddTime(10000);
 		}
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
@@ -920,6 +929,7 @@ void CPlayer::HitboxEffectUpdate(void)
 		{
 			m_nInvincibilityCnt = 90;
 			m_pHitbox->SetInvincibility(true);
+			CApplication::GetGame()->AddTime(10000);
 		}
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);

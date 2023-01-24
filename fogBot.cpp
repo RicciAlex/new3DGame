@@ -23,6 +23,7 @@ const float CFogbot::DEFAULT_VIEW_RANGE = 300.0f;	//ディフォルトの見える範囲の半
 D3DXVECTOR3 CFogbot::DEFAULT_PARTICLE_RELATIVE_POS = {0.0f, 66.0f, 0.0f};		//パーティクルのディフォルトの相対位置
 const float CFogbot::DEFAULT_FRAME_ANGLE = D3DX_PI * 0.01f;	//アニメーション用の角度
 const float CFogbot::DEFAULT_ANIM_AMPLITUDE = 0.35f;
+const D3DXVECTOR3 CFogbot::DEFAULT_HITBOX_SIZE = { 25.0f, 70.0f, 25.0f };		//ヒットボックスのディフォルトサイズ
 
 
 //コンストラクタ
@@ -103,6 +104,22 @@ void CFogbot::Update(void)
 	}
 }
 
+//ディフォルトのボットの生成処理
+void CFogbot::CreateDefaultBot(void)
+{
+	SetModelColor(2, ColorGreen);
+
+	if (!m_pParticle)
+	{
+		m_pParticle = CFogParticle::Create(GetPos() + DEFAULT_PARTICLE_RELATIVE_POS);		//パーティクルの生成
+	}
+
+	if (!m_pHitbox)
+	{
+		m_pHitbox = CBoxHitbox::Create(GetPos(), Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, this);		//ヒットボックスの生成
+	}
+}
+
 
 
 //=============================================================================
@@ -131,16 +148,22 @@ CFogbot * CFogbot::Create(const D3DXVECTOR3 pos, const float shadowPos)
 
 	pEnemy->m_pParticle = CFogParticle::Create(pos + DEFAULT_PARTICLE_RELATIVE_POS);		//パーティクルの生成
 
-	pEnemy->m_pHitbox = CBoxHitbox::Create(pos, Vec3Null, D3DXVECTOR3(25.0f, 70.0f, 25.0f), CHitbox::TYPE_NEUTRAL, pEnemy);		//ヒットボックスの生成
+	pEnemy->m_pHitbox = CBoxHitbox::Create(pos, Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, pEnemy);		//ヒットボックスの生成
 
 	return pEnemy;							//生成したインスタンスを返す
 }
 
 
 
+//=============================================================================
+//
+//							プライベート関数
+//
+//=============================================================================
 
 
 
+//パーティクルの更新処理
 void CFogbot::UpdateParticle(void)
 {
 	D3DXVECTOR3 pos = GetPos(), playerPos = CApplication::GetGame()->GetPlayer()->GetPos();			//位置の取得

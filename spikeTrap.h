@@ -30,6 +30,7 @@ public:
 	void Draw(void) override;				//描画処理
 
 	void SetStartingDelay(const int nDelay);//初期時のディレイの設定処理
+	void SetPos(const D3DXVECTOR3 pos) override;		//位置の設定処理
 
 	static CSpikeTrap* Create(const D3DXVECTOR3 pos);										//生成処理
 	static CSpikeTrap* Create(const D3DXVECTOR3 pos, const float fSpeed);					//生成処理
@@ -38,13 +39,19 @@ public:
 
 private:
 
+	static const int DEFAULT_DELAY = 60;			//ディフォルトのディレイ
+	static const float DEFAULT_SPEED;				//ディフォルトの速度
+	static const float DEFAULT_SPIKE_HEIGHT;		//はじめのスパイクのY座標
+	static const D3DXVECTOR3 DEFAULT_HITBOX_SIZE;	//ディフォルトのヒットボックスサイズ
+
 	int m_nDelay;			//ディレイ
 	int m_nCntTime;			//アニメーションカウンター
 	float m_fSpeed;			//速度
 	float m_fStartingHeight;//初期時の高さ
 	bool m_bMoving;			//動いているかどうか
 
-	CBoxHitbox* m_pHitbox;	//ヒットボックスへのポインタ	
+	CBoxHitbox* m_pHitbox;	//ヒットボックスへのポインタ
+	CModel*		m_pModel;	//モデルへのポインタ
 
 };
 

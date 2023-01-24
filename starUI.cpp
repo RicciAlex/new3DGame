@@ -13,7 +13,14 @@
 #include "UIString.h"
 #include <string>
 
-#include "inputKeyboard.h"
+//=============================================================================
+//							静的変数の初期化
+//=============================================================================
+const D3DXVECTOR3 CStarUI::DEFAULT_STAR_POS = D3DXVECTOR3(100.0f, 40.0f, 0.0f);			//ディフォルトの画像の位置
+const D3DXVECTOR2 CStarUI::DEFAULT_STAR_SIZE = D3DXVECTOR2(30.0f, 30.0f);				//ディフォルトの画像のサイズ
+const D3DXVECTOR3 CStarUI::DEFAULT_STRING_POS = D3DXVECTOR3(160.0f, 40.0f, 0.0f);		//ディフォルトの位置
+const D3DXVECTOR2 CStarUI::DEFAULT_STRING_SIZE = D3DXVECTOR2(180.0f, 25.0f);			//ディフォルトのサイズ
+const D3DXCOLOR	  CStarUI::DEFAULT_STRING_COLOR = D3DXCOLOR(1.0f, 0.9f, 0.0f, 1.0f);	//ディフォルトの色
 
 
 //コンストラクタ
@@ -156,7 +163,7 @@ CStarUI* CStarUI::Create(const int nMaxStar)
 	if (pUI->m_pStar)
 	{//生成出来たら、必要なパラメータを設定する
 
-		pUI->m_pStar->SetPos(D3DXVECTOR3(150.0f, 40.0f, 0.0f));
+		pUI->m_pStar->SetPos( D3DXVECTOR3(100.0f, 40.0f, 0.0f));
 		pUI->m_pStar->SetSize(D3DXVECTOR2(30.0f, 30.0f));
 		pUI->m_pStar->SetTexture(CObject::TEXTURE_STAR_UI);
 		pUI->m_pStar->SetPriority(4);
@@ -164,7 +171,7 @@ CStarUI* CStarUI::Create(const int nMaxStar)
 
 	std::string str = "00/" + std::to_string(nMaxStar);
 
-	pUI->m_pString = CUIString::Create(D3DXVECTOR3(210.0f, 40.0f, 0.0f), D3DXVECTOR2(180.0f, 25.0f), D3DXCOLOR(1.0f, 0.9f, 0.0f, 1.0f), str.c_str());
+	pUI->m_pString = CUIString::Create(DEFAULT_STRING_POS, DEFAULT_STRING_SIZE, DEFAULT_STRING_COLOR, str.c_str());
 
 	return pUI;
 }

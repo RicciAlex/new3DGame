@@ -11,6 +11,7 @@
 #include "line.h"
 #include "application.h"
 #include "rendering.h"
+#include "camera.h"
 
 //コンストラクタ
 CLine::CLine() : CObject(5)
@@ -64,38 +65,43 @@ void CLine::Update(void)
 //描画処理
 void CLine::Draw(void)
 {
-	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
-	D3DXMATRIX	mtxRot, mtxTrans;					//計算用マトリックス
+	D3DXVECTOR3 dist = CApplication::GetCamera()->GetPos() - GetPos();
 
-	//ライトを無効化にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);	
+	if (D3DXVec3Length(&dist) <= 2500.0f)
+	{
+		//デバイスの取得
+		LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
+		D3DXMATRIX	mtxRot, mtxTrans;					//計算用マトリックス
 
-	//ワルドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
+		//ライトを無効化にする
+		pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	//向きを反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+		//ワルドマトリックスの初期化
+		D3DXMatrixIdentity(&m_mtxWorld);
 
-	//位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+		//向きを反映
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
+		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
 
-	//ワルドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+		//位置を反映
+		D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_LINE));
+		//ワルドマトリックスの設定
+		pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_LINE);
+		//頂点バッファをデータストリームに設定
+		pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_LINE));
 
-	//四角形を描画する
-	pDevice->DrawPrimitive(D3DPT_LINELIST, 0, 1);
+		//頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_LINE);
 
-	//ライトを有効にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+		//四角形を描画する
+		pDevice->DrawPrimitive(D3DPT_LINELIST, 0, 1);
+
+		//ライトを有効にする
+		pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	}
 }
 
 //位置の設定処理

@@ -33,7 +33,11 @@
 
 
 #include "firePipe.h"
+#include "fireEffect.h"
 #include "fogBot.h"
+#include "timer.h"
+#include "PendulumClock.h"
+#include "spawnTrigger.h"
 
 //コンストラクタ
 CFirstStage::CFirstStage()
@@ -123,11 +127,27 @@ HRESULT CFirstStage::Init(void)
 
 	pField->SetTexture(CObject::TEXTURE_IRON);
 
+	pField = CMeshfield::Create(D3DXVECTOR3(-3700.0f, -200.0f, -3550.0f), Vec3Null, "data\\STAGESET\\FieldsData\\Level1\\Level1Field6.txt", 3);
+
+	if (!pField)
+	{
+		return -1;
+	}
+
+	pField->SetTexture(CObject::TEXTURE_IRON);
+
+	pField = CMeshfield::Create(D3DXVECTOR3(-4825.0f, -200.0f, -3875.0f), Vec3Null, "data\\STAGESET\\FieldsData\\Level1\\Level1Field4.txt", 3);
+
+	if (!pField)
+	{
+		return -1;
+	}
+
+	pField->SetTexture(CObject::TEXTURE_IRON);
+
 	CBoxHitbox::Create(D3DXVECTOR3(755.0f, 120.0f - 405.0f, 0.0f), Vec3Null, D3DXVECTOR3(10.0f, 404.0f, 200.0f), CHitbox::TYPE_NEUTRAL, nullptr);
 	CBoxHitbox::Create(D3DXVECTOR3(2150.0f, 120.0f, 0.0f), Vec3Null, D3DXVECTOR3(10.0f, 512.0f, 200.0f), CHitbox::TYPE_NEUTRAL, nullptr);
 	CBoxHitbox::Create(D3DXVECTOR3(1500.0f, -230.0f, 0.0f), Vec3Null, D3DXVECTOR3(150.0f, 180.0f, 200.0f), CHitbox::TYPE_FALL, nullptr, -1, CHitbox::EFFECT_FALL);
-
-	//pField->SetTextureTiling(D3DXVECTOR2(0.3f, 0.35f));
 
 	CGoal* pGoal = CGoal::Create(D3DXVECTOR3(0.0f, 100.0f, 2000.0f));
 
@@ -159,6 +179,8 @@ HRESULT CFirstStage::Init(void)
 
 	CGoldStar* pStar = CGoldStar::Create(D3DXVECTOR3(-1225.0f, -130.0f, 1150.0f));
 	pStar->SetShadowHeight(-199.9f);
+	pStar = CGoldStar::Create(D3DXVECTOR3(-1600.0f, -130.0f, 500.0f));
+	pStar->SetShadowHeight(-199.9f);
 
 	/*pModel = CModel::Create(CModel::MODEL_GEAR, D3DXVECTOR3(-250.0f, -100.0f, 400.0f));
 	pModel->SetShadowHeight(-199.9f);
@@ -177,8 +199,8 @@ HRESULT CFirstStage::Init(void)
 	CTriggerablePlatform::Create(D3DXVECTOR3(550.0f, -100.0f, 0.0f),
 		D3DXVECTOR3(-200.0f, -200.0f, 600.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 150.0f);
 
-	CTriggerablePlatform::Create(D3DXVECTOR3(2050.0f, 350.0f, 0.0f),
-		D3DXVECTOR3(-1600.0f, -200.0f, 500.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 150.0f);
+	CTriggerablePlatform* pTrigger = CTriggerablePlatform::Create(D3DXVECTOR3(2050.0f, 350.0f, 0.0f),
+		D3DXVECTOR3(-4700.0f, -200.0f, -4000.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 150.0f);
 
 	CTriggerablePlatform* pPlatform = CTriggerablePlatform::Create(D3DXVECTOR3(0.0f, -175.0f, 1300.0f),
 		D3DXVECTOR3(2325.0f, 634.0f, 0.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 100.0f);
@@ -241,12 +263,81 @@ HRESULT CFirstStage::Init(void)
 
 	CCheckpoint::Create(D3DXVECTOR3(-300.0f, -200.1f, 150.0f), 100.0f);
 	CCheckpoint::Create(D3DXVECTOR3( 300.0f, -200.1f, 150.0f), 100.0f, D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f), D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.5f));
+	CCheckpoint::Create(D3DXVECTOR3(-3200.0f, -200.1f, -4000.0f), 100.0f);
 
 	CFallBoard::Create(D3DXVECTOR3(0.0f, -200.0f, -200.0f), 220);
 
 	CFirePipe::Create(D3DXVECTOR3(-300.0f, -200.0f, -200.0f));
 
 	CFogbot::Create(D3DXVECTOR3(-300.0f, -175.0f, 600.0f), -199.9f);
+
+	CPendulumClock::Create(D3DXVECTOR3(200.0f, -200.0f, 300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), -199.9f);
+
+	CFirePipe::Create(D3DXVECTOR3(-3700.0f, -200.0f, -4000.0f));
+
+	CFallBoard::Create(D3DXVECTOR3(-4000.0f, -200.0f, -4000.0f), 360);
+
+	CFirePipe::Create(D3DXVECTOR3(-4300.0f, -200.0f, -4000.0f));
+
+	CSpawnTrigger* pSpwnTrigger = CSpawnTrigger::Create();
+
+	pNail = CNail::Create(D3DXVECTOR3(-1300.0f, -199.9f, -3000.0f));
+	CSpikeTrap* pSpike = nullptr;
+
+
+	pSpwnTrigger->AddTriggerPlatform(pTrigger);
+	pSpwnTrigger->AddObject(pNail, -199.9f);
+
+	for (int nCnt = 0; nCnt < 6; nCnt++)
+	{
+		pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2800.0f + (200.0f * nCnt), -199.9f, -4200.0f), 2.0f, 60, 0);
+		pSpwnTrigger->AddObject(pSpike, -199.9f);
+		
+		pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2800.0f + (200.0f * nCnt), -199.9f, -4000.0f), 2.0f, 60, 0);
+		pSpwnTrigger->AddObject(pSpike, -199.9f);
+		
+		pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2800.0f + (200.0f * nCnt), -199.9f, -3800.0f), 2.0f, 60, 0);
+		pSpwnTrigger->AddObject(pSpike, -199.9f);
+
+		pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2700.0f + (200.0f * nCnt), -199.9f, -4100.0f), 2.0f, 60, 0);
+		pSpwnTrigger->AddObject(pSpike, -199.9f);
+
+		pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2700.0f + (200.0f * nCnt), -199.9f, -3900.0f), 2.0f, 60, 0);
+		pSpwnTrigger->AddObject(pSpike, -199.9f);
+	}
+
+
+
+	/*pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1800.0f, -199.9f, -4100.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1800.0f, -199.9f, -4000.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1800.0f, -199.9f, -3900.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1800.0f, -199.9f, -3800.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2200.0f, -199.9f, -4200.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2200.0f, -199.9f, -4100.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2200.0f, -199.9f, -4000.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2200.0f, -199.9f, -3900.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-2200.0f, -199.9f, -3800.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1500.0f, -199.9f, -4200.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1500.0f, -199.9f, -4100.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1500.0f, -199.9f, -4000.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1500.0f, -199.9f, -3900.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);
+	pSpike = CSpikeTrap::Create(D3DXVECTOR3(-1500.0f, -199.9f, -3800.0f), 2.0f, 60, 0);
+	pSpwnTrigger->AddObject(pSpike, -199.9f);*/
 
 	return S_OK;
 }

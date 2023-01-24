@@ -1,45 +1,51 @@
 //=============================================================================
 //
-// nail.h
+// timer.h
 // Author : Ricci Alex
 //
 //=============================================================================
-
-#ifndef _NAIL_H_
-#define _NAIL_H_
+#ifndef _TIMER_H
+#define _TIMER_H
 
 //=============================================================================
 //インクルードファイル
 //=============================================================================
-#include "model.h"
+#include "object.h"
 
 //=============================================================================
 //前方宣言
 //=============================================================================
-class CBoxHitbox;
+class CUIString;
 
 
-class CNail : public CModel
+class CTimer : public CObject
 {
 public:
-	CNail();											//コンストラクタ
-	~CNail() override;									//デストラクタ
-														
-	HRESULT Init(void) override;						//初期化処理
-	void Uninit(void) override;							//終了処理
-	void Update(void) override;							//更新処理
-	void Draw(void) override;							//描画処理
+
+	CTimer();							//コンストラクタ
+	~CTimer() override;					//デストラクタ
+										
+	HRESULT Init(void) override;		//初期化処理
+	void  Uninit(void) override;		//終了処理
+	void  Update(void) override;		//更新処理
+	void Draw(void) override;			//描画処理
 
 	void SetPos(const D3DXVECTOR3 pos) override;		//位置の設定処理
-														
-	static CNail* Create(const D3DXVECTOR3 pos);		//生成処理
+	void AddTime(const float fMilliseconds);			//時間の追加処理
+
+	const D3DXVECTOR3 GetPos(void) override;			//位置の取得処理
+
+	static CTimer* Create(void);		//生成処理
 
 private:
 
-	CBoxHitbox* m_pHitbox;								//ヒットボックス
+	float m_fCurrentTime;
+	float m_fStartTime;
+	float m_fAddedTime;
+
+	CUIString* m_pString;
 
 };
-
 
 
 

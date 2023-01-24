@@ -39,7 +39,7 @@ public:
 
 private:
 
-	bool BoxBoxHit(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size);					//当たり判定
+	bool BoxBoxHit(CHitbox* pOther);					//当たり判定
 
 	CLine* m_pLine[12];					//デバッグようの線
 };

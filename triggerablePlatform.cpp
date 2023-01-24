@@ -144,6 +144,12 @@ const D3DXVECTOR3 CTriggerablePlatform::GetButtonPos(void)
 	return Vec3Null;
 }
 
+//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚©‚Ç‚¤‚©‚Ìæ“¾ˆ—
+const bool CTriggerablePlatform::GetTriggeredState(void)
+{
+	return m_bTriggered;
+}
+
 
 
 //=============================================================================
