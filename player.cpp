@@ -27,12 +27,13 @@
 //							静的変数の初期化
 //=============================================================================
 
-const D3DXVECTOR3 CPlayer::m_baseCameraPos = D3DXVECTOR3(0.0f, 250.0f, -400.0f);							//普通のカメラの位置
+const D3DXVECTOR3 CPlayer::m_baseCameraPos = D3DXVECTOR3(0.0f, 300.0f, -500.0f);							//普通のカメラの位置
 const D3DXVECTOR3 CPlayer::m_baseFocalPointPos = D3DXVECTOR3(0.0f, 0.0f, 300.0f);						//普通の注視点の位置
-const D3DXVECTOR3 CPlayer::m_BackCameraPos = D3DXVECTOR3(0.0f, 250.0f, -550.0f);							//後ろのカメラの位置
+const D3DXVECTOR3 CPlayer::m_BackCameraPos = D3DXVECTOR3(0.0f, 300.0f, -650.0f);							//後ろのカメラの位置
 const float CPlayer::m_MaxWalkingSpeed = 7.0f;			//最大歩くスピード
 const float CPlayer::m_AccelerationCoeff = 8.0f;		//加速係数
 const D3DXVECTOR3 CPlayer::m_playerSize = D3DXVECTOR3(30.0f, 175.0f, 30.0f);				//プレイヤーのサイズ
+const float		 CPlayer::DEFAULT_FALL_HEIGHT = -1000.0f;						//この高さの下にいると死ぬ
 
 //プレイヤーの色
 D3DXCOLOR CPlayer::m_playerColor[PLAYER_COLOR_MAX]
@@ -192,7 +193,7 @@ void CPlayer::Update(void)
 
 		UpdateAnimation();
 
-		if (m_pos.y <= -1000.0f)
+		if (m_pos.y <= DEFAULT_FALL_HEIGHT)
 		{
 			RespawnPlayer();
 			m_bFall = false;

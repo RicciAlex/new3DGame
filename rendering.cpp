@@ -289,6 +289,30 @@ void CRenderer::ChangeFog(void)
 	}
 }
 
+//ÉtÉHÉOÇÃê›íËèàóù
+void CRenderer::SetDeepFog(const bool bFog)
+{
+	if (m_bChangeFog != bFog)
+	{
+		m_bChangeFog = bFog;
+		m_bActive = true;
+
+		if (m_fFogTarget == DEFAULT_FOG_NEAR)
+		{
+			m_fFogTarget = DEEP_FOG_NEAR;
+			m_fFrameFog.x = (DEEP_FOG_NEAR - m_fFogNear) / (float)DEFAULT_FOG_CHANGE_TIME;
+			m_fFrameFog.y = (DEEP_FOG_FAR - m_fFogFar) / (float)DEFAULT_FOG_CHANGE_TIME;
+		}
+		else
+		{
+			m_fFogTarget = DEFAULT_FOG_NEAR;
+
+			m_fFrameFog.x = (DEFAULT_FOG_NEAR - m_fFogNear) / (float)DEFAULT_FOG_CHANGE_TIME;
+			m_fFrameFog.y = (DEFAULT_FOG_FAR - m_fFogFar) / (float)DEFAULT_FOG_CHANGE_TIME;
+		}
+	}
+}
+
 void CRenderer::UpdateFog(void)
 {
 	if (m_bActive)

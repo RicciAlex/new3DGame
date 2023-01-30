@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{3b1927cc-8ba3-409b-a00a-6683a9cf6461}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Menu">
+      <UniqueIdentifier>{0b478052-092c-447d-8b55-8e095ea39b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Menu">
+      <UniqueIdentifier>{79c99342-4e18-42ab-8711-a3736797cfab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -213,9 +219,6 @@
     <ClCompile Include="stageSelect.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-    <ClCompile Include="menuButton.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="cameraSetter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -266,6 +269,15 @@
     </ClCompile>
     <ClCompile Include="stalkingBot.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>ソース ファイル\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="menuButton.cpp">
+      <Filter>ソース ファイル\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>ソース ファイル\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,9 +431,6 @@
     <ClInclude Include="stageSelect.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="menuButton.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="cameraSetter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -472,6 +481,15 @@
     </ClInclude>
     <ClInclude Include="stalkingBot.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="menuButton.h">
+      <Filter>ヘッダー ファイル\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>ヘッダー ファイル\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>ヘッダー ファイル\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,7 @@
 //前方宣言
 class CRenderer;
 class CInputKeyboard;
+class CInputMouse;
 class CSound;
 class CCamera;
 class CDebugProc;
@@ -56,6 +57,7 @@ public:
 	void Update(void);									//更新処理
 	void Draw(void);									//描画処理
 	static CRenderer* GetRenderer(void);				//レンディングインスタンスの取得処理
+	static CInputMouse* GetMouse(void);
 	static HWND GetWindow(void);						//ウインドウの取得処理
 	static CSound* GetSound(void);						//サウンドの取得処理
 	static CCamera* GetCamera(void);					//カメラの取得処理
@@ -82,6 +84,7 @@ private:
 	static HWND m_hWnd;									//クライエント画面
 	static CRenderer* m_pRenderer;						//レンディングインスタンスへのポインタ
 	static CInputKeyboard* m_pKeyboard;					//インプットデバイスへのポインタ
+	static CInputMouse*	m_pMouse;						//マウスへのポインタ
 	static CSound* m_pSound;							//サウンドのインスタンスへのポインタ
 	static CFade* m_pFade;								//フェードのインスタンスへのポインタ
 	static CCamera* m_pCamera;							//カメラのインスタンスへのポインタ

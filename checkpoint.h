@@ -21,6 +21,10 @@ class CCheckpoint : public CObject
 {
 public:
 
+	static const float			DEFAULT_RANGE;				//ディフォルトの半径
+	static const D3DXCOLOR		DEFAULT_NORMAL_COLOR;		//ディフォルトの普通の色
+	static const D3DXCOLOR		DEFAULT_ACTIVE_COLOR;		//ディフォルトのアクティブの色
+
 	CCheckpoint();						//コンストラクタ
 	~CCheckpoint() override;			//デストラクタ
 
@@ -41,9 +45,6 @@ private:
 
 	static const int			ANIMATION_FRAMES = 120;		//アニメーションのフレーム数
 	static const float			ANIMATION_AMPLITUDE;		
-	static const float			DEFAULT_RANGE;				//ディフォルトの半径
-	static const D3DXCOLOR		DEFAULT_NORMAL_COLOR;		//ディフォルトの普通の色
-	static const D3DXCOLOR		DEFAULT_ACTIVE_COLOR;		//ディフォルトのアクティブの色
 
 	static bool m_bChange;
 	static bool	m_bFirst;				//最初のチェックポイントであるかどうか

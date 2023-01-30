@@ -33,6 +33,7 @@ CFogbot::CFogbot()
 	m_fAnimAngle = 0.0f;
 	m_fRange = 0.0f;
 	m_bActive = false;
+	m_bForceActive = false;
 	m_pParticle = nullptr;
 	m_pHitbox = nullptr;
 }
@@ -56,6 +57,7 @@ HRESULT CFogbot::Init(void)
 	m_fAnimAngle = 0.0f;
 	m_fRange = DEFAULT_VIEW_RANGE;
 	m_bActive = false;
+	m_bForceActive = false;
 	m_pParticle = nullptr;
 	m_pHitbox = nullptr;
 
@@ -130,6 +132,18 @@ void CFogbot::CreateDefaultBot(void)
 
 
 
+//強制的にアクティブにする
+void CFogbot::ForceActivation(void)
+{
+	m_bForceActive = true;
+}
+
+//アクティブではない状態にする
+void CFogbot::Deactivate(void)
+{
+	m_bForceActive = false;
+}
+
 //生成処理
 CFogbot * CFogbot::Create(const D3DXVECTOR3 pos, const float shadowPos)
 {
@@ -169,7 +183,12 @@ void CFogbot::UpdateParticle(void)
 	D3DXVECTOR3 pos = GetPos(), playerPos = CApplication::GetGame()->GetPlayer()->GetPos();			//位置の取得
 	D3DXVECTOR3 distance = playerPos - pos;		//プレイヤーまでの距離を計算する
 
-	if (D3DXVec3Length(&distance) <= m_fRange)
+	if (m_pParticle)
+	{
+		m_pParticle->SetPos(GetPos() + DEFAULT_PARTICLE_RELATIVE_POS);
+	}
+
+	if (D3DXVec3Length(&distance) <= m_fRange || m_bForceActive)
 	{//プレイヤーが見える範囲の中にいたら
 
 		if (!m_bActive)
@@ -189,7 +208,7 @@ void CFogbot::UpdateParticle(void)
 
 				if (pRenderer)
 				{
-					pRenderer->ChangeFog();
+					pRenderer->SetDeepFog(true);
 				}
 			}
 		}
@@ -212,7 +231,7 @@ void CFogbot::UpdateParticle(void)
 
 				if (pRenderer)
 				{
-					pRenderer->ChangeFog();
+					pRenderer->SetDeepFog(false);
 				}
 			}
 		}

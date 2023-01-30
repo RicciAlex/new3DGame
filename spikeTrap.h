@@ -21,6 +21,9 @@ class CSpikeTrap : public CModel
 {
 public:
 
+	static const int DEFAULT_DELAY = 60;			//ディフォルトのディレイ
+	static const float DEFAULT_SPEED;				//ディフォルトの速度
+
 	CSpikeTrap();							//コンストラクタ
 	~CSpikeTrap() override;					//デストラクタ
 
@@ -39,8 +42,6 @@ public:
 
 private:
 
-	static const int DEFAULT_DELAY = 60;			//ディフォルトのディレイ
-	static const float DEFAULT_SPEED;				//ディフォルトの速度
 	static const float DEFAULT_SPIKE_HEIGHT;		//はじめのスパイクのY座標
 	static const D3DXVECTOR3 DEFAULT_HITBOX_SIZE;	//ディフォルトのヒットボックスサイズ
 

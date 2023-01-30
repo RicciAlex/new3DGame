@@ -36,6 +36,7 @@ public:
 	CPhongShading* GetPhongEffect(void);
 
 	void ChangeFog(void);
+	void SetDeepFog(const bool bFog);				//ƒtƒHƒO‚Ìİ’èˆ—
 
 private:
 	void DrawFPS(void);								//FPS‚Ì•`‰æˆ—

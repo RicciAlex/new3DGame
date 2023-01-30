@@ -11,12 +11,16 @@
 //インクルードファイル
 //=============================================================================
 #include "mode.h"
+#include "object.h"
+#include "hitbox.h"
+#include <functional>
 
 //=============================================================================
 //前方宣言
 //=============================================================================
 class CPlayer;
 class CTimer;
+class CPauseMenu;
 
 
 class CGame : public CMode
@@ -43,10 +47,40 @@ public:
 	void SetPlayer(CPlayer* pPlayer);		//プレイヤーの設定処理
 	CPlayer* GetPlayer(void);				//プレイヤーの取得処理
 
+protected:
+
+	void LoadMap(char* pPass, CObject::TextType fieldTexture);		//マップのロード処理
+
 private:
+
+	void LoadVector2(FILE* pFile, D3DXVECTOR2 &vector2);
+	void LoadVector3(FILE* pFile, D3DXVECTOR3 &vector3);
+	void LoadColor(FILE* pFile, D3DXCOLOR &col);
+
+	void LoadMeshField(FILE* pFile, CObject::TextType fieldTexture);
+
+	void LoadHitbox(FILE* pFile);
+	void SetLoadedHitboxType(char* pLoadedType, CHitbox::HITBOX_TYPE &type);
+	void SetLoadedHitboxEffect(char* pLoadedType, CHitbox::INTERACTION_EFFECT &effect);
+
+	void LoadGoal(FILE* pFile);
+	void LoadNail(FILE* pFile);
+	void LoadSpikeTrap(FILE* pFile);
+	void LoadStar(FILE* pFile);
+	void LoadShurikenTrap(FILE* pFile);
+	void LoadTriggerablePlatform(FILE* pFile);
+	void LoadMovingCube(FILE* pFile);
+	void LoadAccelerationFloor(FILE* pFile);
+	void LoadCameraSetter(FILE* pFile);
+	void LoadCheckpoint(FILE* pFile);
+	void LoadFallBoard(FILE* pFile);
+	void LoadFirePipe(FILE* pFile);
+	void LoadFogbot(FILE* pFile);
+	void LoadPendulumClock(FILE* pFile);
 
 	CPlayer* m_pPlayer;				//プレイヤーへのポインタ
 	CTimer*  m_pTimer;				//タイマーへのポインタ
+	CPauseMenu* m_pPauseMenu;		//ポーズメニューへのポインタ
 
 };
 

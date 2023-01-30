@@ -296,3 +296,28 @@ CGoldStar* CGoldStar::Create(const D3DXVECTOR3 pos)
 
 	return pStar;				//生成したインスタンスを返す
 }
+
+CGoldStar * CGoldStar::Create(const D3DXVECTOR3 pos, const float fShadowHeight)
+{
+	CGoldStar* pStar = new CGoldStar;			//インスタンスを生成する
+
+	if (FAILED(pStar->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pStar->SetPos(pos);													//位置の設定
+	pStar->StartRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.01f, 0.0f));		//回転させる
+	pStar->SetPriority(5);												//プライオリティの設定
+	pStar->SetShadowHeight(fShadowHeight);								//影のY座標の設定
+
+																		//ヒットボックスの生成
+	pStar->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -31.3f, 0.0f), D3DXVECTOR3(30.0f, 65.0f, 30.0f), CHitbox::TYPE_VANISHING, pStar);
+
+	if (pStar->m_pHitbox)
+	{//生成出来たら
+		pStar->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);		//プレイヤーと重なることができるように設定する
+	}
+
+	return pStar;				//生成したインスタンスを返す
+}

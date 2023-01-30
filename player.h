@@ -25,6 +25,7 @@ class CPlayer : public CObject
 {
 public:
 
+	static const float		 DEFAULT_FALL_HEIGHT;						//この高さの下にいると死ぬ
 	static const D3DXVECTOR3 m_playerSize;								//プレイヤーのサイズ
 
 	enum Parts

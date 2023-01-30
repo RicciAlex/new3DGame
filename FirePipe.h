@@ -22,6 +22,9 @@ class CCylinderHitbox;
 class CFirePipe : public CModel
 {
 public:
+
+	static const int DEFAULT_FIRE_TIME = 180;	//ディフォルトの火を消す/付けるまでのフレーム数
+
 	CFirePipe();						//コンストラクタ
 	~CFirePipe() override;				//デストラクタ
 
@@ -35,7 +38,6 @@ public:
 private:
 
 	static const int MIN_FIRE_TIME = 1;			//火を消す/付けるまでのフレーム数の最小値
-	static const int DEFAULT_FIRE_TIME = 180;	//ディフォルトの火を消す/付けるまでのフレーム数
 	static const D3DXVECTOR3 FIRE_HITBOX_SIZE;	//火のヒットボックスのサイズ
 	static const D3DXVECTOR3 HITBOX_SIZE;		//ヒットボックスのサイズ
 

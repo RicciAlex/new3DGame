@@ -34,9 +34,11 @@ public:
 protected:
 
 	void CreateDefaultBot(void);			//ディフォルトのボットの生成処理(派生クラス用)
+	void ForceActivation(void);				//強制的にアクティブにする
+	void Deactivate(void);					//アクティブではない状態にする
 
 private:
-
+	
 	void UpdateParticle(void);
 
 	static const float DEFAULT_VIEW_RANGE;	//ディフォルトの見える範囲の半径
@@ -48,6 +50,7 @@ private:
 	float m_fAnimAngle;						//アニメーション用の角度
 	float m_fRange;							//見える範囲の半径
 	bool  m_bActive;						//プレイヤーが見えるかどうか
+	bool  m_bForceActive;					//強制的にアクティブにするかどうか
 
 	CFogParticle* m_pParticle;				//パーティクルへのポインタ
 	CBoxHitbox*   m_pHitbox;				//ヒットボックスへのポインタ

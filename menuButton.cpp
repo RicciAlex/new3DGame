@@ -26,6 +26,7 @@ CMenuButton::CMenuButton()
 	m_normalCol = ColorNull;
 	m_TriggeredCol = ColorNull;
 	m_bOverlap = false;
+	m_bTriggered = false;
 
 	m_pString = nullptr;
 }
@@ -46,6 +47,7 @@ HRESULT CMenuButton::Init(void)
 	m_normalCol = ColorRed;
 	m_TriggeredCol = ColorYellow;
 	m_bOverlap = false;
+	m_bTriggered = false;
 
 	m_pString = nullptr;
 
@@ -67,7 +69,14 @@ void CMenuButton::Uninit(void)
 //更新処理
 void CMenuButton::Update(void)
 {
+	m_bTriggered = false;
+
 	m_bOverlap = MouseOnButton();
+
+	if (m_bOverlap && CApplication::GetMouse()->GetMouseLeftClick())
+	{
+		m_bTriggered = true;
+	}
 }
 
 //描画処理
@@ -80,6 +89,12 @@ void CMenuButton::Draw(void)
 void CMenuButton::SetPos(const D3DXVECTOR3 pos)
 {
 	m_pos = pos;
+
+	//文字列の位置の設定
+	if (m_pString)
+	{
+		m_pString->SetPos(pos);
+	}
 }
 
 //位置の取得処理
@@ -88,12 +103,77 @@ const D3DXVECTOR3 CMenuButton::GetPos(void)
 	return m_pos;
 }
 
+//押されているかどうかの取得処理
+const bool CMenuButton::GetTriggerState(void)
+{
+	return m_bTriggered;
+}
+
 
 //=============================================================================
 //
 //								静的関数
 //
 //=============================================================================
+
+//生成処理
+CMenuButton* CMenuButton::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const char* pString)
+{
+	CMenuButton* pButton = new CMenuButton;				//インスタンスを生成する
+
+	if (FAILED(pButton->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pButton->m_pos = pos;				//位置の設定
+	pButton->m_size = size;				//サイズの設定
+
+	pButton->m_pString = CUIString::Create(D3DXVECTOR3(pos.x - (size.x * 0.5f), pos.y, 0.0f), size, pButton->m_normalCol, pString);		//UIの配列を生成する
+
+	return pButton;					//生成したインスタンスを返す
+}
+
+//生成処理
+CMenuButton* CMenuButton::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, const char* pString)
+{
+	CMenuButton* pButton = new CMenuButton;				//インスタンスを生成する
+
+	if (FAILED(pButton->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pButton->m_pos = pos;				//位置の設定
+	pButton->m_size = size;				//サイズの設定
+
+	pButton->m_normalCol = stringCol;	//普通の色の設定
+
+	pButton->m_pString = CUIString::Create(D3DXVECTOR3(pos.x - (size.x * 0.5f), pos.y, 0.0f), size, stringCol, pString);		//UIの配列を生成する
+
+	return pButton;					//生成したインスタンスを返す
+}
+
+//生成処理
+CMenuButton* CMenuButton::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, D3DXCOLOR triggeredCol, const char* pString)
+{
+	CMenuButton* pButton = new CMenuButton;				//インスタンスを生成する
+
+	if (FAILED(pButton->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pButton->m_pos = pos;						//位置の設定
+	pButton->m_size = size;						//サイズの設定
+
+	pButton->m_normalCol = stringCol;			//普通の色の設定
+	pButton->m_TriggeredCol = triggeredCol;		//マウスカーソルと重なった時のの色の設定
+
+	pButton->m_pString = CUIString::Create(D3DXVECTOR3(pos.x - (size.x * 0.5f), pos.y, 0.0f), size, stringCol, pString);		//UIの配列を生成する
+
+	return pButton;					//生成したインスタンスを返す
+}
 
 //生成処理
 CMenuButton* CMenuButton::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const char* pString, BUTTON_TYPE type)

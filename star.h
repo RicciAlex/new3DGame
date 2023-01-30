@@ -30,6 +30,7 @@ public:
 	void Draw(void) override;			//•`‰æˆ—
 
 	static CGoldStar* Create(const D3DXVECTOR3 pos);		//¶¬ˆ—
+	static CGoldStar* Create(const D3DXVECTOR3 pos, const float fShadowHeight);		//¶¬ˆ—
 
 private:
 

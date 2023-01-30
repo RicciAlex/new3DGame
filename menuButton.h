@@ -25,7 +25,7 @@ public:
 
 	enum BUTTON_TYPE
 	{
-		BUTTON_TYPE_CONTINUE,
+		BUTTON_TYPE_CONTINUE = 0,
 		BUTTON_TYPE_START,
 		BUTTON_TYPE_QUIT,
 		BUTTON_TYPE_RANKING,
@@ -46,7 +46,11 @@ public:
 	void SetPos(const D3DXVECTOR3 pos) override;		//位置の設定処理
 
 	const D3DXVECTOR3 GetPos(void) override;			//位置の取得処理
+	const bool GetTriggerState(void);					//押されているかどうかの取得処理
 
+	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const char* pString);		//生成処理
+	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, const char* pString);		//生成処理
+	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, D3DXCOLOR triggeredCol, const char* pString);		//生成処理
 	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const char* pString, BUTTON_TYPE type);		//生成処理
 	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, const char* pString, BUTTON_TYPE type);		//生成処理
 	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, D3DXCOLOR triggeredCol, const char* pString, BUTTON_TYPE type);		//生成処理
@@ -61,6 +65,7 @@ private:
 	D3DXCOLOR   m_normalCol;			//普通のカラー
 	D3DXCOLOR   m_TriggeredCol;			//マウスカーソルと重なった時のカラー
 	bool		m_bOverlap;				//マウスカーソルと重なっているかどうか
+	bool		m_bTriggered;			//押されているかどうか
 
 	CUIString*  m_pString;				//ボタンの配列
 

@@ -31,7 +31,7 @@
 HWND CApplication::m_hWnd;													//ウインドウ
 CRenderer* CApplication::m_pRenderer = nullptr;								//レンディングインスタンスへのポインタ
 CInputKeyboard* CApplication::m_pKeyboard = nullptr;						//キーボードへのポインタ
-//CInputMouse* CApplication::m_pMouse = nullptr;								//マウスインスタンスへのポインタ
+CInputMouse* CApplication::m_pMouse = nullptr;								//マウスインスタンスへのポインタ
 //CInputPad* CApplication::m_pPad = nullptr;									//パッドのインスタンス
 CSound* CApplication::m_pSound = nullptr;									//サウンドのインスタンス
 CFade* CApplication::m_pFade = nullptr;										//フェードのインスタンス
@@ -108,6 +108,15 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 		return -1;
 	}
 
+	//マウスインスタンスの生成処理 
+	m_pMouse = new CInputMouse;
+
+	//マウスの初期化処理
+	if (FAILED(m_pMouse->Init(hInstance, hWnd, GUID_SysMouse)))
+	{
+		return -1;
+	}
+
 	////パッドの生成
 	//m_pPad = new CInputPad;
 
@@ -158,6 +167,14 @@ void CApplication::Uninit(void)
 		m_pKeyboard->Uninit();
 		delete m_pKeyboard;
 		m_pKeyboard = nullptr;
+	}
+
+	//マウスの破棄
+	if (m_pMouse != nullptr)
+	{
+		m_pMouse->Uninit();
+		delete m_pMouse;
+		m_pMouse = nullptr;
 	}
 
 	//キーボードの破棄
@@ -222,6 +239,12 @@ void CApplication::Update(void)
 		m_pKeyboard->Update();
 	}
 
+	//マウスの更新処理
+	if (m_pMouse != nullptr)
+	{
+		m_pMouse->Update();
+	}
+
 	// ポーズ中でない場合のみ更新
 	if (m_bPause == false)
 	{
@@ -251,10 +274,7 @@ void CApplication::Update(void)
 	//現在のモードの更新処理
 	if (m_pMode != nullptr)
 	{
-		if (!m_bPause && !m_bFade)
-		{
-			m_pMode->Update();
-		}
+		m_pMode->Update();
 	}
 
 	////パッドの更新処理
@@ -278,6 +298,12 @@ void CApplication::Draw(void)
 CRenderer* CApplication::GetRenderer(void)
 {
 	return m_pRenderer;
+}
+
+//マウスの取得処理
+CInputMouse* CApplication::GetMouse(void)
+{
+	return m_pMouse;
 }
 
 //ウインドウの取得処理

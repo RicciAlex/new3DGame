@@ -86,10 +86,19 @@ void CUIString::ChangeColor(const D3DXCOLOR col)
 	}
 }
 
-//位置の設定処理
+//位置の設定処理(Y座標だけ変更できる)
 void CUIString::SetPos(const D3DXVECTOR3 pos)
 {
 	m_pos = pos;
+
+	CLetter* pLetter = m_pTop;
+
+	while (pLetter)
+	{
+		D3DXVECTOR3 letterPos = pLetter->GetPos();
+		pLetter->SetPos(D3DXVECTOR3(letterPos.x, pos.y, 0.0f));
+		pLetter = pLetter->GetNextLetter();
+	}
 }
 
 //サイズの取得処理
@@ -144,7 +153,8 @@ CUIString* CUIString::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, cons
 	D3DXVECTOR2 letterSize = Vec2Null;			
 	int nLenght = strlen(pString);				
 	letterSize.x = size.x / nLenght;			
-	letterSize.y = size.y;						
+	letterSize.y = size.y;		
+	pStr->m_size = letterSize;
 
 	//先頭の文字を生成する
 	pStr->m_pTop = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f, pos.y, 0.0f), letterSize, pString[0], 5);
@@ -202,6 +212,7 @@ CUIString* CUIString::Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, cons
 	int nLenght = strlen(pString);
 	letterSize.x = size.x / nLenght;
 	letterSize.y = size.y;
+	pStr->m_size = letterSize;
 
 	//先頭の文字を生成する
 	pStr->m_pTop = CLetter::Create(D3DXVECTOR3(pos.x + letterSize.x * 0.5f, pos.y, 0.0f), letterSize, pString[0], nPriority);

@@ -189,6 +189,7 @@
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="membraneLighting.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="menuButton.cpp" />
     <ClCompile Include="meshCube.cpp" />
     <ClCompile Include="meshfield.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PendulumClock.cpp" />
     <ClCompile Include="phongShading.cpp" />
     <ClCompile Include="player.cpp" />
@@ -259,6 +261,7 @@
     <ClInclude Include="line.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="membraneLighting.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="menuButton.h" />
     <ClInclude Include="meshCube.h" />
     <ClInclude Include="meshfield.h" />
@@ -270,6 +273,7 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="object2D.h" />
     <ClInclude Include="object3D.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PendulumClock.h" />
     <ClInclude Include="phongShading.h" />
     <ClInclude Include="player.h" />

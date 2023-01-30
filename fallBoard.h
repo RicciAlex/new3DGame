@@ -22,6 +22,9 @@ class CBoxHitbox;
 class CFallBoard : public CModel
 {
 public:
+
+	static const int DEFAULT_FALL_DELAY = 60;				//落下する前のフレーム数
+
 	CFallBoard();							//コンストラクタ
 	~CFallBoard() override;					//デストラクタ
 
@@ -34,7 +37,6 @@ public:
 
 private:
 
-	static const int DEFAULT_FALL_DELAY = 60;				//落下する前のフレーム数
 	static const float DEFAULT_FALL_ACCELERATION;			//ディフォルトの落下加速
 	static const D3DXVECTOR3 DEFAULT_BOARD_SIZE;			//ディフォルトのモデルサイズ
 
