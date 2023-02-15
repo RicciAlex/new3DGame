@@ -10,6 +10,7 @@
 //=============================================================================
 #include "animator.h"
 #include "modelPart.h"
+#include "debugProc.h"
 #include <string>
 
 
@@ -121,9 +122,9 @@ void CAnimator::Update(void)
 				if (m_vParts.data()[nCnt] != nullptr)
 				{//パーツがnullではなかったら
 
-				 //移動量の計算
+					 //移動量の計算
 					m_vAnimSpeed.data()[nCnt].move = (m_vAnimAll.data()[m_type].vAnimSets[m_nPresentAnim].vAnimKeySet[m_nPresentMotionSet + 1].vAnimKey[nCnt].RelativePos - m_vParts.data()[nCnt]->GetPos())
-						/ (float)m_vAnimAll.data()[m_type].vAnimSets[m_nPresentAnim].vAnimKeySet[0].nAnimFrames;
+						/ (float)m_vAnimAll.data()[m_type].vAnimSets[m_nPresentAnim].vAnimKeySet[m_nPresentMotionSet + 1].nAnimFrames;
 
 					//回転スピードの計算
 					m_vAnimSpeed.data()[nCnt].rotSpeed = (m_vAnimAll.data()[m_type].vAnimSets[m_nPresentAnim].vAnimKeySet[m_nPresentMotionSet + 1].vAnimKey[nCnt].RelativeRot - m_vParts.data()[nCnt]->GetRot())
@@ -135,6 +136,8 @@ void CAnimator::Update(void)
 		}
 		m_nPresentFrame = 0;				//フレームを0に戻す
 	}
+
+	CDebugProc::Print("\n\nAnimSet: %d", m_nPresentMotionSet);
 }
 
 //モデルパーツの設定処理

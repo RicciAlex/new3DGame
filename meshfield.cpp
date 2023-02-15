@@ -250,6 +250,21 @@ void CMeshfield::SetFieldPriority(const int nPriority)
 	}
 }
 
+//–€CŒW”‚Ìæ“¾ˆ—
+void CMeshfield::SetFriction(const float fFriction)
+{
+	m_fFriction = fFriction;
+
+	if (m_fFriction < 0.0f)
+	{
+		m_fFriction = 0.0f;
+	}
+	else if (m_fFriction >= 1.0f)
+	{
+		m_fFriction = 1.0f;
+	}
+}
+
 //ƒTƒCƒY‚Ìæ“¾ˆ—
 const D3DXVECTOR2 CMeshfield::GetSize(void)
 {

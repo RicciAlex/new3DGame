@@ -97,6 +97,11 @@ void CMenuButton::SetPos(const D3DXVECTOR3 pos)
 	}
 }
 
+void CMenuButton::SetOverlap(const bool bOverlap)
+{
+	m_bOverlap = bOverlap;
+}
+
 //位置の取得処理
 const D3DXVECTOR3 CMenuButton::GetPos(void)
 {
@@ -107,6 +112,12 @@ const D3DXVECTOR3 CMenuButton::GetPos(void)
 const bool CMenuButton::GetTriggerState(void)
 {
 	return m_bTriggered;
+}
+
+//マウスと重なっているかどうかの取得処理
+const bool CMenuButton::GetOverlap(void)
+{
+	return m_bOverlap;
 }
 
 

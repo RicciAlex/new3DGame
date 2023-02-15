@@ -22,6 +22,7 @@
 //=============================================================================
 const float CPendulumClock::DEFAULT_ANIM_FRAME_ANGLE = D3DX_PI * 0.0025f;		//毎フレーム加算されている角度
 const float CPendulumClock::DEFAULT_RANGE = 200.0f;								//有効範囲
+const float CPendulumClock::MIN_RANGE = 50.0f;			//最小の有効範囲
 
 
 //コンストラクタ
@@ -30,6 +31,7 @@ CPendulumClock::CPendulumClock()
 	//メンバー変数をクリアする
 	m_fAnimAngle = 0.0f;
 	m_fAnimCoeff = 0.0f;
+	m_fRange = 0.0f;
 
 	m_pPendulum = nullptr;
 	m_pHitbox = nullptr;
@@ -58,6 +60,7 @@ HRESULT CPendulumClock::Init(void)
 	//メンバー変数を初期化する
 	m_fAnimAngle = 0.0f;
 	m_fAnimCoeff = 1.0f;
+	m_fRange = DEFAULT_RANGE;
 
 	m_pPendulum = nullptr;
 	m_pHitbox = nullptr;
@@ -181,6 +184,17 @@ void CPendulumClock::Draw(void)
 	}
 }
 
+//有効範囲の設定処理
+void CPendulumClock::SetRange(const float fRange)
+{
+	m_fRange = fRange;
+
+	if (m_fRange < MIN_RANGE)
+	{
+		m_fRange = MIN_RANGE;
+	}
+}
+
 
 
 //=============================================================================
@@ -232,6 +246,47 @@ CPendulumClock* CPendulumClock::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 
 	return pClock;			//生成したインスタンスを返す
 }
 
+CPendulumClock * CPendulumClock::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fShadowHeight, const float fRange)
+{
+	CPendulumClock* pClock = new CPendulumClock;		//インスタンスを生成する
+
+	if (FAILED(pClock->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pClock->SetModel(CModel::MODEL_CLOCK);
+	pClock->SetPos(pos);
+	pClock->SetRot(rot);
+	pClock->SetShadowHeight(fShadowHeight);
+	pClock->SetRange(fRange);
+
+	pClock->m_pPendulum = CModelPart::Create(CModel::MODEL_PENDULUM, D3DXVECTOR3(0.0f, 140.0f, -26.0f), Vec3Null);
+
+	if (pClock->m_pPendulum)
+	{
+		pClock->m_pPendulum->SetShadowHeight(fShadowHeight);
+	}
+
+	pClock->m_pNeedle[0] = CModelPart::Create(CModel::MODEL_CLOCK_NEEDLE, D3DXVECTOR3(0.0f, 162.0f, -28.6f), Vec3Null);
+
+	if (pClock->m_pNeedle[0])
+	{
+		pClock->m_pNeedle[0]->SetShadowHeight(fShadowHeight);
+	}
+
+	pClock->m_pNeedle[1] = CModelPart::Create(CModel::MODEL_CLOCK_NEEDLE, D3DXVECTOR3(0.0f, 162.0f, -28.6f), Vec3Null);
+
+	if (pClock->m_pNeedle[1])
+	{
+		pClock->m_pNeedle[1]->SetShadowHeight(fShadowHeight);
+	}
+
+	pClock->m_pHitbox = CBoxHitbox::Create(pos, Vec3Null, D3DXVECTOR3(28.0f, 187.0f, 28.0f), CHitbox::TYPE_NEUTRAL, pClock);
+
+	return pClock;			//生成したインスタンスを返す
+}
+
 
 
 //=============================================================================
@@ -251,9 +306,9 @@ void CPendulumClock::CheckPlayer(void)
 
 	float dist = D3DXVec3Length(&distance);
 
-	if (dist <= DEFAULT_RANGE)
+	if (dist <= m_fRange)
 	{
-		float fTime = 2500.0f * (DEFAULT_RANGE) / (60.0f * dist);
+		float fTime = 2500.0f * (m_fRange) / (60.0f * dist);
 
 		CApplication::GetGame()->AddTime(fTime);
 

@@ -63,7 +63,7 @@ void CTitle::Update(void)
 {
 	if (CInputKeyboard::GetKeyboardTrigger(DIK_RETURN))
 	{
-		CApplication::SetFade(CApplication::MODE_FIRST_STAGE);
+		CApplication::SetFade(CApplication::MODE_STAGE_SELECT);
 	}
 }
 

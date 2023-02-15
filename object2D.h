@@ -74,6 +74,11 @@ public:
 	static LPDIRECT3DTEXTURE9 GetTexturePointer(CObject::TextType type);			//テクスチャへのポインタの取得処理
 
 	static CObject_2D* Create(void);												//CObject_2Dの生成処理
+	static CObject_2D* Create(const int nPriority);												//CObject_2Dの生成処理
+	static CObject_2D* Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size);												//CObject_2Dの生成処理
+	static CObject_2D* Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const D3DXCOLOR col);
+	static CObject_2D* Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, CObject::TextType texture);
+	static CObject_2D* Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const D3DXCOLOR col, CObject::TextType texture);
 
 private:
 

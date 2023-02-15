@@ -144,3 +144,25 @@ CNail* CNail::Create(const D3DXVECTOR3 pos)
 
 	return pNail;
 }
+
+CNail * CNail::Create(const D3DXVECTOR3 pos, CModel::ModelType type)
+{
+	CNail* pNail = new CNail;			//インスタンスを生成する
+
+	if (FAILED(pNail->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pNail->SetModel(type);						//モデルの設定
+	pNail->SetPos(pos);							//位置を設定する
+	pNail->SetScale(0.75f);						//スケールを設定する
+	pNail->SetShadowDraw(false);				//影を描画しないように設定する
+
+	float fRot = (float)CObject::random(-31415, 31415) * 0.0001f;
+	pNail->SetRot(D3DXVECTOR3(0.0f, fRot, 0.0f));
+
+	pNail->m_pHitbox = CBoxHitbox::Create(pos, Vec3Null, D3DXVECTOR3(37.0f, 10.0f, 37.0f), CHitbox::TYPE_OBSTACLE, pNail, -1, CHitbox::EFFECT_BOUNCE);		//ヒットボックスの生成
+
+	return pNail;
+}

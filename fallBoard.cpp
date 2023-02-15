@@ -10,6 +10,8 @@
 //=============================================================================
 #include "fallBoard.h"
 #include "BoxHitbox.h"
+#include "application.h"
+#include "sound.h"
 
 //=============================================================================
 //							Ã“I•Ï”‚Ì‰Šú‰»
@@ -101,6 +103,11 @@ void CFallBoard::Update(void)
 		}
 		else
 		{
+			if (m_nCntFall == m_nFallDelay)
+			{
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_FALL_WHISTLE);
+			}
+
 			m_fFallSpeed += DEFAULT_FALL_ACCELERATION;
 
 			if (pos.y <= m_startingPos.y - 1500.0f)

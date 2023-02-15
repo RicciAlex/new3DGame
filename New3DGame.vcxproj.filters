@@ -67,6 +67,12 @@
     <Filter Include="ヘッダー ファイル\Menu">
       <UniqueIdentifier>{79c99342-4e18-42ab-8711-a3736797cfab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Goal">
+      <UniqueIdentifier>{12aab842-a078-4779-81a5-173e2103ac6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Goal">
+      <UniqueIdentifier>{0a39ee5c-5dfd-4baa-bf79-06430c73a1b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -161,9 +167,6 @@
     </ClCompile>
     <ClCompile Include="results.cpp">
       <Filter>ソース ファイル\Mode</Filter>
-    </ClCompile>
-    <ClCompile Include="goal.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="hitbox.cpp">
       <Filter>ソース ファイル\Hitbox</Filter>
@@ -279,6 +282,27 @@
     <ClCompile Include="PauseMenu.cpp">
       <Filter>ソース ファイル\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="icicle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="magicCircleEffect.cpp">
+      <Filter>ソース ファイル\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>ソース ファイル\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="gem.cpp">
+      <Filter>ソース ファイル\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="guideArrow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="secondStage.cpp">
+      <Filter>ソース ファイル\Mode\game</Filter>
+    </ClCompile>
+    <ClCompile Include="iceWall.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -373,9 +397,6 @@
     </ClInclude>
     <ClInclude Include="results.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
-    </ClInclude>
-    <ClInclude Include="goal.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="hitbox.h">
       <Filter>ヘッダー ファイル\Hitbox</Filter>
@@ -490,6 +511,27 @@
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
       <Filter>ヘッダー ファイル\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="icicle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
+      <Filter>ヘッダー ファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="magicCircleEffect.h">
+      <Filter>ヘッダー ファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="gem.h">
+      <Filter>ヘッダー ファイル\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="guideArrow.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="secondStage.h">
+      <Filter>ヘッダー ファイル\Mode\game</Filter>
+    </ClInclude>
+    <ClInclude Include="iceWall.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

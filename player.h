@@ -19,6 +19,7 @@
 class CModelPart;
 class CAnimator;
 class CCylinderHitbox;
+class CBoxHitbox;
 class CStarUI;
 
 class CPlayer : public CObject
@@ -52,7 +53,7 @@ public:
 		STATE_JUMP_START,
 		STATE_JUMP,								//ジャンプ
 		STATE_ATTACK,							//攻撃
-		STATE_DAMAGE,							//ダメージ
+
 		STATE_MAX								
 	};
 
@@ -99,6 +100,7 @@ public:
 	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理
 	const D3DXVECTOR3 GetLastPos(void);									//前回の位置の取得処理
 	const D3DXVECTOR3 GetMove(void);									//速度の取得処理
+	const bool GetLanded(void);											//着地しているかどうかの取得処理
 
 	static CPlayer* Create(const D3DXVECTOR3 pos,int nCntPlayer);		//生成処理
 	static D3DXCOLOR* GetPlayerColors(void);							//プレイヤーの色の取得処理
@@ -124,6 +126,10 @@ private:
 	static D3DXCOLOR m_playerColor[PLAYER_COLOR_MAX];					//プレイヤーの色
 	static const float m_MaxWalkingSpeed;								//最大の歩くスピード
 	static const float m_AccelerationCoeff;								//加速係数
+	static const float JUMP_SPEED;										//ジャンプ力
+	static const float MAX_FALL_SPEED;									//最大の落下スピード
+	static const float GRAVITY_ACCELERATION;							//重力
+	static const int   ATTACK_TIME;										//攻撃時間
 
 	D3DXVECTOR3 m_pos;													//位置
 	D3DXVECTOR3 m_LastPos;												//前回の位置
@@ -153,6 +159,7 @@ private:
 	CModelPart* m_pModel[PARTS_MAX];									//モデルへのポインタ
 	CAnimator* m_pAnimator;												//アニメーターへのポインタ
 	CCylinderHitbox* m_pHitbox;											//ヒットボックス
+	CBoxHitbox* m_pAttackHitbox;										//攻撃のヒットボックス
 	CStarUI*	m_pUI;													//UIへのポインタ
 };
 

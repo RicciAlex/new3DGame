@@ -15,6 +15,18 @@ CSound::SOUNDPARAM CSound::g_aParam[SOUND_LABEL_MAX] =
 {
 	{ "data/SOUNDS/BGM/タイトル画面BGM.wav", -1 },		// SOUND_LABEL_BGM_TITLE = 0
 
+	{ "data/SOUNDS/SE/Button.wav", 0 },				// SOUND_LABEL_SE_BUTTON,
+	{ "data/SOUNDS/SE/Damage.wav", 0 },					// SOUND_LABEL_SE_DAMAGE,
+	{ "data/SOUNDS/SE/FallWhistle.wav", 0 },			// SOUND_LABEL_SE_FALL_WHISTLE,
+	{ "data/SOUNDS/SE/Fire.wav", 0 },					// SOUND_LABEL_SE_FIRE,
+	{ "data/SOUNDS/SE/Item.wav", 0 },					// SOUND_LABEL_SE_ITEM,
+	{ "data/SOUNDS/SE/Jump.wav", 0 },					// SOUND_LABEL_SE_JUMP,
+	{ "data/SOUNDS/SE/Slash.wav", 0 },					// SOUND_LABEL_SE_SLASH,
+
+	{ "data/SOUNDS/SE/AmbientalSE/Industrial1.wav", 0 },// SOUND_LABEL_SE_AMBIENT_1,
+	{ "data/SOUNDS/SE/AmbientalSE/Industrial2.wav", 0 },// SOUND_LABEL_SE_AMBIENT_2,
+	{ "data/SOUNDS/SE/AmbientalSE/Industrial3.wav", 0 },// SOUND_LABEL_SE_AMBIENT_3,
+
 };
 
 //コンストラクタ

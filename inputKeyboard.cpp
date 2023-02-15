@@ -7,6 +7,7 @@
 
 //インクルードファイル
 #include "inputKeyboard.h"
+#include "application.h"
 
 //静的メンバー変数の宣言
 BYTE CInputKeyboard::m_aKeyState[NumMaxKey] = {};
@@ -81,11 +82,21 @@ void CInputKeyboard::Update(void)
 //キーボードのプレス
 bool CInputKeyboard::GetKeyboardPress(int nKey)
 {
+	if (CApplication::GetFade())
+	{
+		return false;
+	}
+
 	return (m_aKeyState[nKey] & 0x80) ? true : false;
 }
 
 //キーボードのトリガー
 bool CInputKeyboard::GetKeyboardTrigger(int nKey)
 {
+	if (CApplication::GetFade())
+	{
+		return false;
+	}
+
 	return (m_aKeyStateTrigger[nKey] & 0x80) ? true : false;
 }

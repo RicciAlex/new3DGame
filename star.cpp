@@ -17,6 +17,7 @@
 #include "directionalLight.h"
 #include "game.h"
 #include "player.h"
+#include "sound.h"
 
 //コンストラクタ
 CGoldStar::CGoldStar()
@@ -62,6 +63,8 @@ void CGoldStar::Update(void)
 
 	if (m_pHitbox)
 	{
+		m_pHitbox->SetPos(GetPos());
+
 		if (m_pHitbox->GetCollisionState())
 		{
 			CPlayer * pPlayer = CApplication::GetGame()->GetPlayer();		//プレイヤーの取得
@@ -70,6 +73,8 @@ void CGoldStar::Update(void)
 			{//nullチェック
 
 				pPlayer->AddStar();
+
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 			}
 
 			Release();
@@ -80,6 +85,7 @@ void CGoldStar::Update(void)
 //描画処理
 void CGoldStar::Draw(void)
 {
+
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();				//デバイスの取得
 	D3DXMATRIX mtxRot, mtxTrans, mtxShadow;			//計算用マトリックス
 	D3DMATERIAL9 matDef;							//現在のマテリアル保存用
@@ -260,6 +266,12 @@ void CGoldStar::Draw(void)
 
 	//保持しいたマテリアルを戻す
 	pDevice->SetMaterial(&matDef);
+}
+
+//位置の設定処理
+void CGoldStar::SetPos(const D3DXVECTOR3 pos)
+{
+	CModel::SetPos(pos);
 }
 
 

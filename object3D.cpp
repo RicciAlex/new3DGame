@@ -209,6 +209,27 @@ void CObject_3D::Update()
 		//頂点バッファをアンロックする
 		m_pVtxBuff->Unlock();
 	}
+	else
+	{
+		m_nCountAnim++;								//アニメーションカウンターの更新
+
+		if (m_nCountAnim >= m_nAnimFrame)
+		{
+			m_nCountAnim = 0;						//アニメーションカウンターを0に戻す
+			m_nAnimPattern++;						//アニメーションパターンの更新
+
+			if (m_nAnimPattern >= m_nFirstPattern + m_nMaxTexPattern)
+			{//アニメーションの最後のパターンを超えた場合
+				m_nAnimPattern = m_nFirstPattern;					//アニメーションパターンを戻す
+			}
+		}
+
+		UpdateTexture();
+	}
+	if (D3DXVec3Length(&m_fFrameRot) != 0.0f)
+	{
+		m_rot += m_fFrameRot;
+	}
 }
 
 //=============================================================================

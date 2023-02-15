@@ -44,9 +44,11 @@ public:
 	void Draw(void) override;				//描画処理
 
 	void SetPos(const D3DXVECTOR3 pos) override;		//位置の設定処理
+	void SetOverlap(const bool bOverlap);				
 
 	const D3DXVECTOR3 GetPos(void) override;			//位置の取得処理
 	const bool GetTriggerState(void);					//押されているかどうかの取得処理
+	const bool GetOverlap(void);						//マウスと重なっているかどうかの取得処理
 
 	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const char* pString);		//生成処理
 	static CMenuButton* Create(const D3DXVECTOR3 pos, const D3DXVECTOR2 size, D3DXCOLOR stringCol, const char* pString);		//生成処理

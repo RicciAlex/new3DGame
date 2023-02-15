@@ -22,6 +22,10 @@ class CModelPart;
 class CPendulumClock : public CModel
 {
 public:
+
+	static const float DEFAULT_RANGE;		//ディフォルトの有効範囲
+
+
 	CPendulumClock();					//コンストラクタ
 	~CPendulumClock() override;			//デストラクタ
 										
@@ -30,7 +34,10 @@ public:
 	void Update(void) override;			//更新処理
 	void Draw(void) override;			//描画処理
 
+	void SetRange(const float fRange);	//有効範囲の設定処理
+
 	static CPendulumClock* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fShadowHeight);		//生成処理
+	static CPendulumClock* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fShadowHeight, const float fRange);		//生成処理
 
 private:
 
@@ -38,10 +45,11 @@ private:
 
 	static const int NEEDLE_NUMBER = 2;		//針の数
 	static const float DEFAULT_ANIM_FRAME_ANGLE;		//毎フレーム加算されている角度
-	static const float DEFAULT_RANGE;		//有効範囲
+	static const float MIN_RANGE;			//最小の有効範囲
 
 	float			m_fAnimAngle;		//アニメーション用の角度
 	float			m_fAnimCoeff;		//アニメーション用の角度
+	float			m_fRange;			//有効範囲
 
 	CModelPart*		m_pPendulum;		//ペンジュラムのモデルへのポインタ
 	CModelPart*		m_pNeedle[NEEDLE_NUMBER];		//針へのポインタ

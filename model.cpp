@@ -45,6 +45,7 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 
 	{ "data\\MODELS\\GoalFlag.x" },								//MODEL_FLAG,
 	{ "data\\MODELS\\8InchNails.x" },							//MODEL_NAILS,
+	{ "data\\MODELS\\IceSpike.x" },								//MODEL_ICE_SPIKES,
 	{ "data\\MODELS\\Gear.x" },									//MODEL_GEAR,
 	{ "data\\MODELS\\Button.x" },								//MODEL_BUTTON,
 	{ "data\\MODELS\\TrapPillar.x" },							//MODEL_TRAP_PILLAR,
@@ -59,6 +60,14 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\Clock.x" },								//MODEL_CLOCK,
 	{ "data\\MODELS\\Pendolo.x" },								//MODEL_PENDULUM,
 	{ "data\\MODELS\\ClockNeedle.x" },							//MODEL_CLOCK_NEEDLE,
+	{ "data\\MODELS\\icicle.x" },								//MODEL_ICICLE,
+	{ "data\\MODELS\\Ruby.x" },									//MODEL_JEWEL,
+
+	{ "data\\MODELS\\IceFragment1.x" },							//MODEL_ICE_FRAGMENT_1,
+	{ "data\\MODELS\\IceFragment2.x" },							//MODEL_ICE_FRAGMENT_2,
+	{ "data\\MODELS\\IceFragment3.x" },							//MODEL_ICE_FRAGMENT_3,
+	{ "data\\MODELS\\IceFragment4.x" },							//MODEL_ICE_FRAGMENT_4,
+	{ "data\\MODELS\\IceFragment5.x" },							//MODEL_ICE_FRAGMENT_5,
 
 	{ "data\\MODELS\\GoldStar.x" },								//MODEL_ITEM_STAR,
 

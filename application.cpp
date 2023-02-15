@@ -25,6 +25,9 @@
 #include "title.h"
 #include "results.h"
 #include "BoxHitbox.h"
+#include "checkpoint.h"
+#include "stageSelect.h"
+#include "secondStage.h"
 
 
 //静的メンバー変数の宣言
@@ -43,7 +46,7 @@ CDebugProc* CApplication::m_pDebug = nullptr;								//デバッグ表示
 CApplication::Mode CApplication::m_mode = CApplication::MODE_TITLE;			//モード
 CApplication::Mode CApplication::m_modeNext = CApplication::MODE_TITLE;		//次のモード
 bool CApplication::m_bPause = false;										//ポーズ状態であるかどうか
-bool CApplication::m_bFade = true;
+bool CApplication::m_bFade = false;
 int CApplication::m_nStageSelect = 0;										// ステージ選択番号
 
 //コンストラクタ
@@ -362,6 +365,7 @@ void CApplication::SetMode(Mode mode)
 
 	CObject::ReleaseAll();
 	CMeshfield::ClearFields();
+	CCheckpoint::Clear();
 	//CHitbox::ReleaseAll();
 
 	if (m_pSound != nullptr)
@@ -380,6 +384,14 @@ void CApplication::SetMode(Mode mode)
 
 		break;
 
+	case CApplication::MODE_STAGE_SELECT:
+
+	{
+		m_pMode = CStageSelect::Create();
+	}
+
+	break;
+
 	case CApplication::MODE_FIRST_STAGE:
 
 	{
@@ -389,6 +401,16 @@ void CApplication::SetMode(Mode mode)
 	}
 
 		break;
+
+	case CApplication::MODE_SECOND_STAGE:
+
+	{
+		m_pMode = CSecondStage::Create();
+
+		CSilhouette::Create();
+	}
+
+	break;
 
 	case CApplication::MODE_RESULTS:
 

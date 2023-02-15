@@ -174,6 +174,15 @@ const D3DXVECTOR3 CCheckpoint::GetPos(void)
 
 
 
+
+
+//ƒNƒŠƒAˆ—
+void CCheckpoint::Clear(void)
+{
+	m_bFirst = true;
+	m_bChange = false;
+}
+
 //¶¬ˆ—
 CCheckpoint* CCheckpoint::Create(const D3DXVECTOR3 pos)
 {

@@ -12,6 +12,8 @@
 #include "shuriken.h"
 #include "button.h"
 #include "CylinderHitbox.h"
+#include "application.h"
+#include "sound.h"
 
 //コンストラクタ
 CShurikenTrap::CShurikenTrap()
@@ -84,6 +86,8 @@ void CShurikenTrap::Update(void)
 				speed.z *= 10.0f;
 
 				CShuriken::Create(m_spawnPos, speed);
+
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_SLASH);
 
 				m_nDelay = 15;
 			}

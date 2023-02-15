@@ -29,6 +29,8 @@ public:
 	void Update(void) override;			//XVˆ—
 	void Draw(void) override;			//•`‰æˆ—
 
+	void SetPos(const D3DXVECTOR3 pos) override;			//ˆÊ’u‚Ìİ’èˆ—
+
 	static CGoldStar* Create(const D3DXVECTOR3 pos);		//¶¬ˆ—
 	static CGoldStar* Create(const D3DXVECTOR3 pos, const float fShadowHeight);		//¶¬ˆ—
 

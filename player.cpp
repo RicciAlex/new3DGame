@@ -18,8 +18,10 @@
 #include "animator.h"
 #include "rendering.h"
 #include "CylinderHitbox.h"
+#include "BoxHitbox.h"
 #include "starUI.h"
 #include "game.h"
+#include "sound.h"
 
 #include "animationFade.h"
 
@@ -27,13 +29,17 @@
 //							静的変数の初期化
 //=============================================================================
 
-const D3DXVECTOR3 CPlayer::m_baseCameraPos = D3DXVECTOR3(0.0f, 300.0f, -500.0f);							//普通のカメラの位置
-const D3DXVECTOR3 CPlayer::m_baseFocalPointPos = D3DXVECTOR3(0.0f, 0.0f, 300.0f);						//普通の注視点の位置
-const D3DXVECTOR3 CPlayer::m_BackCameraPos = D3DXVECTOR3(0.0f, 300.0f, -650.0f);							//後ろのカメラの位置
+const D3DXVECTOR3 CPlayer::m_baseCameraPos = D3DXVECTOR3(0.0f, 300.0f, -500.0f);	//普通のカメラの位置
+const D3DXVECTOR3 CPlayer::m_baseFocalPointPos = D3DXVECTOR3(0.0f, 0.0f, 300.0f);	//普通の注視点の位置
+const D3DXVECTOR3 CPlayer::m_BackCameraPos = D3DXVECTOR3(0.0f, 300.0f, -650.0f);	//後ろのカメラの位置
 const float CPlayer::m_MaxWalkingSpeed = 7.0f;			//最大歩くスピード
 const float CPlayer::m_AccelerationCoeff = 8.0f;		//加速係数
-const D3DXVECTOR3 CPlayer::m_playerSize = D3DXVECTOR3(30.0f, 175.0f, 30.0f);				//プレイヤーのサイズ
-const float		 CPlayer::DEFAULT_FALL_HEIGHT = -1000.0f;						//この高さの下にいると死ぬ
+const D3DXVECTOR3 CPlayer::m_playerSize = D3DXVECTOR3(30.0f, 175.0f, 30.0f);	//プレイヤーのサイズ
+const float	CPlayer::DEFAULT_FALL_HEIGHT = -1000.0f;	//この高さの下にいると死ぬ
+const float CPlayer::JUMP_SPEED = 17.5f;				//ジャンプ力
+const float CPlayer::MAX_FALL_SPEED = -20.0f;			//最大の落下スピード
+const float CPlayer::GRAVITY_ACCELERATION = -0.8f;		//重力
+const int   CPlayer::ATTACK_TIME = 165;					//攻撃時間
 
 //プレイヤーの色
 D3DXCOLOR CPlayer::m_playerColor[PLAYER_COLOR_MAX]
@@ -74,6 +80,7 @@ CPlayer::CPlayer() : CObject::CObject(1)
 	m_fFrictionCoeff = 0.0f;						//摩擦係数
 	m_bFall = false;								//落下しているかどうか
 	m_pHitbox = nullptr;							//ヒットボックス
+	m_pAttackHitbox = nullptr;						//攻撃のヒットボックス
 	m_bMoveCamera = false;							//カメラの位置を更新するかどうか
 	m_bCameraAnim = false;
 
@@ -106,7 +113,7 @@ HRESULT CPlayer::Init(void)
 	m_pAnimator = nullptr;							//アニメーターへのポインタ
 	m_State = STATE_NEUTRAL;						//アニメーション状態
 	m_bJump = false;								//ジャンプしているかどうか
-	m_bLanded = false;
+	m_bLanded = true;
 	m_bMoving = false;								//移動しているかどうか
 	m_nInvincibilityCnt = 0;						//無敵状態のカウンター
 	m_bAttacking = false;							//攻撃しているかどうか
@@ -160,6 +167,11 @@ void CPlayer::Uninit(void)
 		m_pHitbox->Release();
 		m_pHitbox = nullptr;
 	}
+	if (m_pAttackHitbox != nullptr)
+	{
+		m_pAttackHitbox->Release();
+		m_pAttackHitbox = nullptr;
+	}
 
 	//UIの破棄処理
 	if (m_pUI != nullptr)
@@ -192,6 +204,40 @@ void CPlayer::Update(void)
 		UpdateHitbox();
 
 		UpdateAnimation();
+
+		if (m_nCntAttack > 0)
+		{
+			m_nCntAttack--;
+
+			if (m_nCntAttack == ATTACK_TIME - 15 && !m_pAttackHitbox)
+			{
+				//スポーンの位置を計算する
+				D3DXVECTOR3 Rot = m_rot;
+
+				D3DXVECTOR3 dir = D3DXVECTOR3(0.0f, 65.0f, 100.0f);
+				D3DXMATRIX mtxOut, mtxTrans, mtxRot;
+				D3DXMatrixIdentity(&mtxOut);
+				D3DXMatrixRotationYawPitchRoll(&mtxRot, Rot.y, 0.0f, 0.0f);
+				D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxRot);
+				D3DXVec3TransformCoord(&dir, &dir, &mtxOut);
+
+				//ヒットボックスの生成
+				m_pAttackHitbox = CBoxHitbox::Create(dir + m_pos, Vec3Null, D3DXVECTOR3(35.0f, 150.0f, 35.0f), CHitbox::TYPE_OBSTACLE, this, 0, CHitbox::EFFECT_DAMAGE);
+
+			}
+
+			if (m_nCntAttack <= 0)
+			{
+				m_bAttacking = false;
+				m_bMoving = false;
+
+				if (m_pAttackHitbox)
+				{
+					m_pAttackHitbox->Release();
+					m_pAttackHitbox = nullptr;
+				}
+			}
+		}
 
 		if (m_pos.y <= DEFAULT_FALL_HEIGHT)
 		{
@@ -275,12 +321,11 @@ void CPlayer::SetLanded(void)
 {
 	if (m_bJump)
 	{
+		m_bJump = false;		//着地している状態にする
+		m_bLanded = true;
+
 		if (m_pAnimator)
 		{
-
-			m_bJump = false;		//着地している状態にする
-			m_bLanded = true;
-
 			if (!m_bMoving)
 			{
 				m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
@@ -357,11 +402,23 @@ const D3DXVECTOR3 CPlayer::GetMove(void)
 	return m_move;
 }
 
+//着地しているかどうかの取得処理
+const bool CPlayer::GetLanded(void)
+{
+	return m_bLanded;
+}
+
+
+
+
 //=============================================================================
 //
 //								静的関数
 //
 //=============================================================================
+
+
+
 
 //生成処理
 CPlayer* CPlayer::Create(const D3DXVECTOR3 pos, int nCntPlayer)
@@ -659,9 +716,10 @@ void CPlayer::PlayerController(int nCntPlayer)
 	//SPACEキーが押された場合
 	if (CInputKeyboard::GetKeyboardTrigger(DIK_SPACE) && !m_bJump && !m_bAttacking && m_move.y < 0.0f)
 	{//ジャンプ
-		m_move.y = 30.0f;
+		m_move.y = JUMP_SPEED;
  		m_bJump = true;
 		m_bLanded = false;
+		CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_JUMP);
 
 		if (m_pAnimator != nullptr)
 		{
@@ -670,10 +728,15 @@ void CPlayer::PlayerController(int nCntPlayer)
 	}
 
 	//攻撃キーが押されている時
-	if (CInputKeyboard::GetKeyboardTrigger(DIK_V) &&  !m_bJump && m_bLanded && !m_bHit && !m_bAttacking)
+	if (CInputKeyboard::GetKeyboardTrigger(DIK_R) &&  !m_bJump && m_bLanded && !m_bHit && !m_bAttacking)
 	{
 		m_bAttacking = true;
-		m_nCntAttack = 19;
+		m_nCntAttack = ATTACK_TIME;
+
+		if (m_pAnimator != nullptr)
+		{
+			m_pAnimator->SetPresentAnim(CPlayer::STATE_ATTACK);
+		}
 	}
 
 }
@@ -697,15 +760,14 @@ void CPlayer::TransformUpdate(void)
 	m_pos += m_move;
 
 	m_move.x += (0.0f - m_move.x) * m_fFrictionCoeff;		//移動量のXコンポネントの更新
-	m_move.y += (0.0f - m_move.y) * 0.1f;					//移動量のYコンポネントの更新
 	m_move.z += (0.0f - m_move.z) * m_fFrictionCoeff;		//移動量のZコンポネントの更新
 
 	UpdateRotation();
 
 	//重量を追加する
-	if (m_move.y >= -15.0f)
+	if (m_move.y >= MAX_FALL_SPEED)
 	{
-		m_move.y -= 0.8f;
+		m_move.y += GRAVITY_ACCELERATION;
 	}
 }
 
@@ -790,7 +852,7 @@ void CPlayer::UpdateAnimation(void)
 		//アニメーションの更新
 		m_pAnimator->Update();
 
-		if (!m_bJump && m_bMoving)
+		if (!m_bJump && m_bMoving && !m_bAttacking)
 		{
 			D3DXVECTOR3 residualMove = m_move;
 			residualMove.y = 0.0f;
@@ -834,21 +896,7 @@ void CPlayer::FieldUpdate(void)
 			{
 				if (m_bJump)
 				{
-					if (m_pAnimator)
-					{
-
-						m_bJump = false;		//着地している状態にする
-						m_bLanded = true;
-
-						if (!m_bMoving)
-						{
-							m_pAnimator->SetPresentAnim(CPlayer::STATE_NEUTRAL);
-						}
-						else
-						{
-							m_pAnimator->SetPresentAnim(CPlayer::STATE_RUNNING);
-						}
-					}
+					SetLanded();
 				}
 
 				m_bHit = false;			//当たってない状態にする
@@ -906,6 +954,8 @@ void CPlayer::HitboxEffectUpdate(void)
 		}
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
+
+		CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_DAMAGE);
 	}
 
 	break;
@@ -931,6 +981,8 @@ void CPlayer::HitboxEffectUpdate(void)
 			m_nInvincibilityCnt = 90;
 			m_pHitbox->SetInvincibility(true);
 			CApplication::GetGame()->AddTime(10000);
+
+			CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_DAMAGE);
 		}
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);

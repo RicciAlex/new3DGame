@@ -11,6 +11,10 @@
 #include "FirePipe.h"
 #include "fireParticle.h"
 #include "CylinderHitbox.h"
+#include "application.h"
+#include "sound.h"
+#include "game.h"
+#include "player.h"
 
 //=============================================================================
 //							静的変数の初期化
@@ -24,6 +28,7 @@ CFirePipe::CFirePipe()
 	//メンバー変数をクリアする
 	m_nCntTime = 0;
 	m_nFireTime = 0;
+	m_nCntSound = 0;
 
 	m_pParticle = nullptr;
 	m_pHitbox = nullptr;
@@ -42,6 +47,7 @@ HRESULT CFirePipe::Init(void)
 	//メンバー変数を初期化する
 	m_nCntTime = 0;
 	m_nFireTime = DEFAULT_FIRE_TIME;
+	m_nCntSound = 0;
 
 	m_pParticle = nullptr;
 	m_pHitbox = nullptr;
@@ -98,6 +104,8 @@ void CFirePipe::Update(void)
 				{//nullチェック
 					m_pFireHitbox->SetPos(GetPos() + D3DXVECTOR3(0.0f, -5000.0f, 0.0f));
 				}
+
+				m_nCntSound = 0;
 			}
 			else
 			{
@@ -110,6 +118,30 @@ void CFirePipe::Update(void)
 				}
 			}
 		}
+	}
+
+	if (m_nCntSound <= 0)
+	{
+		if (m_pParticle)
+		{//パーティクルのnullチェック
+
+		 //アクティブ状態を逆にする
+			if (m_pParticle->GetActiveState())
+			{
+				D3DXVECTOR3 dist = CApplication::GetGame()->GetPlayer()->GetPos() - GetPos();
+
+				if (D3DXVec3Length(&dist) <= 2500.0f)
+				{
+					CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_FIRE);
+
+					m_nCntSound = 30;
+				}
+			}
+		}
+	}
+	else
+	{
+		m_nCntSound--;
 	}
 }
 
@@ -144,6 +176,11 @@ CFirePipe* CFirePipe::Create(const D3DXVECTOR3 pos)
 	pPipe->m_pHitbox = CCylinderHitbox::Create(pos + D3DXVECTOR3(0.0f, -1000.0f, 0.0f), Vec3Null, HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, pPipe);
 	pPipe->m_pFireHitbox = CCylinderHitbox::Create(pos, Vec3Null, FIRE_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, -1, pPipe, CHitbox::EFFECT_BOUNCE);
 
+	if (pPipe->m_pFireHitbox)
+	{
+		pPipe->m_pFireHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
 	return pPipe;				//生成したインスタンスを返す
 }
 
@@ -174,7 +211,12 @@ CFirePipe* CFirePipe::Create(const D3DXVECTOR3 pos, const int nFireTime)
 
 	//ヒットボックスの生成
 	pPipe->m_pHitbox = CCylinderHitbox::Create(pos + D3DXVECTOR3(0.0f, -1000.0f, 0.0f), Vec3Null, HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, pPipe);
-	pPipe->m_pFireHitbox = CCylinderHitbox::Create(pos, Vec3Null, HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, -1, pPipe, CHitbox::EFFECT_BOUNCE);
+	pPipe->m_pFireHitbox = CCylinderHitbox::Create(pos, Vec3Null, FIRE_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, -1, pPipe, CHitbox::EFFECT_BOUNCE);
+
+	if (pPipe->m_pFireHitbox)
+	{
+		pPipe->m_pFireHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
 
 	return pPipe;				//生成したインスタンスを返す
 }

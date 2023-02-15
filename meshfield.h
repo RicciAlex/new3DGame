@@ -28,6 +28,7 @@ public:
 
 	void SetPos(const D3DXVECTOR3 pos) override;		//位置の設定処理
 	void SetFieldPriority(const int nPriority);			//プライオリティの設定処理
+	void SetFriction(const float fFriction);			//摩擦係数の取得処理
 
 	const D3DXVECTOR2 GetSize(void);			//サイズの取得処理
 	const D3DXVECTOR3 GetPos(void) override;			//位置の取得処理

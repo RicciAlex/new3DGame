@@ -61,10 +61,13 @@ void CSpawnTrigger::Update(void)
 		{
 			for (int nCnt = 0; nCnt < (int)m_vSpawnObj.size(); nCnt++)
 			{
-				D3DXVECTOR3 pos = m_vSpawnObj.data()[nCnt]->GetPos();
-				pos.y = m_vObjHeight.data()[nCnt];
+				if (m_vSpawnObj.data()[nCnt])
+				{
+					D3DXVECTOR3 pos = m_vSpawnObj.data()[nCnt]->GetPos();
+					pos.y = m_vObjHeight.data()[nCnt];
 
-				m_vSpawnObj.data()[nCnt]->SetPos(pos);
+					m_vSpawnObj.data()[nCnt]->SetPos(pos);
+				}
 			}
 
 			Release();

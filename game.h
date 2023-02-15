@@ -21,6 +21,7 @@
 class CPlayer;
 class CTimer;
 class CPauseMenu;
+class CGoal;
 
 
 class CGame : public CMode
@@ -46,6 +47,7 @@ public:
 
 	void SetPlayer(CPlayer* pPlayer);		//プレイヤーの設定処理
 	CPlayer* GetPlayer(void);				//プレイヤーの取得処理
+	CGoal* GetGoal(void);					//ゴールの取得処理
 
 protected:
 
@@ -63,7 +65,7 @@ private:
 	void SetLoadedHitboxType(char* pLoadedType, CHitbox::HITBOX_TYPE &type);
 	void SetLoadedHitboxEffect(char* pLoadedType, CHitbox::INTERACTION_EFFECT &effect);
 
-	void LoadGoal(FILE* pFile);
+	void LoadGoal(FILE* pFile, CGoal* pGoal);
 	void LoadNail(FILE* pFile);
 	void LoadSpikeTrap(FILE* pFile);
 	void LoadStar(FILE* pFile);
@@ -77,10 +79,12 @@ private:
 	void LoadFirePipe(FILE* pFile);
 	void LoadFogbot(FILE* pFile);
 	void LoadPendulumClock(FILE* pFile);
+	void LoadGem(FILE* pFile);
 
 	CPlayer* m_pPlayer;				//プレイヤーへのポインタ
 	CTimer*  m_pTimer;				//タイマーへのポインタ
 	CPauseMenu* m_pPauseMenu;		//ポーズメニューへのポインタ
+	CGoal*   m_pGoal;				//ゴールへのポインタ
 
 };
 

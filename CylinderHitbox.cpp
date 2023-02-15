@@ -187,6 +187,11 @@ void CCylinderHitbox::Update(void)
 							{
 								SetDirection(pHbx->data()[nCnt]->GetDirection());
 							}
+
+							if (GetScore() >= 0 && pHbx->data()[nCnt]->GetScore() < 0)
+							{
+								SetScore(pHbx->data()[nCnt]->GetScore());
+							}
 						}
 					}
 				}

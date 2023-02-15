@@ -31,6 +31,7 @@
 #include "fogBot.h"
 #include "PendulumClock.h"
 #include "PauseMenu.h"
+#include "gem.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -41,6 +42,7 @@ CGame::CGame() : CMode(true)
 	m_pPlayer = nullptr;
 	m_pTimer = nullptr;
 	m_pPauseMenu = nullptr;
+	m_pGoal = nullptr;
 }
 
 //デストラクタ
@@ -129,6 +131,12 @@ CPlayer* CGame::GetPlayer(void)
 	return m_pPlayer;
 }
 
+//ゴールの取得処理
+CGoal * CGame::GetGoal(void)
+{
+	return m_pGoal;
+}
+
 //マップのロード処理
 void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 {
@@ -157,7 +165,7 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 			}
 			else if (strcmp(aStr, "GOAL") == 0)
 			{
-				LoadGoal(pFile);
+				LoadGoal(pFile, m_pGoal);
 			}
 			else if (strcmp(aStr, "NAIL") == 0)
 			{
@@ -211,6 +219,10 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 			{
 				LoadPendulumClock(pFile);
 			}
+			else if (strcmp(aStr, "GEM") == 0)
+			{
+				LoadGem(pFile);
+			}
 		}
 
 		fclose(pFile);
@@ -255,9 +267,11 @@ void CGame::LoadMeshField(FILE * pFile, CObject::TextType fieldTexture)
 	char aStr[1024] = {};
 	FILE* pCheck = nullptr;
 	bool bCreate = false;
+	bool bFriction = false;
 	char aPass[1024] = {};
 	D3DXVECTOR3 pos = Vec3Null;
 	D3DXVECTOR3 rot = Vec3Null;
+	float fFriction = 0.0f;
 
 	while (strcmp(aStr, "END_FIELD") != 0)
 	{
@@ -286,6 +300,33 @@ void CGame::LoadMeshField(FILE * pFile, CObject::TextType fieldTexture)
 			
 			LoadVector3(pFile, rot);
 		}
+		else if (strcmp(aStr, "FRICTION") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%f", &fFriction);
+			bFriction = true;
+		}
+		else if (strcmp(aStr, "TEXTURE") == 0)
+		{
+			char aTex[80] = {};
+
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%s", aTex);
+			bFriction = true;
+
+			if (strcmp(aTex, "IRON") == 0)
+			{
+				fieldTexture = CObject::TEXTURE_IRON;
+			}
+			else if (strcmp(aTex, "ICE") == 0)
+			{
+				fieldTexture = CObject::TEXTURE_ICE;
+			}
+			else if (strcmp(aTex, "SNOW") == 0)
+			{
+				fieldTexture = CObject::TEXTURE_SNOW;
+			}
+		}
 	}
 
 	if (bCreate)
@@ -296,6 +337,11 @@ void CGame::LoadMeshField(FILE * pFile, CObject::TextType fieldTexture)
 		if (pField)
 		{
 			pField->SetTexture(fieldTexture);
+
+			if (bFriction)
+			{
+				pField->SetFriction(fFriction);
+			}
 		}
 	}
 }
@@ -416,26 +462,29 @@ void CGame::SetLoadedHitboxEffect(char * pLoadedType, CHitbox::INTERACTION_EFFEC
 	}
 }
 
-void CGame::LoadGoal(FILE * pFile)
+void CGame::LoadGoal(FILE * pFile, CGoal* pGoal)
 {
-	char aStr[1024] = {};
-	D3DXVECTOR3 pos = Vec3Null;
-
-	while (strcmp(aStr, "END_GOAL") != 0)
+	if (!m_pGoal)
 	{
-		fscanf(pFile, "%s", aStr);
+		char aStr[1024] = {};
+		D3DXVECTOR3 pos = Vec3Null;
 
-		if (strcmp(aStr, "POS") == 0)
+		while (strcmp(aStr, "END_GOAL") != 0)
 		{
 			fscanf(pFile, "%s", aStr);
-			
-			LoadVector3(pFile, pos);
 
-			break;
+			if (strcmp(aStr, "POS") == 0)
+			{
+				fscanf(pFile, "%s", aStr);
+
+				LoadVector3(pFile, pos);
+
+				break;
+			}
 		}
-	}
 
-	CGoal::Create(pos);
+		m_pGoal = CGoal::Create(pos);
+	}
 }
 
 void CGame::LoadNail(FILE * pFile)
@@ -856,6 +905,7 @@ void CGame::LoadPendulumClock(FILE * pFile)
 	D3DXVECTOR3 pos = Vec3Null;
 	D3DXVECTOR3 rot = Vec3Null;
 	float fShadowHeight = 0.0f;
+	float fRange = CPendulumClock::DEFAULT_RANGE;
 
 	while (strcmp(aStr, "END_CLOCK") != 0)
 	{
@@ -878,7 +928,55 @@ void CGame::LoadPendulumClock(FILE * pFile)
 			fscanf(pFile, "%s", aStr);
 			fscanf(pFile, "%f", &fShadowHeight);
 		}
+		if (strcmp(aStr, "RANGE") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%f", &fRange);
+		}
 	}
 
-	CPendulumClock::Create(pos, rot, fShadowHeight);
+	CPendulumClock::Create(pos, rot, fShadowHeight, fRange);
+}
+
+void CGame::LoadGem(FILE * pFile)
+{
+	if (m_pGoal)
+	{
+		char aStr[1024] = {};
+		D3DXVECTOR3 pos = Vec3Null;
+		D3DXCOLOR col = ColorRed;
+		float fShadowHeight = -199.9f;
+		D3DXVECTOR3 newPos = Vec3Null;
+
+		while (strcmp(aStr, "END_GEM") != 0)
+		{
+			fscanf(pFile, "%s", aStr);
+
+			if (strcmp(aStr, "POS") == 0)
+			{
+				fscanf(pFile, "%s", aStr);
+
+				LoadVector3(pFile, pos);
+			}
+			if (strcmp(aStr, "COLOR") == 0)
+			{
+				fscanf(pFile, "%s", aStr);
+
+				LoadColor(pFile, col);
+			}
+			if (strcmp(aStr, "SHADOW_HEIGHT") == 0)
+			{
+				fscanf(pFile, "%s", aStr);
+				fscanf(pFile, "%f", &fShadowHeight);
+			}
+			if (strcmp(aStr, "NEW_POS") == 0)
+			{
+				fscanf(pFile, "%s", aStr);
+
+				LoadVector3(pFile, newPos);
+			}
+		}
+
+		CGem::Create(pos, col, fShadowHeight, newPos, m_pGoal);
+	}
 }

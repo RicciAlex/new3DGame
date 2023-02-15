@@ -36,6 +36,8 @@ public:
 	void SetPos(const D3DXVECTOR3 pos) override;	//ˆÊ’u‚Ìİ’èˆ—
 	const D3DXVECTOR3 GetPos(void) override;		//ˆÊ’u‚Ìæ“¾ˆ—
 
+	static void Clear(void);
+
 	static CCheckpoint* Create(const D3DXVECTOR3 pos);			//¶¬ˆ—
 	static CCheckpoint* Create(const D3DXVECTOR3 pos, const float fRange);			//¶¬ˆ—
 	static CCheckpoint* Create(const D3DXVECTOR3 pos, const float fRange, const D3DXCOLOR normalCol);			//¶¬ˆ—

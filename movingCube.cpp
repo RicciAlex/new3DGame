@@ -320,6 +320,7 @@ void CMovingCube::PushOut(void)
 			playerPos.y = pos.y + m_size.y * 0.5f;
 			pPlayer->SetPos(playerPos);
 			pPlayer->SetLanded();
+			pPlayer->SetFriction(1.0f);
 		}
 	}
 }

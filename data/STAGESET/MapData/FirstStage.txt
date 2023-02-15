@@ -38,7 +38,7 @@ SCRIPT
 	
 	FIELD
 	
-		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field5.txt
+		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field7.txt
 		POS = -1600.0 -200.0 400.0
 	
 	END_FIELD
@@ -47,7 +47,7 @@ SCRIPT
 	FIELD
 	
 		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field6.txt
-		POS = -3700.0 -200.0 -3550.0
+		POS = -3700.0 -200.0 -1300.0
 	
 	END_FIELD
 	
@@ -55,7 +55,23 @@ SCRIPT
 	FIELD
 	
 		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field4.txt
-		POS = -4825.0 -200.0 -3875.0
+		POS = -4825.0 -200.0 -1625.0
+	
+	END_FIELD
+	
+	
+	FIELD
+	
+		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field7.txt
+		POS = 700.0 120.0 -200.0
+	
+	END_FIELD
+	
+	
+	FIELD
+	
+		PASS = data\\STAGESET\\FieldsData\\Level1\\Level1Field4.txt
+		POS = 4000.0 120.0 -1500.0
 	
 	END_FIELD
 	
@@ -267,6 +283,75 @@ SCRIPT
 	END_STAR
 	
 	
+	STAR
+	
+		POS = 2200.0 1000.0 125.0
+		SHADOW_HEIGHT = -632.9
+	
+	END_STAR
+	
+	
+	STAR
+	
+		POS = 2200.0 1000.0 -75.0
+		SHADOW_HEIGHT = -632.9
+	
+	END_STAR
+	
+	
+	STAR
+	
+		POS = -250.0 200.0 1450.0
+		SHADOW_HEIGHT = 100.9
+	
+	END_STAR
+	
+	
+	STAR
+	
+		POS = 250.0 200.0 1450.0
+		SHADOW_HEIGHT = 100.9
+	
+	END_STAR
+	
+	
+	STAR
+	
+		POS = 4025.0 200.0 -1525.0
+		SHADOW_HEIGHT = 120.1
+	
+	END_STAR
+	
+	STAR
+	
+		POS = 4200.0 200.0 -1525.0
+		SHADOW_HEIGHT = 120.1
+	
+	END_STAR
+	
+	STAR
+	
+		POS = 4025.0 200.0 -1700.0
+		SHADOW_HEIGHT = 120.1
+	
+	END_STAR
+	
+	STAR
+	
+		POS = 4200.0 200.0 -1700.0
+		SHADOW_HEIGHT = 120.1
+	
+	END_STAR
+	
+	
+	STAR
+	
+		POS = 4112.5 200.0 -1612.5
+		SHADOW_HEIGHT = 120.1
+	
+	END_STAR
+	
+	
 	
 #==========================================================================================================================
 #==========================================================================================================================
@@ -328,19 +413,58 @@ SCRIPT
 		END_MOVING_CUBE
 		
 		
+		MOVING_CUBE
+		
+			POS = 1800.0 120.0 -2500.0
+			MOVE = 2.0 0.0 0.0
+			RANGE = 350.0
+		
+		END_MOVING_CUBE
+		
+		
 		
 #==========================================================================================================================
 #==========================================================================================================================
-#										Acceleration Platform
+#										Acceleration Floor
 #									  (POS, SIZE, SPEED, TILING)
 
 		
 	ACCELERATION_FLOOR
 		
 		POS = 0.0 -199.0 1000.0
-		SIZE = 350.0 200.0
+		SIZE = 375.0 200.0
 		SPEED = 1.0 0.0
 		TILING = 2.0 2.0
+		
+	END_ACCELERATION_FLOOR
+	
+	
+	ACCELERATION_FLOOR
+		
+		POS = 1800.0 120.9 -15.0
+		SIZE = 200.0 205.0
+		SPEED = -1.0 0.0
+		TILING = 2.0 2.0
+		
+	END_ACCELERATION_FLOOR
+	
+	
+	ACCELERATION_FLOOR
+		
+		POS = 1175.0 120.9 -1600.0
+		SIZE = 125.0 750.0
+		SPEED = 1.0 0.0
+		TILING = 1.0 5.0
+		
+	END_ACCELERATION_FLOOR
+	
+	
+	ACCELERATION_FLOOR
+		
+		POS = 925.0 120.9 -1600.0
+		SIZE = 125.0 750.0
+		SPEED = -1.0 0.0
+		TILING = 1.0 5.0
 		
 	END_ACCELERATION_FLOOR
 		
@@ -353,7 +477,7 @@ SCRIPT
 #									  	(POS, SIZE)
 
 
-	CAMERA_SETTER
+	#CAMERA_SETTER
 	
 		POS = -1250.0 -151.0 -1900.0
 		SIZE = 500.0 100.0 5150.0
@@ -367,12 +491,18 @@ SCRIPT
 #==========================================================================================================================
 #										Checkpoint
 #						(POS, SIZE, NORMAL_COLOR, TRIGGERED_COLOR)
-
-
-
+	
+	
 	CHECKPOINT
 	
-		POS = -300.0 -200.1 150.0 
+		POS = -3200.0 -200.1 -1750.0
+		SIZE = 100.0
+	
+	END_CHECKPOINT
+	
+	CHECKPOINT
+	
+		POS = 0.0 -200.1 200.0
 		SIZE = 100.0
 	
 	END_CHECKPOINT
@@ -380,17 +510,7 @@ SCRIPT
 	
 	CHECKPOINT
 	
-		POS = 300.0 -200.1 150.0
-		SIZE = 100.0
-		NORMAL_COLOR = 1.0 1.0 0.0 0.5
-		TRIGGERED_COLOR = 0.0 1.0 0.0 0.5
-	
-	END_CHECKPOINT
-	
-	
-	CHECKPOINT
-	
-		POS = -3200.0 -200.1 -4000.0
+		POS = 1150.0 140.0 -2500.0
 		SIZE = 100.0
 	
 	END_CHECKPOINT
@@ -402,20 +522,60 @@ SCRIPT
 #										Fallboard
 #									  	(POS, DELAY)
 
-
-
+	
+	
 	FALLBOARD
 	
-		POS = 0.0 -200.0 -200.0
-		DELAY = 220
+		POS = -4000.0 -200.0 -1750.0
+		DELAY = 300
 	
 	END_FALLBOARD
 	
 	
 	FALLBOARD
 	
-		POS = -4000.0 -200.0 -4000.0
-		DELAY = 360
+		POS = 2400.0 120.0 -2500.0
+		DELAY = 300
+	
+	END_FALLBOARD
+	
+	
+	FALLBOARD
+	
+		POS = 2800.0 120.0 -2500.0
+		DELAY = 300
+	
+	END_FALLBOARD
+	
+	
+	FALLBOARD
+	
+		POS = 3200.0 120.0 -2500.0
+		DELAY = 300
+	
+	END_FALLBOARD
+	
+	
+	FALLBOARD
+	
+		POS = 3200.0 120.0 -2100.0
+		DELAY = 300
+	
+	END_FALLBOARD
+	
+	
+	FALLBOARD
+	
+		POS = 3200.0 120.0 -1700.0
+		DELAY = 300
+	
+	END_FALLBOARD
+	
+	
+	FALLBOARD
+	
+		POS = 3600.0 120.0 -1700.0
+		DELAY = 300
 	
 	END_FALLBOARD
 	
@@ -433,14 +593,14 @@ SCRIPT
 
 	FIRE_PIPE
 	
-		POS = -3700.0 -200.0 -4000.0
+		POS = -3700.0 -200.0 -1750.0
 	
 	END_FIRE_PIPE
 	
 	
 	FIRE_PIPE
 	
-		POS = -4300.0 -200.0 -4000.0
+		POS = -4300.0 -200.0 -1750.0
 	
 	END_FIRE_PIPE
 	
@@ -452,11 +612,18 @@ SCRIPT
 #								 (POS, SHADOW_HEIGHT)
 	
 	
+	FOG_BOT
+	
+	POS = -2900.0 -150.0 -1600.0
+	SHADOW_HEIGHT = -200.1
+	
+	END_FOG_BOT
+	
 	
 	FOG_BOT
 	
-		POS = -300.0 -175.0 600.0
-		SHADOW_HEIGHT = -199.9
+	POS = -2300.0 -150.0 -2000.0
+	SHADOW_HEIGHT = -200.1
 	
 	END_FOG_BOT
 	
@@ -468,12 +635,38 @@ SCRIPT
 #								  (POS, ROT, SHADOW_HEIGHT)
 
 
-	CLOCK
-	
-		POS = 200.0 -200.0 300.0
-		SHADOW_HEIGHT = -199.9
-	
-	END_CLOCK
+#==========================================================================================================================
+#==========================================================================================================================
+#											Gem
+#							(POS, COLOR, SHADOW_HEIGHT, NEW_POS)
 
+	GEM
+	
+		POS = -3000.0 -200.1 -1750.0
+		COLOR = 1.0 0.0 0.0 0.75
+		SHADOW_HEIGHT = -199.9
+		NEW_POS = 50.0 120.0 1950.0
+	
+	END_GEM
+	
+	
+	GEM
+	
+		POS = 2175.0 650.1 0.0
+		COLOR = 0.0 1.0 0.0 0.75
+		SHADOW_HEIGHT = -199.9
+		NEW_POS = -50.0 120.0 1950.0
+	
+	END_GEM
+	
+	
+	GEM
+	
+		POS = 1050.0 140.0 -2600.0
+		COLOR = 0.0 0.0 1.0 0.75
+		SHADOW_HEIGHT = -199.9
+		NEW_POS = 0.0 120.0 2050.0
+	
+	END_GEM
 
 END_SCRIPT				#絶対消さないこと

@@ -10,6 +10,8 @@
 //=============================================================================
 #include "button.h"
 #include "CylinderHitbox.h"
+#include "application.h"
+#include "sound.h"
 
 //コンストラクタ
 CButton::CButton()
@@ -78,6 +80,8 @@ void CButton::Update(void)
 				m_bTriggered = true;				//押された状態にする
 				SetModelColor(0, m_triggeredCol);	//色を変更する
 				SetPos(m_originalPos + D3DXVECTOR3(0.0f, -9.0f, 0.0f));			//位置を更新する
+
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_BUTTON);
 			}
 			else
 			{//当っていない状態だったら
@@ -101,6 +105,8 @@ void CButton::Update(void)
 					m_bTriggered = true;				//押された状態にする
 					SetModelColor(0, m_triggeredCol);	//色を変更する
 					SetPos(m_originalPos + D3DXVECTOR3(0.0f, -9.0f, 0.0f));			//位置を更新する
+
+					CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_BUTTON);
 				}
 			}
 		}

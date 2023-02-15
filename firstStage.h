@@ -30,6 +30,12 @@ public:
 
 private:
 
+	static const int DEFAULT_MIN_SOUND_DELAY = 180;
+	static const int DEFAULT_MAX_SOUND_DELAY = 400;
+
+	int m_nCntSound;							//サウンドエフェクト用のカウンター
+	int m_nSoundDelay;							//サウンドエフェクトのディレイ
+
 };
 
 

@@ -43,6 +43,7 @@ private:
 
 	int m_nCntTime;						//現在のフレーム
 	int m_nFireTime;					//火を消す/付けるまでのフレーム数
+	int m_nCntSound;					//サウンドのカウンター
 
 	CFireParticle* m_pParticle;			//パーティクルへのポインタ
 	CCylinderHitbox* m_pHitbox;			//ヒットボックスへのポインタ

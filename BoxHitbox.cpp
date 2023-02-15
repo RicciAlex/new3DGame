@@ -85,10 +85,14 @@ void CBoxHitbox::Update(void)
 
 				if (BoxBoxHit(pHbx->data()[nCnt]))
 				{//当たった場合
-
+					
 					if (GetEffect() != EFFECT_MAX && pHbx->data()[nCnt]->GetEffect() == EFFECT_MAX)
 					{//エフェクトがあったら、設定する
 						pHbx->data()[nCnt]->SetEffect(GetEffect());
+					}
+					else if (GetEffect() == EFFECT_MAX && pHbx->data()[nCnt]->GetEffect() != EFFECT_MAX)
+					{
+						SetEffect(pHbx->data()[nCnt]->GetEffect());
 					}
 				}
 

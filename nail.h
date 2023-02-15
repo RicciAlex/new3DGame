@@ -33,6 +33,7 @@ public:
 	void SetPos(const D3DXVECTOR3 pos) override;		//ˆÊ’u‚Ìİ’èˆ—
 														
 	static CNail* Create(const D3DXVECTOR3 pos);		//¶¬ˆ—
+	static CNail* Create(const D3DXVECTOR3 pos, CModel::ModelType type);
 
 private:
 

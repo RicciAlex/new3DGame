@@ -23,17 +23,21 @@ const float CFogbot::DEFAULT_VIEW_RANGE = 300.0f;	//ディフォルトの見える範囲の半
 D3DXVECTOR3 CFogbot::DEFAULT_PARTICLE_RELATIVE_POS = {0.0f, 66.0f, 0.0f};		//パーティクルのディフォルトの相対位置
 const float CFogbot::DEFAULT_FRAME_ANGLE = D3DX_PI * 0.01f;	//アニメーション用の角度
 const float CFogbot::DEFAULT_ANIM_AMPLITUDE = 0.35f;
+const float CFogbot::DEFAULT_GRAVITY_ACCELERATION = -0.8f;	//重力加速度
 const D3DXVECTOR3 CFogbot::DEFAULT_HITBOX_SIZE = { 25.0f, 70.0f, 25.0f };		//ヒットボックスのディフォルトサイズ
+const float CFogbot::DEFAULT_DESPAWN_HEIGHT = -1500.0f;			//ディフォルトのディスポーンのY座標
 
 
 //コンストラクタ
 CFogbot::CFogbot()
 {
 	//メンバー変数を初期化する
+	m_deathSpeed = Vec3Null;
 	m_fAnimAngle = 0.0f;
 	m_fRange = 0.0f;
 	m_bActive = false;
 	m_bForceActive = false;
+	m_bDeath = false;
 	m_pParticle = nullptr;
 	m_pHitbox = nullptr;
 }
@@ -92,17 +96,60 @@ void CFogbot::Update(void)
 {
 	D3DXVECTOR3 pos = GetPos();			//位置の取得
 
-	UpdateParticle();
-
-	m_fAnimAngle += DEFAULT_FRAME_ANGLE;
-
-	pos.y += DEFAULT_ANIM_AMPLITUDE * sinf(m_fAnimAngle);
-
-	SetPos(pos);
-
-	if (m_pHitbox)
+	if (!m_bDeath)
 	{
-		m_pHitbox->SetPos(pos);
+		UpdateParticle();
+
+		m_fAnimAngle += DEFAULT_FRAME_ANGLE;
+
+		pos.y += DEFAULT_ANIM_AMPLITUDE * sinf(m_fAnimAngle);
+
+		SetPos(pos);
+
+		if (m_pHitbox)
+		{
+			m_pHitbox->SetPos(pos);
+
+			m_pHitbox->Update();
+
+			if (m_pHitbox->GetEffect() == CHitbox::EFFECT_DAMAGE)
+			{
+				m_pHitbox->Release();
+				m_pHitbox = nullptr;
+
+				if (m_pParticle)
+				{
+					m_pParticle->SetActiveState(false);
+
+					CRenderer* pRenderer = CApplication::GetRenderer();
+
+					if (pRenderer)
+					{
+						pRenderer->SetDeepFog(false);
+					}
+				}
+
+				m_deathSpeed = D3DXVECTOR3((float)random(-500, 500) * 0.01f, 17.5f, (float)random(-500, 500) * 0.01f);
+
+				StartRotation(D3DXVECTOR3((float)random(-10, 10) * 0.0005f * D3DX_PI, (float)random(-10, 10) * 0.0005f * D3DX_PI, 0.0f));
+
+				m_bDeath = true;
+			}
+		}
+	}
+	else
+	{
+		m_deathSpeed.y += DEFAULT_GRAVITY_ACCELERATION;
+
+		pos += m_deathSpeed;
+
+		SetPos(pos);
+
+		if (pos.y <= DEFAULT_DESPAWN_HEIGHT)
+		{
+			Release();
+			return;
+		}
 	}
 }
 
@@ -163,6 +210,11 @@ CFogbot * CFogbot::Create(const D3DXVECTOR3 pos, const float shadowPos)
 	pEnemy->m_pParticle = CFogParticle::Create(pos + DEFAULT_PARTICLE_RELATIVE_POS);		//パーティクルの生成
 
 	pEnemy->m_pHitbox = CBoxHitbox::Create(pos, Vec3Null, DEFAULT_HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, pEnemy);		//ヒットボックスの生成
+
+	if (pEnemy->m_pHitbox)
+	{
+		pEnemy->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_OBSTACLE, CHitbox::RESPONSE_OVERLAP);
+	}
 
 	return pEnemy;							//生成したインスタンスを返す
 }

@@ -33,12 +33,16 @@ char* CObject_2D::m_paTextPass[CObject::TEXTURE_TYPE_MAX] =
 	"data\\TEXTURE\\ArrowTileRight.png",					//TEXTURE_ARROW_TILE_RIGHT,
 	"data\\TEXTURE\\ArrowTileDown.png",						//TEXTURE_ARROW_TILE_DOWN,
 	"data\\TEXTURE\\ArrowTileLeft.png",						//TEXTURE_ARROW_TILE_LEFT,
+	"data\\TEXTURE\\GuideArrow.png",						//TEXTURE_GUIDE_ARROW,
 
 	"data\\TEXTURE\\GearBg.png",							//TEXTURE_GEAR_BG,
+	"data\\TEXTURE\\Materials\\Ice.png",					//TEXTURE_ICE,
+	"data\\TEXTURE\\Materials\\Snow.png",					//TEXTURE_SNOW,
 
 	"data\\TEXTURE\\Star.png",								//TEXTURE_STAR_UI,
 
 	"data\\TEXTURE\\Effect\\Particle02.png",				//TEXTURE_CIRCLE_EFFECT,
+	"data\\TEXTURE\\Effect\\MagicCircle5.png",				//TEXTURE_MAGIC_CIRCLE_EFFECT,
 	"data\\TEXTURE\\Effect\\Circle.png",					//TEXTURE_CIRCLE,
 };
 
@@ -707,20 +711,88 @@ LPDIRECT3DTEXTURE9 CObject_2D::GetTexturePointer(CObject::TextType type)
 //¶¬ˆ—
 CObject_2D* CObject_2D::Create(void)
 {
-	CObject_2D* pObj2D = nullptr;
-
-	pObj2D = new CObject_2D;
+	CObject_2D* pObj2D = new CObject_2D;
 
 	if (FAILED(pObj2D->Init()))
 	{
-		if (pObj2D != nullptr)
-		{
-			delete pObj2D;
-			pObj2D = nullptr;
-		}
-
 		return nullptr;
 	}
+
+	return pObj2D;
+}
+
+CObject_2D * CObject_2D::Create(const int nPriority)
+{
+	CObject_2D* pObj2D = new CObject_2D(nPriority);
+
+	if (FAILED(pObj2D->Init()))
+	{
+		return nullptr;
+	}
+
+	return pObj2D;
+}
+
+CObject_2D * CObject_2D::Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size)
+{
+	CObject_2D* pObj2D = new CObject_2D(nPriority);
+
+	if (FAILED(pObj2D->Init()))
+	{
+		return nullptr;
+	}
+
+	pObj2D->SetPos(pos);
+	pObj2D->SetSize(size);
+
+	return pObj2D;
+}
+
+CObject_2D * CObject_2D::Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const D3DXCOLOR col)
+{
+	CObject_2D* pObj2D = new CObject_2D(nPriority);
+
+	if (FAILED(pObj2D->Init()))
+	{
+		return nullptr;
+	}
+
+	pObj2D->SetPos(pos);
+	pObj2D->SetSize(size);
+	pObj2D->SetColor(col);
+
+	return pObj2D;
+}
+
+CObject_2D * CObject_2D::Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, CObject::TextType texture)
+{
+	CObject_2D* pObj2D = new CObject_2D(nPriority);
+
+	if (FAILED(pObj2D->Init()))
+	{
+		return nullptr;
+	}
+
+	pObj2D->SetPos(pos);
+	pObj2D->SetSize(size);
+	pObj2D->SetTexture(texture);
+
+	return pObj2D;
+}
+
+CObject_2D * CObject_2D::Create(const int nPriority, const D3DXVECTOR3 pos, const D3DXVECTOR2 size, const D3DXCOLOR col, CObject::TextType texture)
+{
+	CObject_2D* pObj2D = new CObject_2D(nPriority);
+
+	if (FAILED(pObj2D->Init()))
+	{
+		return nullptr;
+	}
+
+	pObj2D->SetPos(pos);
+	pObj2D->SetSize(size);
+	pObj2D->SetColor(col);
+	pObj2D->SetTexture(texture);
 
 	return pObj2D;
 }
