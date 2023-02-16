@@ -42,6 +42,7 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\Player\\Katana.x" },						//MODEL_KATANA,
 
 	{ "data\\MODELS\\Enemy\\FogBot\\FogBot.x" },				//MODEL_ENEMY_FOGBOT,
+	{ "data\\MODELS\\Enemy\\Boss\\BossEyes.x" },				//MODEL_BOSS_EYES,
 
 	{ "data\\MODELS\\GoalFlag.x" },								//MODEL_FLAG,
 	{ "data\\MODELS\\8InchNails.x" },							//MODEL_NAILS,
@@ -63,6 +64,8 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\icicle.x" },								//MODEL_ICICLE,
 	{ "data\\MODELS\\Ruby.x" },									//MODEL_JEWEL,
 
+	{ "data\\MODELS\\IceBoulder.x" },							//MODEL_ICE_BOULDER,
+	{ "data\\MODELS\\IceShard.x" },								//MODEL_ICE_SHARD,
 	{ "data\\MODELS\\IceFragment1.x" },							//MODEL_ICE_FRAGMENT_1,
 	{ "data\\MODELS\\IceFragment2.x" },							//MODEL_ICE_FRAGMENT_2,
 	{ "data\\MODELS\\IceFragment3.x" },							//MODEL_ICE_FRAGMENT_3,
@@ -94,6 +97,7 @@ CModel::CModel()
 	D3DXMatrixIdentity(&m_mtxRot);					//回転マトリックス
 	m_rotAxis = Vec3Null;							//回転軸
 	m_fRotAngle = 0.0f;								//回転角
+	m_fDrawDistance = 0.0f;
 }
 
 CModel::CModel(const int nPriority) : CObject::CObject(nPriority)
@@ -115,6 +119,7 @@ CModel::CModel(const int nPriority) : CObject::CObject(nPriority)
 	D3DXMatrixIdentity(&m_mtxRot);					//回転マトリックス
 	m_rotAxis = Vec3Null;							//回転軸
 	m_fRotAngle = 0.0f;								//回転角
+	m_fDrawDistance = 0.0f;
 }
 
 //デストラクタ
@@ -142,6 +147,7 @@ HRESULT CModel::Init(void)
 	D3DXMatrixIdentity(&m_mtxRot);					//回転マトリックス
 	m_rotAxis = Vec3Null;							//回転軸
 	m_fRotAngle = 0.0f;								//回転角
+	m_fDrawDistance = 2500.0f;						
 
 	return S_OK;
 }
@@ -168,10 +174,32 @@ void CModel::Draw(void)
 {
 	D3DXVECTOR3 distance = CApplication::GetCamera()->GetPos() - GetPos();
 
-	if (D3DXVec3Length(&distance) <= 2500.0f)
+	D3DXMATRIX mtxRot, mtxTrans, mtxShadow;			//計算用マトリックス
+
+	//ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+	D3DXMatrixIdentity(&mtxShadow);
+
+	//スケールを反映
+	if (m_fScale != 0.0f)
+	{
+		D3DXMATRIX mtxScale;
+
+		D3DXMatrixScaling(&mtxScale, m_fScale, m_fScale, m_fScale);
+		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
+	}
+
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	if (D3DXVec3Length(&distance) <= m_fDrawDistance)
 	{
 		LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();				//デバイスの取得
-		D3DXMATRIX mtxRot, mtxTrans, mtxShadow;			//計算用マトリックス
 		D3DMATERIAL9 matDef;							//現在のマテリアル保存用
 		D3DXMATERIAL *pMat;								//マテリアルデータへのポインタ
 		D3DXVECTOR4 vecLight;							//ライトの向き
@@ -186,38 +214,6 @@ void CModel::Draw(void)
 
 		pos = D3DXVECTOR3(0.0f, m_fShadowHeight, 0.0f);				//面の高さ
 		Normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);						//面の法線
-
-		//ワールドマトリックスの初期化
-		D3DXMatrixIdentity(&m_mtxWorld);
-		D3DXMatrixIdentity(&mtxShadow);
-
-		//スケールを反映
-		if (m_fScale != 0.0f)
-		{
-			D3DXMATRIX mtxScale;
-
-			D3DXMatrixScaling(&mtxScale, m_fScale, m_fScale, m_fScale);
-			D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
-		}
-
-		////クオータニオンの初期化
-		//D3DXQuaternionIdentity(&quat);
-
-		////クオータニオンの作成
-		//D3DXQuaternionRotationAxis(&quat, &m_rotAxis, m_fRotAngle);
-		//D3DXMatrixRotationQuaternion(&mtxRot, &quat);
-
-		////向きを反映
-		//D3DXMatrixMultiply(&m_mtxRot, &m_mtxRot, &mtxRot);
-		//D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &m_mtxRot);
-
-		//向きを反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-		//位置を反映
-		D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 		if (m_bShadow)
 		{//影の描画のフラグがtrueだったら
@@ -488,6 +484,16 @@ void CModel::SetShadowDraw(const bool bDraw)
 void CModel::SetShadowHeight(const float fHeight)
 {
 	m_fShadowHeight = fHeight;
+}
+
+void CModel::SetDrawDistance(const float fDistance)
+{
+	m_fDrawDistance = fDistance;
+
+	if (m_fDrawDistance <= 0)
+	{
+		m_fDrawDistance = 2500.0f;
+	}
 }
 
 const float CModel::GetShadowHeight(void)

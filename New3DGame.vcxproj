@@ -160,6 +160,7 @@
     <ClCompile Include="bg.cpp" />
     <ClCompile Include="bgModel.cpp" />
     <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="boss.cpp" />
     <ClCompile Include="BoxHitbox.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -183,6 +184,8 @@
     <ClCompile Include="goal.cpp" />
     <ClCompile Include="guideArrow.cpp" />
     <ClCompile Include="hitbox.cpp" />
+    <ClCompile Include="iceBoulder.cpp" />
+    <ClCompile Include="iceShard.cpp" />
     <ClCompile Include="iceWall.cpp" />
     <ClCompile Include="icicle.cpp" />
     <ClCompile Include="input.cpp" />
@@ -227,6 +230,8 @@
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="triggerablePlatform.cpp" />
+    <ClCompile Include="twister.cpp" />
+    <ClCompile Include="twisterEffect.cpp" />
     <ClCompile Include="UIString.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +243,7 @@
     <ClInclude Include="bg.h" />
     <ClInclude Include="bgModel.h" />
     <ClInclude Include="billboard.h" />
+    <ClInclude Include="boss.h" />
     <ClInclude Include="BoxHitbox.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="camera.h" />
@@ -261,6 +267,8 @@
     <ClInclude Include="goal.h" />
     <ClInclude Include="guideArrow.h" />
     <ClInclude Include="hitbox.h" />
+    <ClInclude Include="iceBoulder.h" />
+    <ClInclude Include="iceShard.h" />
     <ClInclude Include="iceWall.h" />
     <ClInclude Include="icicle.h" />
     <ClInclude Include="input.h" />
@@ -305,6 +313,8 @@
     <ClInclude Include="timer.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="triggerablePlatform.h" />
+    <ClInclude Include="twister.h" />
+    <ClInclude Include="twisterEffect.h" />
     <ClInclude Include="UIString.h" />
   </ItemGroup>
   <ItemGroup>

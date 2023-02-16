@@ -31,6 +31,7 @@ public:
 	HRESULT Init(void) override;		//‰Šú‰»ˆ—
 	void Uninit(void) override;			//I—¹ˆ—
 	void Update(void) override;			//XVˆ—
+	void Draw(void) override;
 
 	static CFirePipe* Create(const D3DXVECTOR3 pos);							//¶¬ˆ—
 	static CFirePipe* Create(const D3DXVECTOR3 pos, const int nFireTime);		//¶¬ˆ—

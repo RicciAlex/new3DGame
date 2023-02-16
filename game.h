@@ -68,7 +68,7 @@ private:
 	void LoadGoal(FILE* pFile, CGoal* pGoal);
 	void LoadNail(FILE* pFile);
 	void LoadSpikeTrap(FILE* pFile);
-	void LoadStar(FILE* pFile);
+	void LoadStar(FILE* pFile, int& nStar);
 	void LoadShurikenTrap(FILE* pFile);
 	void LoadTriggerablePlatform(FILE* pFile);
 	void LoadMovingCube(FILE* pFile);
@@ -80,6 +80,7 @@ private:
 	void LoadFogbot(FILE* pFile);
 	void LoadPendulumClock(FILE* pFile);
 	void LoadGem(FILE* pFile);
+	void LoadIceWall(FILE* pFile);
 
 	CPlayer* m_pPlayer;				//プレイヤーへのポインタ
 	CTimer*  m_pTimer;				//タイマーへのポインタ

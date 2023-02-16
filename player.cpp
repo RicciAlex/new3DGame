@@ -214,15 +214,16 @@ void CPlayer::Update(void)
 				//スポーンの位置を計算する
 				D3DXVECTOR3 Rot = m_rot;
 
-				D3DXVECTOR3 dir = D3DXVECTOR3(0.0f, 65.0f, 100.0f);
+				D3DXVECTOR3 dir = D3DXVECTOR3(0.0f, 50.0f, 40.0f);
 				D3DXMATRIX mtxOut, mtxTrans, mtxRot;
 				D3DXMatrixIdentity(&mtxOut);
 				D3DXMatrixRotationYawPitchRoll(&mtxRot, Rot.y, 0.0f, 0.0f);
 				D3DXMatrixMultiply(&mtxOut, &mtxOut, &mtxRot);
 				D3DXVec3TransformCoord(&dir, &dir, &mtxOut);
+				D3DXVECTOR3 p = dir + m_pos;
 
 				//ヒットボックスの生成
-				m_pAttackHitbox = CBoxHitbox::Create(dir + m_pos, Vec3Null, D3DXVECTOR3(35.0f, 150.0f, 35.0f), CHitbox::TYPE_OBSTACLE, this, 0, CHitbox::EFFECT_DAMAGE);
+				m_pAttackHitbox = CBoxHitbox::Create(dir + m_pos, Vec3Null, D3DXVECTOR3(70.0f, 165.0f, 70.0f), CHitbox::TYPE_OBSTACLE, this, 0, CHitbox::EFFECT_DAMAGE);
 
 			}
 
@@ -382,6 +383,15 @@ void CPlayer::SetRespawnPoint(const D3DXVECTOR3 pos)
 void CPlayer::SetCameraAnim(const bool bAnim)
 {
 	m_bCameraAnim = bAnim;
+}
+
+//星の数の設定処理
+void CPlayer::SetStarNumber(const int nStar)
+{
+	if (m_pUI)
+	{//nullチェック
+		m_pUI->SetTargetStar(nStar);
+	}
 }
 
 //位置の取得処理
@@ -765,9 +775,14 @@ void CPlayer::TransformUpdate(void)
 	UpdateRotation();
 
 	//重量を追加する
-	if (m_move.y >= MAX_FALL_SPEED)
+	if (m_move.y >= MAX_FALL_SPEED && !CInputKeyboard::GetKeyboardPress(DIK_Q))
 	{
 		m_move.y += GRAVITY_ACCELERATION;
+	}
+
+	if (CInputKeyboard::GetKeyboardPress(DIK_Q))
+	{
+		m_move.y = 0.0f;
 	}
 }
 

@@ -96,6 +96,7 @@ public:
 	void SetTargetCameraPos(CAMERA_POS pos);							//カメラの目的の位置の設定処理
 	void SetRespawnPoint(const D3DXVECTOR3 pos);						//リスポーンの位置の設定処理
 	void SetCameraAnim(const bool bAnim);								//カメラアニメーションの設定処理
+	void SetStarNumber(const int nStar);								//星の数の設定処理
 
 	const D3DXVECTOR3 GetPos(void) override;							//位置の取得処理
 	const D3DXVECTOR3 GetLastPos(void);									//前回の位置の取得処理

@@ -96,7 +96,7 @@ void CStarUI::AddStar(void)
 
 		if (m_pString)
 		{
-			if (m_nStarNumber < 10)
+			if ((float)m_nStarNumber * 0.1f < 1.0f)
 			{
 				std::string str = "0" + std::to_string(m_nStarNumber) + "/" + std::to_string(m_nTargetStar);
 				m_pString->ChangeString(str.c_str());
@@ -127,6 +127,20 @@ void CStarUI::SetPos(const D3DXVECTOR3 pos)
 void CStarUI::SetTargetStar(const int target)
 {
 	m_nTargetStar = target;
+
+	if (m_pString)
+	{
+		if ((float)m_nStarNumber * 0.1f < 1.0f)
+		{
+			std::string str = "0" + std::to_string(m_nStarNumber) + "/" + std::to_string(m_nTargetStar);
+			m_pString->ChangeString(str.c_str());
+		}
+		else
+		{
+			std::string str = std::to_string(m_nStarNumber) + "/" + std::to_string(m_nTargetStar);
+			m_pString->ChangeString(str.c_str());
+		}
+	}
 }
 
 //ˆÊ’u‚Ìæ“¾ˆ—

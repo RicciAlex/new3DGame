@@ -32,6 +32,8 @@
 #include "PendulumClock.h"
 #include "PauseMenu.h"
 #include "gem.h"
+#include "iceWall.h"
+#include "stalkingBot.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -146,6 +148,8 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 	{
 		char aStr[1024] = {};			//ì«Ç›çûÇ›èàóùÇ…ïKóvÇ»ï∂éöóÒÇêÈåæÇ∑ÇÈ
 
+		int nStar = 0;
+
 		/*std::function<void(FILE*)> func = [this](FILE* pFile) {
 			LoadMeshField(pFile,); 
 		};
@@ -177,7 +181,7 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 			}
 			else if (strcmp(aStr, "STAR") == 0)
 			{
-				LoadStar(pFile);
+				LoadStar(pFile, nStar);
 			}
 			else if (strcmp(aStr, "SHURIKEN_TRAP") == 0)
 			{
@@ -223,9 +227,18 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 			{
 				LoadGem(pFile);
 			}
+			else if (strcmp(aStr, "ICE_WALL") == 0)
+			{
+				LoadIceWall(pFile);
+			}
 		}
 
 		fclose(pFile);
+
+		if (m_pPlayer)
+		{
+			m_pPlayer->SetStarNumber(nStar);
+		}
 	}
 }
 
@@ -491,6 +504,7 @@ void CGame::LoadNail(FILE * pFile)
 {
 	char aStr[1024] = {};
 	D3DXVECTOR3 pos = Vec3Null;
+	bool bIce = false;
 
 	while (strcmp(aStr, "END_NAIL") != 0)
 	{
@@ -501,12 +515,28 @@ void CGame::LoadNail(FILE * pFile)
 			fscanf(pFile, "%s", aStr);
 			
 			LoadVector3(pFile, pos);
+		}
 
-			break;
+		if (strcmp(aStr, "ICE") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%s", aStr);
+
+			if (strcmp(aStr, "YES") == 0)
+			{
+				bIce = true;
+			}
 		}
 	}
 
-	CNail::Create(pos);
+	if (!bIce)
+	{
+		CNail::Create(pos);
+	}
+	else
+	{
+		CNail::Create(pos, CModel::MODEL_ICE_SPIKES);
+	}
 }
 
 void CGame::LoadSpikeTrap(FILE * pFile)
@@ -547,7 +577,7 @@ void CGame::LoadSpikeTrap(FILE * pFile)
 	CSpikeTrap::Create(pos, fSpeed, nDelay, nStartDelay);
 }
 
-void CGame::LoadStar(FILE * pFile)
+void CGame::LoadStar(FILE * pFile, int& nStar)
 {
 	char aStr[1024] = {};
 	D3DXVECTOR3 pos = Vec3Null;
@@ -570,7 +600,12 @@ void CGame::LoadStar(FILE * pFile)
 		}
 	}
 
-	CGoldStar::Create(pos, fShadowHeight);
+	CGoldStar* pStar = CGoldStar::Create(pos, fShadowHeight);
+
+	if (pStar)
+	{
+		nStar++;
+	}
 }
 
 void CGame::LoadShurikenTrap(FILE * pFile)
@@ -878,6 +913,7 @@ void CGame::LoadFogbot(FILE * pFile)
 	char aStr[1024] = {};
 	D3DXVECTOR3 pos = Vec3Null;
 	float fShadowHeight = 0.0f;
+	bool bStalk = false;
 
 	while (strcmp(aStr, "END_FOG_BOT") != 0)
 	{
@@ -894,9 +930,26 @@ void CGame::LoadFogbot(FILE * pFile)
 			fscanf(pFile, "%s", aStr);
 			fscanf(pFile, "%f", &fShadowHeight);
 		}
+		if (strcmp(aStr, "FOLLOW") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%s", aStr);
+
+			if (strcmp(aStr, "YES") == 0)
+			{
+				bStalk = true;
+			}
+		}
 	}
 
-	CFogbot::Create(pos, fShadowHeight);
+	if (!bStalk)
+	{
+		CFogbot::Create(pos, fShadowHeight);
+	}
+	else
+	{
+		CStalkingBot::Create(pos, fShadowHeight);
+	}
 }
 
 void CGame::LoadPendulumClock(FILE * pFile)
@@ -979,4 +1032,35 @@ void CGame::LoadGem(FILE * pFile)
 
 		CGem::Create(pos, col, fShadowHeight, newPos, m_pGoal);
 	}
+}
+
+void CGame::LoadIceWall(FILE * pFile)
+{
+	char aStr[1024] = {};
+	D3DXVECTOR3 pos = Vec3Null;
+	bool bRotate = false;
+
+	while (strcmp(aStr, "END_ICE_WALL") != 0)
+	{
+		fscanf(pFile, "%s", aStr);
+
+		if (strcmp(aStr, "POS") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+
+			LoadVector3(pFile, pos);
+		}
+		if (strcmp(aStr, "ROTATE") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%s", aStr);
+
+			if (strcmp(aStr, "YES") == 0)
+			{
+				bRotate = true;
+			}
+		}
+	}
+
+	CIceWall::Create(pos, bRotate);
 }

@@ -89,22 +89,28 @@ void CAccelerationFloor::SetSpeed(const float speedX, const float speedY)
 //テクスチャの移動量の設定処理
 void CAccelerationFloor::SetTextureTiling(const D3DXVECTOR2 tiling)
 {
+	D3DXVECTOR2 spd = m_speed;
+	D3DXVec2Normalize(&spd, &spd);
 	CObject_3D::SetTextureTiling(tiling);
-	MoveTexCoordinates(D3DXVECTOR2(m_speed.x * -0.01f * tiling.x, m_speed.y * 0.01f * tiling.y));
+	MoveTexCoordinates(D3DXVECTOR2(spd.x * -0.01f * tiling.x, spd.y * 0.01f * tiling.y));
 }
 
 //テクスチャの大きさの設定処理
 void CAccelerationFloor::SetTextureTiling(const float fTiling)
 {
+	D3DXVECTOR2 spd = m_speed;
+	D3DXVec2Normalize(&spd, &spd);
 	CObject_3D::SetTextureTiling(fTiling);
-	MoveTexCoordinates(D3DXVECTOR2(m_speed.x * -0.01f * fTiling, m_speed.y * 0.01f * fTiling));
+	MoveTexCoordinates(D3DXVECTOR2(spd.x * -0.01f * fTiling, spd.y * 0.01f * fTiling));
 }
 
 //テクスチャの大きさの設定処理
 void CAccelerationFloor::SetTextureTiling(const float fTilingX, const float fTilingY)
 {
+	D3DXVECTOR2 spd = m_speed;
+	D3DXVec2Normalize(&spd, &spd);
 	CObject_3D::SetTextureTiling(fTilingX, fTilingY);
-	MoveTexCoordinates(D3DXVECTOR2(m_speed.x * -0.01f * fTilingX, m_speed.y * 0.01f * fTilingY));
+	MoveTexCoordinates(D3DXVECTOR2(spd.x * -0.01f * fTilingX, spd.y * 0.01f * fTilingY));
 }
 
 
@@ -132,7 +138,9 @@ CAccelerationFloor* CAccelerationFloor::Create(const D3DXVECTOR3 pos, const D3DX
 	pFloor->m_bActive = true;
 	pFloor->m_speed = speed;
 	pFloor->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f));
-	pFloor->MoveTexCoordinates(D3DXVECTOR2(pFloor->m_speed.x * -0.01f, pFloor->m_speed.y * 0.01f));
+	D3DXVECTOR2 spd = speed;
+	D3DXVec2Normalize(&spd, &spd);
+	pFloor->MoveTexCoordinates(D3DXVECTOR2(spd.x * -0.01f, spd.y * 0.01f));
 
 	if (speed.x > 0.0f)
 	{
@@ -176,7 +184,9 @@ CAccelerationFloor * CAccelerationFloor::Create(const D3DXVECTOR3 pos, const D3D
 	pFloor->m_bActive = true;
 	pFloor->m_speed = speed;
 	pFloor->SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f));
-	pFloor->MoveTexCoordinates(D3DXVECTOR2(pFloor->m_speed.x * -0.01f, pFloor->m_speed.y * 0.01f));
+	D3DXVECTOR2 spd = speed;
+	D3DXVec2Normalize(&spd, &spd);
+	pFloor->MoveTexCoordinates(D3DXVECTOR2(spd.x * -0.01f, spd.y * 0.01f));
 	pFloor->SetTexture(texture);
 
 	pFloor->m_pHitbox = CBoxHitbox::Create(pos, D3DXVECTOR3(0.0f, -9.0f, 0.0f), D3DXVECTOR3(size.x, 10.0f, size.y), CHitbox::TYPE_OVERLAPPABLE, pFloor);

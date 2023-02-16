@@ -217,6 +217,12 @@ CIceWall* CIceWall::Create(const D3DXVECTOR3 pos, const bool bRotate)
 
 
 
+//=============================================================================
+//
+//								プライベート関数
+//
+//=============================================================================
+
 
 
 //速度の設定処理
@@ -237,7 +243,7 @@ void CIceWall::SetMove(void)
 	{
 		D3DXVec3TransformCoord(&m_move[nCnt], &m_move[nCnt], &mtxRot);
 
-		m_partsRot[nCnt] = D3DXVECTOR3(0.0f, random(-100, 100) * D3DX_PI * 0.0001f, random(-100, 100) * D3DX_PI * 0.0001f);
+		m_partsRot[nCnt] = D3DXVECTOR3(0.0f, random(-100, 100) * D3DX_PI * 0.001f, random(-100, 100) * D3DX_PI * 0.001f);
 		D3DXVec3TransformCoord(&m_partsRot[nCnt], &m_partsRot[nCnt], &mtxRot);
 	}
 }

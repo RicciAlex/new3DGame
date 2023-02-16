@@ -22,6 +22,7 @@ CSound::SOUNDPARAM CSound::g_aParam[SOUND_LABEL_MAX] =
 	{ "data/SOUNDS/SE/Item.wav", 0 },					// SOUND_LABEL_SE_ITEM,
 	{ "data/SOUNDS/SE/Jump.wav", 0 },					// SOUND_LABEL_SE_JUMP,
 	{ "data/SOUNDS/SE/Slash.wav", 0 },					// SOUND_LABEL_SE_SLASH,
+	{ "data/SOUNDS/SE/Roar.wav", 0 },					// SOUND_LABEL_SE_ROAR,
 
 	{ "data/SOUNDS/SE/AmbientalSE/Industrial1.wav", 0 },// SOUND_LABEL_SE_AMBIENT_1,
 	{ "data/SOUNDS/SE/AmbientalSE/Industrial2.wav", 0 },// SOUND_LABEL_SE_AMBIENT_2,

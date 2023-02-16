@@ -41,6 +41,7 @@ public:
 		MODEL_KATANA,
 
 		MODEL_ENEMY_FOGBOT,
+		MODEL_BOSS_EYES,
 
 		MODEL_FLAG,
 		MODEL_NAILS,
@@ -62,6 +63,8 @@ public:
 		MODEL_ICICLE,
 		MODEL_JEWEL,
 
+		MODEL_ICE_BOULDER,
+		MODEL_ICE_SHARD,
 		MODEL_ICE_FRAGMENT_1,
 		MODEL_ICE_FRAGMENT_2,
 		MODEL_ICE_FRAGMENT_3,
@@ -98,6 +101,7 @@ public:
 	void SetModelColor(const int nNumMat, const D3DXCOLOR col);							//モデルの色の設定処理
 	void SetShadowDraw(const bool bDraw);												//影の描画フラグの設定処理
 	void SetShadowHeight(const float fHeight);											//影の高さの設定処理
+	void SetDrawDistance(const float fDistance);
 
 	const float GetShadowHeight(void);													//影の高さの取得処理
 	const float GetScale(void);															//拡大率の取得処理
@@ -131,6 +135,7 @@ private:
 	std::vector <ModelColor> m_vCol;										//モデルの色
 	bool			m_bShadow;												//影があるかどうか
 	float			m_fShadowHeight;										//影の高さ
+	float			m_fDrawDistance;										//描画処理の距離
 
 	static LPD3DXMESH		m_pMeshAll[MODEL_MAX];							//メッシュ情報へのポインタ
 	static LPD3DXBUFFER		m_pBuffMatAll[MODEL_MAX];						//マテリアル情報へのポインタ

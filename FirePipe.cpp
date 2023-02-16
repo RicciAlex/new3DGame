@@ -44,6 +44,12 @@ CFirePipe::~CFirePipe()
 //初期化処理
 HRESULT CFirePipe::Init(void)
 {
+	//基本クラスの初期化処理
+	if (FAILED(CModel::Init()))
+	{
+		return -1;
+	}
+
 	//メンバー変数を初期化する
 	m_nCntTime = 0;
 	m_nFireTime = DEFAULT_FIRE_TIME;
@@ -143,6 +149,11 @@ void CFirePipe::Update(void)
 	{
 		m_nCntSound--;
 	}
+}
+
+void CFirePipe::Draw(void)
+{
+	CModel::Draw();
 }
 
 
