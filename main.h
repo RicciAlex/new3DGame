@@ -37,7 +37,7 @@ namespace
 	// ウインドウのクラス名
 	LPCTSTR CLASS_NAME = _T("AppClass");
 	// ウインドウのキャプション名
-	LPCTSTR WINDOW_NAME = _T("3D Team Work");
+	LPCTSTR WINDOW_NAME = _T("Deep Fog Mayhem");
 }
 
 //#define PLAYER_MAX		(4)		//プレイヤーの最大人数

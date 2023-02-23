@@ -22,6 +22,8 @@ class CTimer : public CObject
 {
 public:
 
+	static const int DEFAULT_MAX_TIME = 900000;
+
 	CTimer();							//コンストラクタ
 	~CTimer() override;					//デストラクタ
 										
@@ -34,6 +36,7 @@ public:
 	void AddTime(const float fMilliseconds);			//時間の追加処理
 
 	const D3DXVECTOR3 GetPos(void) override;			//位置の取得処理
+	const float GetTime(void);							//時間の取得処理
 
 	static CTimer* Create(void);		//生成処理
 

@@ -82,13 +82,17 @@ void CMovingCube::Update(void)
 {
 	SetPos(GetPos() + m_move);			//位置の更新
 
-	//ヒットボックスの更新
-	if (m_pHitbox)
-	{//nullチェック
+	if (CApplication::GetModeInstance()->IsGame())
+	{
 
-		m_pHitbox->SetPos(GetPos());	//ヒットボックスの位置の更新
+		//ヒットボックスの更新
+		if (m_pHitbox)
+		{//nullチェック
 
-		PushOut();
+			m_pHitbox->SetPos(GetPos());	//ヒットボックスの位置の更新
+
+			PushOut();
+		}
 	}
 
 	ClampPos();							//位置を制限する処理

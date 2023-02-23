@@ -13,16 +13,37 @@
 
 CSound::SOUNDPARAM CSound::g_aParam[SOUND_LABEL_MAX] =
 {
-	{ "data/SOUNDS/BGM/ƒ^ƒCƒgƒ‹‰æ–ÊBGM.wav", -1 },		// SOUND_LABEL_BGM_TITLE = 0
+	{ "data/SOUNDS/BGM/Title.wav", -1 },				// SOUND_LABEL_BGM_TITLE = 0
+	{ "data/SOUNDS/BGM/SelectStage.wav", -1 },			// SOUND_LABEL_BGM_STAGE_SELECTION,
+	{ "data/SOUNDS/BGM/Tutorial.wav", -1 },				// SOUND_LABEL_BGM_TUTORIAL,
+	{ "data/SOUNDS/BGM/Stage1.wav", -1 },				// SOUND_LABEL_BGM_STAGE1,
+	{ "data/SOUNDS/BGM/Stage2.wav", -1 },				// SOUND_LABEL_BGM_STAGE2,
+	{ "data/SOUNDS/BGM/Boss.wav", -1 },					// SOUND_LABEL_BGM_BOSS,
+	{ "data/SOUNDS/BGM/Results.wav", -1 },				// SOUND_LABEL_BGM_RESULTS
 
-	{ "data/SOUNDS/SE/Button.wav", 0 },				// SOUND_LABEL_SE_BUTTON,
+	{ "data/SOUNDS/SE/Button.wav", 0 },					// SOUND_LABEL_SE_BUTTON,
 	{ "data/SOUNDS/SE/Damage.wav", 0 },					// SOUND_LABEL_SE_DAMAGE,
 	{ "data/SOUNDS/SE/FallWhistle.wav", 0 },			// SOUND_LABEL_SE_FALL_WHISTLE,
 	{ "data/SOUNDS/SE/Fire.wav", 0 },					// SOUND_LABEL_SE_FIRE,
 	{ "data/SOUNDS/SE/Item.wav", 0 },					// SOUND_LABEL_SE_ITEM,
+	{ "data/SOUNDS/SE/Gem.wav", 0 },					// SOUND_LABEL_SE_GEM,
 	{ "data/SOUNDS/SE/Jump.wav", 0 },					// SOUND_LABEL_SE_JUMP,
 	{ "data/SOUNDS/SE/Slash.wav", 0 },					// SOUND_LABEL_SE_SLASH,
 	{ "data/SOUNDS/SE/Roar.wav", 0 },					// SOUND_LABEL_SE_ROAR,
+	{ "data/SOUNDS/SE/IceBroken.wav", 0 },				// SOUND_LABEL_SE_ICE_BROKEN
+	{ "data/SOUNDS/SE/Steam.wav", 0 },					// SOUND_LABEL_SE_STEAM
+	{ "data/SOUNDS/SE/MetalImpact.wav", 0 },			// SOUND_LABEL_SE_METAL_IMPACT
+	{ "data/SOUNDS/SE/Sword.wav", 0 },					// SOUND_LABEL_SE_SWORD
+	{ "data/SOUNDS/SE/Clock.wav", 0 },					// SOUND_LABEL_SE_CLOCK
+	{ "data/SOUNDS/SE/IceBoulder.wav", 0 },				//SOUND_LABEL_SE_ICE_BOULDER
+	{ "data/SOUNDS/SE/Throw.wav", 0 },					//SOUND_LABEL_SE_THROW
+	{ "data/SOUNDS/SE/Icicle.wav", 0 },					//SOUND_LABEL_SE_ICICLE
+	{ "data/SOUNDS/SE/Gale.wav", 0 },					//SOUND_LABEL_SE_TWISTER
+	{ "data/SOUNDS/SE/Cannon.wav", 0 },					//SOUND_LABEL_SE_CANNON,
+	{ "data/SOUNDS/SE/Cannonball.wav", 0 },				//SOUND_LABEL_SE_CANNONBALL,
+	{ "data/SOUNDS/SE/Tap.wav", 0 },					//SOUND_LABEL_SE_TAP
+	{ "data/SOUNDS/SE/Whoosh.wav", 0 },					//SOUND_LABEL_SE_WHOOSH
+	{ "data/SOUNDS/SE/Win.wav", 0 },					//SOUND_LABEL_SE_WIN,
 
 	{ "data/SOUNDS/SE/AmbientalSE/Industrial1.wav", 0 },// SOUND_LABEL_SE_AMBIENT_1,
 	{ "data/SOUNDS/SE/AmbientalSE/Industrial2.wav", 0 },// SOUND_LABEL_SE_AMBIENT_2,

@@ -15,6 +15,7 @@
 #include "game.h"
 #include "player.h"
 #include "BoxHitbox.h"
+#include "object2D.h"
 
 
 //=============================================================================
@@ -29,11 +30,15 @@ const float CPendulumClock::MIN_RANGE = 50.0f;			//最小の有効範囲
 CPendulumClock::CPendulumClock()
 {
 	//メンバー変数をクリアする
+	m_nCntSound = 0;
 	m_fAnimAngle = 0.0f;
 	m_fAnimCoeff = 0.0f;
 	m_fRange = 0.0f;
+	m_bVisible = false;
+	m_bSound = false;
 
 	m_pPendulum = nullptr;
+	m_pUI = nullptr;
 	m_pHitbox = nullptr;
 
 	for (int nCnt = 0; nCnt < NEEDLE_NUMBER; nCnt++)
@@ -61,13 +66,14 @@ HRESULT CPendulumClock::Init(void)
 	m_fAnimAngle = 0.0f;
 	m_fAnimCoeff = 1.0f;
 	m_fRange = DEFAULT_RANGE;
+	
+	m_pUI = CObject_2D::Create(5, D3DXVECTOR3(950.0f, 50.0f, 0.0f), D3DXVECTOR2(35.0f, 40.0f), CObject::TEXTURE_GUIDE_ARROW);
 
-	m_pPendulum = nullptr;
-	m_pHitbox = nullptr;
-
-	for (int nCnt = 0; nCnt < NEEDLE_NUMBER; nCnt++)
+	if (m_pUI)
 	{
-		m_pNeedle[nCnt] = nullptr;
+		m_pUI->SetTextureParameter(2, 2, 1, 20);
+		m_pUI->SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 0.0f));
+		m_pUI->SetStartingRot(D3DX_PI * 0.5f);
 	}
 
 	return S_OK;
@@ -79,24 +85,31 @@ void CPendulumClock::Uninit(void)
 	for (int nCnt = 0; nCnt < NEEDLE_NUMBER; nCnt++)
 	{
 		if (m_pNeedle[nCnt])
-		{
-			m_pNeedle[nCnt]->Uninit();
-			delete m_pNeedle[nCnt];
-			m_pNeedle[nCnt] = nullptr;
+		{//nullチェック
+			m_pNeedle[nCnt]->Uninit();		//終了処理
+			delete m_pNeedle[nCnt];			//メモリを解放する
+			m_pNeedle[nCnt] = nullptr;		//ポインタをnullにする
 		}
 	}
 
 	if (m_pPendulum)
-	{
-		m_pPendulum->Uninit();
-		delete m_pPendulum;
-		m_pPendulum = nullptr;
+	{//nullチェック
+		m_pPendulum->Uninit();		//終了処理
+		delete m_pPendulum;			//メモリを解放する
+		m_pPendulum = nullptr;		//ポインタをnullにする
+	}
+
+	//Uiの破棄処理
+	if (m_pUI)
+	{//nullチェック
+		m_pUI->Release();		//メモリを解放する
+		m_pUI = nullptr;		//ポインタをnullにする
 	}
 
 	if (m_pHitbox)
-	{
-		m_pHitbox->Release();
-		m_pHitbox = nullptr;
+	{//nullチェック
+		m_pHitbox->Release();	//メモリを解放する
+		m_pHitbox = nullptr;	//ポインタをnullにする
 	}
 }
 
@@ -316,9 +329,39 @@ void CPendulumClock::CheckPlayer(void)
 		{
 			m_fAnimCoeff = (2000.0f / dist);
 		}
+
+		if (m_pUI && !m_bVisible)
+		{
+			m_pUI->SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
+
+			m_bVisible = true;
+		}
+
+		m_nCntSound--;
+
+		if (m_nCntSound <= 0)
+		{
+			m_nCntSound = 1200;
+			CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_CLOCK);
+			m_bSound = true;
+		}
 	}
 	else
 	{
 		m_fAnimCoeff = 1.0f;
+
+		if (m_pUI && m_bVisible)
+		{
+			m_pUI->SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 0.0f));
+
+			m_bVisible = false;
+		}
+
+		if (m_bSound)
+		{
+			CApplication::GetSound()->Stop(CSound::SOUND_LABEL_SE_CLOCK);
+			m_bSound = false;
+			m_nCntSound = 0;
+		}
 	}
 }

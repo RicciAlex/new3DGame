@@ -186,3 +186,54 @@ CButton* CButton::Create(const D3DXVECTOR3 pos, const D3DXCOLOR normalCol, const
 
 	return pButton;									//生成したインスタンスを返す
 }
+
+CButton * CButton::Create(const D3DXVECTOR3 pos, const bool bOnce)
+{
+	CButton* pButton = new CButton;					//インスタンスを生成する
+
+	if (FAILED(pButton->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pButton->SetPos(pos);							//位置の設定
+	pButton->m_originalPos = pos;					//元の位置の設定
+	pButton->SetModel(CModel::MODEL_BUTTON);		//モデルの設定
+	pButton->m_normalCol = ColorRed;				//普通の色の設定
+	pButton->m_triggeredCol = ColorGreen;			//押された後の色の設定
+	pButton->SetShadowDraw(false);					//影を描画しないようにする
+	pButton->m_bOnce = true;						//一回だけ押すことができるように設定する
+		
+	//ヒットボックスの生成
+	pButton->m_pHitbox = CCylinderHitbox::Create(pos, Vec3Null, D3DXVECTOR3(50.0f, 10.0f, 50.0f), CHitbox::TYPE_BUTTON, pButton);
+	pButton->m_pHitbox->IgnoreAllCollision();
+	pButton->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+
+	return pButton;									//生成したインスタンスを返す
+}
+
+CButton * CButton::Create(const D3DXVECTOR3 pos, const D3DXCOLOR normalCol, const D3DXCOLOR pressedCol, const bool bOnce)
+{
+	CButton* pButton = new CButton;					//インスタンスを生成する
+
+	if (FAILED(pButton->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pButton->SetPos(pos);							//位置の設定
+	pButton->m_originalPos = pos;					//元の位置の設定
+	pButton->SetModel(CModel::MODEL_BUTTON);		//モデルの設定
+	pButton->SetModelColor(0, normalCol);			//色の設定
+	pButton->m_normalCol = normalCol;				//普通の色の設定
+	pButton->m_triggeredCol = pressedCol;			//押された後の色の設定
+	pButton->SetShadowDraw(false);					//影を描画しないようにする
+	pButton->m_bOnce = true;						//一回だけ押すことができるように設定する
+
+													//ヒットボックスの生成
+	pButton->m_pHitbox = CCylinderHitbox::Create(pos, Vec3Null, D3DXVECTOR3(50.0f, 10.0f, 50.0f), CHitbox::TYPE_BUTTON, pButton);
+	pButton->m_pHitbox->IgnoreAllCollision();
+	pButton->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+
+	return pButton;									//生成したインスタンスを返す
+}

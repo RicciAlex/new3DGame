@@ -62,7 +62,12 @@ void CTimer::Update(void)
 
 	int min = 0, sec = 0;
 
-	float fTime = (float)(m_fCurrentTime - m_fStartTime) + m_fAddedTime;
+	float fTime = DEFAULT_MAX_TIME - ((float)(m_fCurrentTime - m_fStartTime) + m_fAddedTime);
+
+	if (fTime < 0.0f)
+	{
+		fTime = 0.0f;
+	}
 
 	sec = (int)(fTime / 1000.0f) % 60;
 	min = (int)(fTime / (60.0f * 1000.0f));
@@ -118,6 +123,12 @@ void CTimer::AddTime(const float fMilliseconds)
 const D3DXVECTOR3 CTimer::GetPos(void)
 {
 	return Vec3Null;
+}
+
+//ŽžŠÔ‚ÌŽæ“¾ˆ—
+const float CTimer::GetTime(void)
+{
+	return (m_fCurrentTime - m_fStartTime) + m_fAddedTime;
 }
 
 

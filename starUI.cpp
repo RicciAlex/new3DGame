@@ -149,6 +149,12 @@ const D3DXVECTOR3 CStarUI::GetPos(void)
 	return Vec3Null;
 }
 
+//–Ú“I‚Ì¯”‚Ìæ“¾ˆ—
+const int CStarUI::GetTargerStar(void)
+{
+	return m_nTargetStar;
+}
+
 
 
 //=============================================================================

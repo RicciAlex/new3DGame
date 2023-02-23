@@ -9,11 +9,25 @@
 //インクルードファイル
 //=============================================================================
 #include "mode.h"
+#include "application.h"
+#include "rendering.h"
 
 //コンストラクタ
 CMode::CMode()
 {
 	m_bGame = false;
+
+	CRenderer* pRenderer = CApplication::GetRenderer();
+
+	if (pRenderer)
+	{
+		LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+
+		if (pDevice)
+		{
+			pDevice->SetRenderState(D3DRS_FOGCOLOR, ColorWhite);		//フォグの色を白に戻す
+		}
+	}	
 }
 
 //コンストラクタ

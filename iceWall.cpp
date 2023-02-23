@@ -11,6 +11,8 @@
 #include "iceWall.h"
 #include "modelPart.h"
 #include "BoxHitbox.h"
+#include "application.h"
+#include "sound.h"
 
 
 //=============================================================================
@@ -101,6 +103,8 @@ void CIceWall::Update(void)
 				m_pHitbox = nullptr;
 
 				m_bBroken = true;
+
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_ICE_BROKEN);
 			}
 		}
 	}

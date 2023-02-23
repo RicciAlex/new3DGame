@@ -11,6 +11,7 @@
 #include "star.h"
 #include "BoxHitbox.h"
 #include "application.h"
+#include "score.h"
 #include "rendering.h"
 #include "membraneLighting.h"
 #include "camera.h"
@@ -74,10 +75,18 @@ void CGoldStar::Update(void)
 
 				pPlayer->AddStar();
 
+				CScore* pScore = CApplication::GetScore();
+
+				if (pScore)
+				{
+					pScore->AddStar();
+				}
+
 				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_ITEM);
 			}
 
 			Release();
+			return;
 		}
 	}
 }
@@ -186,10 +195,6 @@ void CGoldStar::Draw(void)
 		pDevice->SetMaterial(&matDef);
 	}
 
-	//保持しいたマテリアルを戻す
-	pDevice->SetMaterial(&matDef);
-
-
 	//ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, mtxWorld);
 
@@ -201,9 +206,6 @@ void CGoldStar::Draw(void)
 
 	for (int nCntMat = 0; nCntMat < (int)nNumMat; nCntMat++)
 	{
-		//テクスチャの設定
-		pDevice->SetTexture(0, NULL);
-
 		//マテリアルの色が設定されていたら、そのマテリアルの色を変えたら、描画して、元に戻す
 		D3DXCOLOR c = {};
 		D3DXCOLOR scaledCol = {};
@@ -266,6 +268,9 @@ void CGoldStar::Draw(void)
 
 	//保持しいたマテリアルを戻す
 	pDevice->SetMaterial(&matDef);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, nullptr);
 }
 
 //位置の設定処理

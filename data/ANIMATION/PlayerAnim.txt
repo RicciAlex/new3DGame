@@ -1091,7 +1091,7 @@ END_KEY
 		
 		
 		KEY_SET				#KeySet 5/8	
-			FRAME = 15
+			FRAME = 10
 			
 		
 
@@ -1185,7 +1185,7 @@ END_KEY
 #戻る
 
 KEY_SET				#KeySet 6/8	
-			FRAME = 15
+			FRAME = 10
 
 
 
@@ -1269,7 +1269,7 @@ END_KEY_SET
 
 
 KEY_SET				#KeySet 7/8	
-			FRAME = 15
+			FRAME = 10
 			
 			
 			

@@ -30,6 +30,7 @@ CAnimateUI::CAnimateUI()
 	m_bAnimateColor = false;							//カーラーアニメーションがあるかどうか
 	m_ntargetCol = 0;									//目的のカーラー番号
 	m_deltaCol = ColorNull;								//カーラーの減数
+	m_bAnim = false;
 }
 
 //デストラクタ
@@ -51,6 +52,7 @@ HRESULT CAnimateUI::Init(void)
 	m_bAnimateColor = false;						//カーラーアニメーションがあるかどうか
 	m_deltaCol = ColorNull;							//カーラーの減数
 	m_ntargetCol = 0;								//目的のカーラー番号
+	m_bAnim = true;
 
 	return S_OK;
 }
@@ -65,64 +67,67 @@ void CAnimateUI::Uninit(void)
 //更新処理
 void CAnimateUI::Update(void)
 {
-	if (m_AnimInfo.nChangeFrame != 0)
-	{//アニメーション時間が0ではない場合
+	if (m_bAnim)
+	{
+		if (m_AnimInfo.nChangeFrame != 0)
+		{//アニメーション時間が0ではない場合
 
-		m_nCntAnim++;			//カウンターをインクリメントする
+			m_nCntAnim++;			//カウンターをインクリメントする
 
-		if (m_nCntAnim >= m_AnimInfo.nChangeFrame)
-		{//設定した時間を超えたら
+			if (m_nCntAnim >= m_AnimInfo.nChangeFrame)
+			{//設定した時間を超えたら
 
-			m_AnimInfo.deltaSize.x *= -1.0f;		//サイズアニメーションを逆にする
-			m_AnimInfo.deltaSize.y *= -1.0f;		//サイズアニメーションを逆にする
-			m_nCntAnim = 0;							//カウンターを0に戻す
+				m_AnimInfo.deltaSize.x *= -1.0f;		//サイズアニメーションを逆にする
+				m_AnimInfo.deltaSize.y *= -1.0f;		//サイズアニメーションを逆にする
+				m_nCntAnim = 0;							//カウンターを0に戻す
+
+				if (m_bAnimateColor)
+				{//カーラーアニメーションの場合
+
+					m_ntargetCol++;				//目的のカーラーの更新
+
+					if (m_ntargetCol >= 6)
+					{//最後のカーラーを超えたら
+						m_ntargetCol = 0;			//元に戻す
+					}
+
+					D3DXCOLOR target = targetCol[m_ntargetCol];			//目的のカーラーを設定する
+					D3DXCOLOR col = GetColor();							//現在のカーラーを設定する
+
+					//カーラーの減数を計算する
+					m_deltaCol = target - col;
+					m_deltaCol.r /= m_AnimInfo.nChangeFrame;
+					m_deltaCol.g /= m_AnimInfo.nChangeFrame;
+					m_deltaCol.b /= m_AnimInfo.nChangeFrame;
+					m_deltaCol.a = 0.0f;
+				}
+			}
+
+			D3DXVECTOR2 size = GetSize();				//現在のサイズの取得
+
+			size -= m_AnimInfo.deltaSize;				//サイズの更新
+
+			//サイズが0以下にならないように
+			if (size.x < 0.0f)
+			{
+				size.x = 0.0f;
+			}
+			if (size.y < 0.0f)
+			{
+				size.y = 0.0f;
+			}
+
+			SetSize(size);							//サイズの設定処理
 
 			if (m_bAnimateColor)
 			{//カーラーアニメーションの場合
 
-				m_ntargetCol++;				//目的のカーラーの更新
+				D3DXCOLOR col = GetColor();			//現在のカーラーの取得
 
-				if (m_ntargetCol >= 6)
-				{//最後のカーラーを超えたら
-					m_ntargetCol = 0;			//元に戻す
-				}
+				col += m_deltaCol;					//カーラーの更新
 
-				D3DXCOLOR target = targetCol[m_ntargetCol];			//目的のカーラーを設定する
-				D3DXCOLOR col = GetColor();							//現在のカーラーを設定する
-
-				//カーラーの減数を計算する
-				m_deltaCol = target - col;							
-				m_deltaCol.r /= m_AnimInfo.nChangeFrame;				
-				m_deltaCol.g /= m_AnimInfo.nChangeFrame;				
-				m_deltaCol.b /= m_AnimInfo.nChangeFrame;				
-				m_deltaCol.a = 0.0f;								
+				SetColor(col);						//カーラーの設定
 			}
-		}
-
-		D3DXVECTOR2 size = GetSize();				//現在のサイズの取得
-
-		size -= m_AnimInfo.deltaSize;				//サイズの更新
-
-		//サイズが0以下にならないように
-		if (size.x < 0.0f)
-		{
-			size.x = 0.0f;
-		}
-		if (size.y < 0.0f)
-		{
-			size.y = 0.0f;
-		}
-
-		SetSize(size);							//サイズの設定処理
-
-		if (m_bAnimateColor)
-		{//カーラーアニメーションの場合
-
-			D3DXCOLOR col = GetColor();			//現在のカーラーの取得
-
-			col += m_deltaCol;					//カーラーの更新
-												
-			SetColor(col);						//カーラーの設定
 		}
 	}
 
@@ -134,6 +139,18 @@ void CAnimateUI::Update(void)
 void CAnimateUI::AnimateColor(const bool bAnim)
 {
 	m_bAnimateColor = bAnim;				
+}
+
+//アニメーションの開始処理
+void CAnimateUI::StartAnimation(void)
+{
+	m_bAnim = true;
+}
+
+//アニメーションの終了処理
+void CAnimateUI::StopAnimation(void)
+{
+	m_bAnim = false;
 }
 
 

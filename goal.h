@@ -11,6 +11,7 @@
 //インクルードファイル
 //=============================================================================
 #include "model.h"
+#include "UIString.h"
 
 
 class CGoal : public CModel
@@ -33,6 +34,9 @@ private:
 	static const float DEFAULT_RADIUS;				//ディフォルトの半径
 
 	int m_nPresentGem;			//現在の宝石数
+	bool m_bCreate;				//UIを生成したかどうか
+
+	CUIString* m_pGemNeeded;	//必要な宝石のUI文字列へのポインタ
 
 };
 

@@ -22,6 +22,7 @@
 #include "starUI.h"
 #include "game.h"
 #include "sound.h"
+#include "score.h"
 
 #include "animationFade.h"
 
@@ -39,7 +40,7 @@ const float	CPlayer::DEFAULT_FALL_HEIGHT = -1000.0f;	//この高さの下にいると死ぬ
 const float CPlayer::JUMP_SPEED = 17.5f;				//ジャンプ力
 const float CPlayer::MAX_FALL_SPEED = -20.0f;			//最大の落下スピード
 const float CPlayer::GRAVITY_ACCELERATION = -0.8f;		//重力
-const int   CPlayer::ATTACK_TIME = 165;					//攻撃時間
+const int   CPlayer::ATTACK_TIME = 150;					//攻撃時間
 
 //プレイヤーの色
 D3DXCOLOR CPlayer::m_playerColor[PLAYER_COLOR_MAX]
@@ -223,20 +224,28 @@ void CPlayer::Update(void)
 				D3DXVECTOR3 p = dir + m_pos;
 
 				//ヒットボックスの生成
-				m_pAttackHitbox = CBoxHitbox::Create(dir + m_pos, Vec3Null, D3DXVECTOR3(70.0f, 165.0f, 70.0f), CHitbox::TYPE_OBSTACLE, this, 0, CHitbox::EFFECT_DAMAGE);
+				m_pAttackHitbox = CBoxHitbox::Create(dir + m_pos, Vec3Null, D3DXVECTOR3(85.0f, 165.0f, 85.0f), CHitbox::TYPE_OBSTACLE, this, 0, CHitbox::EFFECT_DAMAGE);
 
+				if (m_pAttackHitbox)
+				{
+					m_pAttackHitbox->SetOverlapResponse(CHitbox::TYPE_OBSTACLE, CHitbox::RESPONSE_OVERLAP);
+				}
+
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_SWORD);
 			}
 
-			if (m_nCntAttack <= 0)
+			if (m_nCntAttack == ATTACK_TIME / 2)
 			{
-				m_bAttacking = false;
-				m_bMoving = false;
-
 				if (m_pAttackHitbox)
 				{
 					m_pAttackHitbox->Release();
 					m_pAttackHitbox = nullptr;
 				}
+			}
+			if (m_nCntAttack <= 0)
+			{
+				m_bAttacking = false;
+				m_bMoving = false;
 			}
 		}
 
@@ -248,21 +257,24 @@ void CPlayer::Update(void)
 
 		UpdatePlayerCamera();
 
-		if (CInputKeyboard::GetKeyboardTrigger(DIK_U))
+		/*if (CInputKeyboard::GetKeyboardTrigger(DIK_U))
 		{
 			m_bCameraAnim = true;
 			CAnimationFade::Create(D3DXVECTOR3(-1500.0f, -200.0f, 500.0f) + m_cameraPos, D3DXVECTOR3(-1500.0f, -200.0f, 500.0f) + m_baseFocalPointPos, CAnimationFade::TYPE_PLATFORM);
+		}*/
+
+		//影の高さの設定
+		if (m_bLanded)
+		{
+			for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
+			{
+				if (m_pModel[nCnt] != nullptr)
+				{
+					m_pModel[nCnt]->SetShadowHeight(m_pos.y);
+				}
+			}
 		}
 	}
-
-	/*if (CInputKeyboard::GetKeyboardTrigger(DIK_M))
-	{
-		SetTargetCameraPos(CAMERA_POS_BACK);
-	}
-	else if (CInputKeyboard::GetKeyboardTrigger(DIK_N))
-	{
-		SetTargetCameraPos(CAMERA_POS_NORMAL);
-	}*/
 
 	CDebugProc::Print("\n\n Pos: %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 }
@@ -416,6 +428,19 @@ const D3DXVECTOR3 CPlayer::GetMove(void)
 const bool CPlayer::GetLanded(void)
 {
 	return m_bLanded;
+}
+
+//星の数の取得処理
+const int CPlayer::GetStarNumber(void)
+{
+	int nStar = 0;
+
+	if (m_pUI)
+	{//nullチェック
+		nStar = m_pUI->GetTargerStar();
+	}
+
+	return nStar;
 }
 
 
@@ -775,14 +800,9 @@ void CPlayer::TransformUpdate(void)
 	UpdateRotation();
 
 	//重量を追加する
-	if (m_move.y >= MAX_FALL_SPEED && !CInputKeyboard::GetKeyboardPress(DIK_Q))
+	if (m_move.y >= MAX_FALL_SPEED)
 	{
 		m_move.y += GRAVITY_ACCELERATION;
-	}
-
-	if (CInputKeyboard::GetKeyboardPress(DIK_Q))
-	{
-		m_move.y = 0.0f;
 	}
 }
 
@@ -917,15 +937,6 @@ void CPlayer::FieldUpdate(void)
 				m_bHit = false;			//当たってない状態にする
 										//摩擦係数の取得
 				m_fFrictionCoeff = pField->GetFriction();
-
-				//影の高さの設定
-				for (int nCnt = 0; nCnt < PARTS_MAX; nCnt++)
-				{
-					if (m_pModel[nCnt] != nullptr)
-					{
-						m_pModel[nCnt]->SetShadowHeight(fHeight);
-					}
-				}
 			}
 		}
 	}
@@ -940,6 +951,13 @@ void CPlayer::RespawnPlayer(void)
 	if (m_pHitbox)
 	{
 		m_pHitbox->SetInvincibility(true);
+	}
+
+	CScore* pScore = CApplication::GetScore();
+
+	if (pScore)
+	{
+		pScore->GotDamaged();
 	}
 
 	CApplication::GetGame()->AddTime(10000);
@@ -970,6 +988,13 @@ void CPlayer::HitboxEffectUpdate(void)
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);
 
+		CScore* pScore = CApplication::GetScore();
+
+		if (pScore)
+		{
+			pScore->GotDamaged();
+		}
+
 		CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_DAMAGE);
 	}
 
@@ -998,6 +1023,13 @@ void CPlayer::HitboxEffectUpdate(void)
 			CApplication::GetGame()->AddTime(10000);
 
 			CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_DAMAGE);
+		}
+
+		CScore* pScore = CApplication::GetScore();
+
+		if (pScore)
+		{
+			pScore->GotDamaged();
 		}
 
 		m_pHitbox->SetEffect(CHitbox::EFFECT_MAX);

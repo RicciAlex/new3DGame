@@ -34,6 +34,7 @@
 #include "gem.h"
 #include "iceWall.h"
 #include "stalkingBot.h"
+#include "guideArrow.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -125,6 +126,19 @@ void CGame::AddTime(const float fMilliseconds)
 void CGame::SetPlayer(CPlayer* pPlayer)
 {
 	m_pPlayer = pPlayer;
+}
+
+//éûä‘ÇÃéÊìæèàóù
+const float CGame::GetTime(void)
+{
+	float fTime = 0.0f;
+
+	if (m_pTimer)
+	{
+		fTime = m_pTimer->GetTime();
+	}
+
+	return fTime;
 }
 
 //ÉvÉåÉCÉÑÅ[ÇÃéÊìæèàóù
@@ -230,6 +244,10 @@ void CGame::LoadMap(char* pPass, CObject::TextType fieldTexture)
 			else if (strcmp(aStr, "ICE_WALL") == 0)
 			{
 				LoadIceWall(pFile);
+			}
+			else if (strcmp(aStr, "GUIDE_ARROW") == 0)
+			{
+				LoadGuideArrow(pFile);
 			}
 		}
 
@@ -887,6 +905,7 @@ void CGame::LoadFirePipe(FILE * pFile)
 	char aStr[1024] = {};
 	D3DXVECTOR3 pos = Vec3Null;
 	int nFireTime = CFirePipe::DEFAULT_FIRE_TIME;
+	int nStartDelay = 0;
 
 	while (strcmp(aStr, "END_FIRE_PIPE") != 0)
 	{
@@ -903,9 +922,14 @@ void CGame::LoadFirePipe(FILE * pFile)
 			fscanf(pFile, "%s", aStr);
 			fscanf(pFile, "%d", &nFireTime);
 		}
+		if (strcmp(aStr, "START_DELAY") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			fscanf(pFile, "%d", &nStartDelay);
+		}
 	}
 
-	CFirePipe::Create(pos, nFireTime);
+	CFirePipe::Create(pos, nFireTime, nStartDelay);
 }
 
 void CGame::LoadFogbot(FILE * pFile)
@@ -1063,4 +1087,31 @@ void CGame::LoadIceWall(FILE * pFile)
 	}
 
 	CIceWall::Create(pos, bRotate);
+}
+
+void CGame::LoadGuideArrow(FILE * pFile)
+{
+	char aStr[1024] = {};
+	D3DXVECTOR3 pos = Vec3Null;
+	D3DXVECTOR3 rot = Vec3Null;
+
+	while (strcmp(aStr, "END_GUIDE_ARROW") != 0)
+	{
+		fscanf(pFile, "%s", aStr);
+
+		if (strcmp(aStr, "POS") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+
+			LoadVector3(pFile, pos);
+		}
+		if (strcmp(aStr, "ROT") == 0)
+		{
+			fscanf(pFile, "%s", aStr);
+			
+			LoadVector3(pFile, rot);
+		}
+	}
+
+	CGuideArrow::Create(pos, rot);
 }

@@ -38,6 +38,7 @@ public:
 	void SetTargetStar(const int target);			//–Ú“I‚Ì¯”‚Ìİ’èˆ—
 
 	const D3DXVECTOR3 GetPos(void) override;		//ˆÊ’u‚Ìæ“¾ˆ—
+	const int GetTargerStar(void);					//–Ú“I‚Ì¯”‚Ìæ“¾ˆ—
 
 
 	static CStarUI* Create(const int nMaxStar);		//¶¬ˆ—

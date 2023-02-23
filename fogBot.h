@@ -50,6 +50,7 @@ private:
 	static const float DEFAULT_DESPAWN_HEIGHT;			//ディフォルトのディスポーンのY座標
 
 	D3DXVECTOR3 m_deathSpeed;				//死亡した後のスピード
+	int   m_nCntSound;						//サウンド用のカウンター
 	float m_fAnimAngle;						//アニメーション用の角度
 	float m_fRange;							//見える範囲の半径
 	bool  m_bActive;						//プレイヤーが見えるかどうか

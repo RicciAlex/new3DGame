@@ -31,47 +31,101 @@
     <Filter Include="ソース ファイル\Hitbox">
       <UniqueIdentifier>{62ee410e-b65f-4021-b697-54fe61f54472}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Item">
-      <UniqueIdentifier>{ff9ab418-c938-48cb-954b-8a76b2f70da9}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Light">
+      <UniqueIdentifier>{c5d620e6-252d-4f55-9fc7-70d82e766a7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Item">
-      <UniqueIdentifier>{3776cd1c-fb77-47c2-b3c8-2661456f971b}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Light">
+      <UniqueIdentifier>{a3c92bd4-324b-4568-83b7-e08cb4538f9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\effect">
-      <UniqueIdentifier>{ab9a3c28-5c0d-48e9-b83e-d52ed90593df}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Camera">
+      <UniqueIdentifier>{08b86532-44e3-4690-a713-4b6a70c19e15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\effect">
-      <UniqueIdentifier>{3878733c-7d5c-426d-b089-678be60da5c9}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{4b6b2050-82ba-4de1-9efd-35074b8d6e35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Particle">
-      <UniqueIdentifier>{1453b002-6754-4009-ab32-9f141a8e6469}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Object">
+      <UniqueIdentifier>{dfdff275-53fb-43d1-9646-e8a2263826c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Particle">
-      <UniqueIdentifier>{1a1d4177-4f3e-4932-9085-8ee15ab785c6}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Object">
+      <UniqueIdentifier>{6d191ec4-ace9-47e7-9919-5f3450b4533c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\UI">
-      <UniqueIdentifier>{42896f29-704d-4853-a84e-1b3522705a23}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Object\Gimmick">
+      <UniqueIdentifier>{d8127287-f229-4475-b049-b120778b6ef0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\UI">
-      <UniqueIdentifier>{ca9d3436-c4e4-4244-aa54-4cb2dda5ebe3}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Object\Gimmick\Cannon">
+      <UniqueIdentifier>{d3082d01-351b-4a17-9ec1-00715bd1a078}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Enemy">
-      <UniqueIdentifier>{70ac054b-7a16-4283-9f6f-18712625c3a5}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Object\Gimmick\ShurikenTrap">
+      <UniqueIdentifier>{0a229eb0-6b5f-4cdc-92ae-9ad20f2ba22d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Enemy">
-      <UniqueIdentifier>{3b1927cc-8ba3-409b-a00a-6683a9cf6461}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Menu">
+    <Filter Include="ソース ファイル\Object\Menu">
       <UniqueIdentifier>{0b478052-092c-447d-8b55-8e095ea39b56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Menu">
+    <Filter Include="ソース ファイル\Object\Item">
+      <UniqueIdentifier>{3776cd1c-fb77-47c2-b3c8-2661456f971b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\Enemy">
+      <UniqueIdentifier>{3b1927cc-8ba3-409b-a00a-6683a9cf6461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\Enemy\Boss">
+      <UniqueIdentifier>{f8cc75ee-7d73-4b5b-8eb1-75b7a609d527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\effect">
+      <UniqueIdentifier>{3878733c-7d5c-426d-b089-678be60da5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\Goal">
+      <UniqueIdentifier>{0a39ee5c-5dfd-4baa-bf79-06430c73a1b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\Particle">
+      <UniqueIdentifier>{1a1d4177-4f3e-4932-9085-8ee15ab785c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object\UI">
+      <UniqueIdentifier>{ca9d3436-c4e4-4244-aa54-4cb2dda5ebe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\UI">
+      <UniqueIdentifier>{42896f29-704d-4853-a84e-1b3522705a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Particle">
+      <UniqueIdentifier>{1453b002-6754-4009-ab32-9f141a8e6469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Gimmick">
+      <UniqueIdentifier>{c6cdab03-301f-4a27-96b1-9b8117a131f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Gimmick\Cannon">
+      <UniqueIdentifier>{811ed8c4-18b2-47a8-a571-81892dd7e2d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Gimmick\ShurikenTrap">
+      <UniqueIdentifier>{d5f7ddc7-fb94-4355-9fad-a7d8602ca4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Menu">
       <UniqueIdentifier>{79c99342-4e18-42ab-8711-a3736797cfab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Goal">
+    <Filter Include="ヘッダー ファイル\Object\Item">
+      <UniqueIdentifier>{ff9ab418-c938-48cb-954b-8a76b2f70da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Goal">
       <UniqueIdentifier>{12aab842-a078-4779-81a5-173e2103ac6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Goal">
-      <UniqueIdentifier>{0a39ee5c-5dfd-4baa-bf79-06430c73a1b3}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Object\Enemy">
+      <UniqueIdentifier>{70ac054b-7a16-4283-9f6f-18712625c3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\Enemy\Boss">
+      <UniqueIdentifier>{a8b60744-fd8e-4f0e-af06-ebe1d24fc8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object\effect">
+      <UniqueIdentifier>{ab9a3c28-5c0d-48e9-b83e-d52ed90593df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Debug">
+      <UniqueIdentifier>{be6f8751-708e-4391-bb6e-eaf180788639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Debug">
+      <UniqueIdentifier>{f6cf9e23-16f1-4b6f-91f3-f35f7abd0437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Input">
+      <UniqueIdentifier>{52ab0aaf-8eec-40e2-b259-f3c76f75d2da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Input">
+      <UniqueIdentifier>{ea5df415-3976-4cd5-ada4-142787eb6e79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,58 +135,16 @@
     <ClCompile Include="application.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="debugProc.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="rendering.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="object2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="object3D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="directionalLight.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="light.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="pointLight.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="animator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="modelPart.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="inputKeyboard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="inputMouse.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="meshfield.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="mode.cpp">
@@ -144,53 +156,14 @@
     <ClCompile Include="firstStage.cpp">
       <Filter>ソース ファイル\Mode\game</Filter>
     </ClCompile>
-    <ClCompile Include="fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="silhouette.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="title.cpp">
       <Filter>ソース ファイル\Mode</Filter>
-    </ClCompile>
-    <ClCompile Include="billboard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="UIString.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Letter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimateUI.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="results.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
     <ClCompile Include="hitbox.cpp">
       <Filter>ソース ファイル\Hitbox</Filter>
-    </ClCompile>
-    <ClCompile Include="line.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="meshCube.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="bg.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="nail.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="button.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="shuriken.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ShurikenTrap.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="BoxHitbox.cpp">
       <Filter>ソース ファイル\Hitbox</Filter>
@@ -199,7 +172,7 @@
       <Filter>ソース ファイル\Hitbox</Filter>
     </ClCompile>
     <ClCompile Include="star.cpp">
-      <Filter>ソース ファイル\Item</Filter>
+      <Filter>ソース ファイル\Object\Item</Filter>
     </ClCompile>
     <ClCompile Include="membraneLighting.cpp">
       <Filter>ソース ファイル</Filter>
@@ -207,116 +180,218 @@
     <ClCompile Include="phongShading.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="movingCube.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="triggerablePlatform.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="spikeTrap.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="accelerationFloor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="stageSelect.cpp">
       <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
-    <ClCompile Include="cameraSetter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="checkpoint.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="fallBoard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="animationFade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="effect.cpp">
-      <Filter>ソース ファイル\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="FirePipe.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\effect</Filter>
     </ClCompile>
     <ClCompile Include="fireEffect.cpp">
-      <Filter>ソース ファイル\effect</Filter>
+      <Filter>ソース ファイル\Object\effect</Filter>
     </ClCompile>
     <ClCompile Include="fireParticle.cpp">
-      <Filter>ソース ファイル\Particle</Filter>
+      <Filter>ソース ファイル\Object\Particle</Filter>
     </ClCompile>
     <ClCompile Include="starUI.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+      <Filter>ソース ファイル\Object\UI</Filter>
     </ClCompile>
     <ClCompile Include="fogEffect.cpp">
-      <Filter>ソース ファイル\effect</Filter>
+      <Filter>ソース ファイル\Object\effect</Filter>
     </ClCompile>
     <ClCompile Include="fogBot.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
+      <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="fogParticle.cpp">
-      <Filter>ソース ファイル\Particle</Filter>
+      <Filter>ソース ファイル\Object\Particle</Filter>
     </ClCompile>
     <ClCompile Include="timer.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="PendulumClock.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="bgModel.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="spawnTrigger.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\UI</Filter>
     </ClCompile>
     <ClCompile Include="stalkingBot.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
+      <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
-      <Filter>ソース ファイル\Menu</Filter>
+      <Filter>ソース ファイル\Object\Menu</Filter>
     </ClCompile>
     <ClCompile Include="menuButton.cpp">
-      <Filter>ソース ファイル\Menu</Filter>
+      <Filter>ソース ファイル\Object\Menu</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
-      <Filter>ソース ファイル\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="icicle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\Menu</Filter>
     </ClCompile>
     <ClCompile Include="magicCircleEffect.cpp">
-      <Filter>ソース ファイル\Goal</Filter>
+      <Filter>ソース ファイル\Object\Goal</Filter>
     </ClCompile>
     <ClCompile Include="goal.cpp">
-      <Filter>ソース ファイル\Goal</Filter>
+      <Filter>ソース ファイル\Object\Goal</Filter>
     </ClCompile>
     <ClCompile Include="gem.cpp">
-      <Filter>ソース ファイル\Goal</Filter>
-    </ClCompile>
-    <ClCompile Include="guideArrow.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\Goal</Filter>
     </ClCompile>
     <ClCompile Include="secondStage.cpp">
       <Filter>ソース ファイル\Mode\game</Filter>
     </ClCompile>
-    <ClCompile Include="iceWall.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="twisterEffect.cpp">
+      <Filter>ソース ファイル\Object\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorial.cpp">
+      <Filter>ソース ファイル\Mode\game</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStage.cpp">
+      <Filter>ソース ファイル\Mode\game</Filter>
     </ClCompile>
     <ClCompile Include="boss.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="twisterEffect.cpp">
-      <Filter>ソース ファイル\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="twister.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="iceBoulder.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="twister.cpp">
+      <Filter>ソース ファイル\Object\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="icicle.cpp">
+      <Filter>ソース ファイル\Object\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="iceShard.cpp">
+      <Filter>ソース ファイル\Object\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="triggerablePlatform.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="spikeTrap.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="PendulumClock.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="nail.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="movingCube.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="iceWall.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="FirePipe.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="fallBoard.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="accelerationFloor.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="spawnTrigger.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="cannon.cpp">
+      <Filter>ソース ファイル\Object\Gimmick\Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="cannonBullet.cpp">
+      <Filter>ソース ファイル\Object\Gimmick\Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="ShurikenTrap.cpp">
+      <Filter>ソース ファイル\Object\Gimmick\ShurikenTrap</Filter>
+    </ClCompile>
+    <ClCompile Include="shuriken.cpp">
+      <Filter>ソース ファイル\Object\Gimmick\ShurikenTrap</Filter>
+    </ClCompile>
+    <ClCompile Include="pointLight.cpp">
+      <Filter>ソース ファイル\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>ソース ファイル\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="directionalLight.cpp">
+      <Filter>ソース ファイル\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraSetter.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="animationFade.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>ソース ファイル\Object\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="UIString.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="stageSelectCursor.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="silhouette.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object3D.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object2D.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="meshfield.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="meshCube.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Letter.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="guideArrow.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="explosion.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="checkpoint.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="bg.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimateUI.cpp">
+      <Filter>ソース ファイル\Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="line.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="debugProc.cpp">
+      <Filter>ソース ファイル\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="inputMouse.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="inputKeyboard.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking.cpp">
+      <Filter>ソース ファイル\Mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,58 +401,13 @@
     <ClInclude Include="application.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="debugProc.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="rendering.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="object2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="object3D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="directionalLight.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="light.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="pointLight.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="animator.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="modelPart.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="inputKeyboard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="inputMouse.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="meshfield.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
@@ -389,26 +419,8 @@
     <ClInclude Include="firstStage.h">
       <Filter>ヘッダー ファイル\Mode\game</Filter>
     </ClInclude>
-    <ClInclude Include="fade.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="silhouette.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="title.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
-    </ClInclude>
-    <ClInclude Include="billboard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="UIString.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Letter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimateUI.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="results.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
@@ -416,26 +428,8 @@
     <ClInclude Include="hitbox.h">
       <Filter>ヘッダー ファイル\Hitbox</Filter>
     </ClInclude>
-    <ClInclude Include="line.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="bg.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="nail.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="button.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="shuriken.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ShurikenTrap.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="star.h">
-      <Filter>ヘッダー ファイル\Item</Filter>
+      <Filter>ヘッダー ファイル\Object\Item</Filter>
     </ClInclude>
     <ClInclude Include="membraneLighting.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -449,119 +443,221 @@
     <ClInclude Include="CylinderHitbox.h">
       <Filter>ヘッダー ファイル\Hitbox</Filter>
     </ClInclude>
-    <ClInclude Include="meshCube.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="movingCube.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="triggerablePlatform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="spikeTrap.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="accelerationFloor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="stageSelect.h">
       <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="cameraSetter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="checkpoint.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="fallBoard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="animationFade.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="effect.h">
-      <Filter>ヘッダー ファイル\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="FirePipe.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\effect</Filter>
     </ClInclude>
     <ClInclude Include="fireEffect.h">
-      <Filter>ヘッダー ファイル\effect</Filter>
+      <Filter>ヘッダー ファイル\Object\effect</Filter>
     </ClInclude>
     <ClInclude Include="fireParticle.h">
-      <Filter>ヘッダー ファイル\Particle</Filter>
+      <Filter>ヘッダー ファイル\Object\Particle</Filter>
     </ClInclude>
     <ClInclude Include="starUI.h">
-      <Filter>ヘッダー ファイル\UI</Filter>
+      <Filter>ヘッダー ファイル\Object\UI</Filter>
     </ClInclude>
     <ClInclude Include="fogEffect.h">
-      <Filter>ヘッダー ファイル\effect</Filter>
+      <Filter>ヘッダー ファイル\Object\effect</Filter>
     </ClInclude>
     <ClInclude Include="fogBot.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="fogParticle.h">
-      <Filter>ヘッダー ファイル\Particle</Filter>
+      <Filter>ヘッダー ファイル\Object\Particle</Filter>
     </ClInclude>
     <ClInclude Include="timer.h">
-      <Filter>ヘッダー ファイル\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="PendulumClock.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="bgModel.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="spawnTrigger.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\UI</Filter>
     </ClInclude>
     <ClInclude Include="stalkingBot.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="menuButton.h">
-      <Filter>ヘッダー ファイル\Menu</Filter>
+      <Filter>ヘッダー ファイル\Object\Menu</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
-      <Filter>ヘッダー ファイル\Menu</Filter>
+      <Filter>ヘッダー ファイル\Object\Menu</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
-      <Filter>ヘッダー ファイル\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="icicle.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\Menu</Filter>
     </ClInclude>
     <ClInclude Include="goal.h">
-      <Filter>ヘッダー ファイル\Goal</Filter>
+      <Filter>ヘッダー ファイル\Object\Goal</Filter>
     </ClInclude>
     <ClInclude Include="magicCircleEffect.h">
-      <Filter>ヘッダー ファイル\Goal</Filter>
+      <Filter>ヘッダー ファイル\Object\Goal</Filter>
     </ClInclude>
     <ClInclude Include="gem.h">
-      <Filter>ヘッダー ファイル\Goal</Filter>
-    </ClInclude>
-    <ClInclude Include="guideArrow.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\Goal</Filter>
     </ClInclude>
     <ClInclude Include="secondStage.h">
       <Filter>ヘッダー ファイル\Mode\game</Filter>
     </ClInclude>
-    <ClInclude Include="iceWall.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="twisterEffect.h">
+      <Filter>ヘッダー ファイル\Object\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>ヘッダー ファイル\Mode\game</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStage.h">
+      <Filter>ヘッダー ファイル\Mode\game</Filter>
     </ClInclude>
     <ClInclude Include="boss.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
+      <Filter>ヘッダー ファイル\Object\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="twisterEffect.h">
-      <Filter>ヘッダー ファイル\effect</Filter>
+    <ClInclude Include="icicle.h">
+      <Filter>ヘッダー ファイル\Object\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="twister.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="iceBoulder.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="iceShard.h">
+      <Filter>ヘッダー ファイル\Object\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="triggerablePlatform.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="spikeTrap.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="PendulumClock.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="nail.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="movingCube.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="iceWall.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="FirePipe.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="fallBoard.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="accelerationFloor.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="spawnTrigger.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="cannon.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick\Cannon</Filter>
+    </ClInclude>
+    <ClInclude Include="cannonBullet.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick\Cannon</Filter>
+    </ClInclude>
+    <ClInclude Include="shuriken.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick\ShurikenTrap</Filter>
+    </ClInclude>
+    <ClInclude Include="ShurikenTrap.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick\ShurikenTrap</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>ヘッダー ファイル\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="pointLight.h">
+      <Filter>ヘッダー ファイル\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="directionalLight.h">
+      <Filter>ヘッダー ファイル\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraSetter.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="animationFade.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="UIString.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="stageSelectCursor.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="silhouette.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object3D.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object2D.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="meshfield.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="meshCube.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Letter.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="guideArrow.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="explosion.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="checkpoint.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="billboard.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="bg.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="animator.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>ヘッダー ファイル\Object\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimateUI.h">
+      <Filter>ヘッダー ファイル\Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="debugProc.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
+      <Filter>ヘッダー ファイル\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="inputMouse.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="inputKeyboard.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking.h">
+      <Filter>ヘッダー ファイル\Mode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

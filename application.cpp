@@ -28,6 +28,10 @@
 #include "checkpoint.h"
 #include "stageSelect.h"
 #include "secondStage.h"
+#include "tutorial.h"
+#include "bossStage.h"
+#include "score.h"
+#include "ranking.h"
 
 
 //静的メンバー変数の宣言
@@ -40,8 +44,7 @@ CSound* CApplication::m_pSound = nullptr;									//サウンドのインスタンス
 CFade* CApplication::m_pFade = nullptr;										//フェードのインスタンス
 CCamera* CApplication::m_pCamera = nullptr;									//カメラのインスタンス
 CMode* CApplication::m_pMode = nullptr;										// モードへのポインタ
-//CMenu* CApplication::m_pMenu = nullptr;										// メニューへのポインタ
-//CMessage* CApplication::m_pMessage = nullptr;								// メッセージへのポインタ
+CScore* CApplication::m_pScore = nullptr;									//スコアインスタンスへのポインタ
 CDebugProc* CApplication::m_pDebug = nullptr;								//デバッグ表示
 CApplication::Mode CApplication::m_mode = CApplication::MODE_TITLE;			//モード
 CApplication::Mode CApplication::m_modeNext = CApplication::MODE_TITLE;		//次のモード
@@ -92,6 +95,11 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//サウンドの生成
 	m_pSound = CSound::Create(hWnd);
 
+	if (m_pSound)
+	{
+		m_pSound->Play(CSound::SOUND_LABEL_BGM_TITLE);
+	}
+
 	CLight::ReleaseAll();																						//全部のライトのリリース処理
 	CDirectionalLight::Create(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR3(2, -5, 2));						//メインライトの生成
 	CDirectionalLight::Create(D3DXCOLOR(0.75f, 0.75f, 0.75f, 0.75f), D3DXVECTOR3(-0.2f, 0.2f, 1.0f));			//ライトの生成
@@ -120,13 +128,12 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 		return -1;
 	}
 
-	////パッドの生成
-	//m_pPad = new CInputPad;
+	m_pScore = CScore::Create();		//スコアの生成処理
 
-	//if (m_pPad != nullptr)
-	//{//パッドの初期化処理
-	//	m_pPad->Init(hInstance, hWnd, GUID_SysMouse);
-	//}
+	if (m_pScore)
+	{
+		m_pScore->LoadRanking();
+	}
 
 	m_bPause = false;	//ポーズを未使用にする
 
@@ -188,20 +195,19 @@ void CApplication::Uninit(void)
 		m_pFade = nullptr;
 	}
 
-	////パッドの破棄処理
-	//if (m_pPad != nullptr)
-	//{
-	//	m_pPad->Uninit();				//終了処理
-	//	delete m_pPad;					//破棄する
-	//	m_pPad = nullptr;				//nullにする
-	//}
-
 	//サウンドの破棄処理
 	if (m_pSound != nullptr)
 	{
 		m_pSound->Uninit();				//終了処理
 		delete m_pSound;				//破棄する
 		m_pSound = nullptr;				//nullにする
+	}
+
+	//スコアの破棄処理
+	if (m_pScore != nullptr)
+	{
+		delete m_pScore;				//破棄する
+		m_pScore = nullptr;
 	}
 
 	//デバッグテキストの破棄処理
@@ -279,12 +285,6 @@ void CApplication::Update(void)
 	{
 		m_pMode->Update();
 	}
-
-	////パッドの更新処理
-	//if (m_pPad != nullptr)
-	//{
-	//	m_pPad->Update();
-	//}
 }
 
 //描画処理
@@ -366,7 +366,9 @@ void CApplication::SetMode(Mode mode)
 	CObject::ReleaseAll();
 	CMeshfield::ClearFields();
 	CCheckpoint::Clear();
-	//CHitbox::ReleaseAll();
+	CHitbox::ReleaseAll();
+
+	m_mode = mode;
 
 	if (m_pSound != nullptr)
 	{
@@ -379,6 +381,16 @@ void CApplication::SetMode(Mode mode)
 	case CApplication::MODE_TITLE:
 
 	{
+		if (m_pScore)
+		{//nullチェック
+			m_pScore->Clear();		//スコアをクリアする
+		}
+
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_TITLE);
+		}
+
 		m_pMode = CTitle::Create();
 	}
 
@@ -387,6 +399,11 @@ void CApplication::SetMode(Mode mode)
 	case CApplication::MODE_STAGE_SELECT:
 
 	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_STAGE_SELECTION);
+		}
+
 		m_pMode = CStageSelect::Create();
 	}
 
@@ -395,6 +412,17 @@ void CApplication::SetMode(Mode mode)
 	case CApplication::MODE_FIRST_STAGE:
 
 	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_STAGE1);
+		}
+
+		if (m_pScore)
+		{//nullチェック
+			m_pScore->Clear();		//スコアをクリアする
+			m_pScore->SetStage(CScore::FIRST_STAGE);
+		}
+
 		m_pMode = CFirstStage::Create();
 
 		CSilhouette::Create();
@@ -405,7 +433,33 @@ void CApplication::SetMode(Mode mode)
 	case CApplication::MODE_SECOND_STAGE:
 
 	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_STAGE2);
+		}
+
+		if (m_pScore)
+		{//nullチェック
+			m_pScore->Clear();		//スコアをクリアする
+			m_pScore->SetStage(CScore::SECOND_STAGE);
+		}
+
 		m_pMode = CSecondStage::Create();
+
+		CSilhouette::Create();
+	}
+
+	break;
+
+	case CApplication::MODE_BOSS_STAGE:
+
+	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_BOSS);
+		}
+
+		m_pMode = CBossStage::Create();
 
 		CSilhouette::Create();
 	}
@@ -415,7 +469,50 @@ void CApplication::SetMode(Mode mode)
 	case CApplication::MODE_RESULTS:
 
 	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_RESULTS);
+		}
+
+		if (m_pScore)
+		{
+			m_pScore->SaveRanking();
+		}
+
 		m_pMode = CResults::Create();
+	}
+
+	break;
+
+	case CApplication::MODE_TUTORIAL:
+
+	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_TUTORIAL);
+		}
+
+		if (m_pScore)
+		{//nullチェック
+			m_pScore->Clear();		//スコアをクリアする
+		}
+
+		m_pMode = CTutorial::Create();
+
+		CSilhouette::Create();
+	}
+
+	break;
+
+	case CApplication::MODE_RANKING:
+
+	{
+		if (m_pSound)
+		{
+			m_pSound->Play(CSound::SOUND_LABEL_BGM_RESULTS);
+		}
+
+		m_pMode = CRanking::Create();
 	}
 
 	break;
@@ -424,6 +521,12 @@ void CApplication::SetMode(Mode mode)
 
 		break;
 	}
+}
+
+//モードインスタンスの取得処理
+CMode * CApplication::GetModeInstance(void)
+{
+	return m_pMode;
 }
 
 //ゲームモードの取得処理
@@ -439,6 +542,12 @@ CGame* CApplication::GetGame(void)
 	}
 
 	return nullptr;
+}
+
+//スコアの取得処理
+CScore * CApplication::GetScore(void)
+{
+	return m_pScore;
 }
 
 

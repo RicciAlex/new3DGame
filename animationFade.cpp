@@ -22,6 +22,7 @@ const float CAnimationFade::DEFAULT_FADE_SPEED = 0.05f;				//ÉfÉBÉtÉHÉãÉgÇÃÉtÉFÅ
 //ÉfÉBÉtÉHÉãÉgÇÃÉAÉjÉÅÅ[ÉVÉáÉìÉtÉåÅ[ÉÄêî
 const int   CAnimationFade::DEFAULT_ANIM_FRAMES[TYPE_MAX] =
 {
+	15,
 	120
 };
 
@@ -84,6 +85,112 @@ void CAnimationFade::Uninit(void)
 
 //çXêVèàóù
 void CAnimationFade::Update(void)
+{
+	//äÓñ{ÉNÉâÉXÇÃçXêVèàóù
+	CObject_2D::Update();
+
+	switch (m_type)
+	{
+	case CAnimationFade::TYPE_NORMAL:
+
+		NormalAnim();
+
+		break;
+	case CAnimationFade::TYPE_PLATFORM:
+
+		PlatformAnim();
+
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+//=============================================================================
+//
+//								ê√ìIä÷êî
+//
+//=============================================================================
+
+
+
+//ê∂ê¨èàóù
+CAnimationFade* CAnimationFade::Create(const D3DXVECTOR3 cameraPos, const D3DXVECTOR3 focalPoint, FADE_ANIMATION_TYPE type)
+{
+	CAnimationFade* pObj = new CAnimationFade;			//ÉCÉìÉXÉ^ÉìÉXÇê∂ê¨Ç∑ÇÈ
+
+	if (FAILED(pObj->Init()))
+	{//èâä˙âªèàóù
+		return nullptr;
+	}
+
+	pObj->m_cameraPos = cameraPos;				//ÉJÉÅÉâÇÃà íuÇÃê›íË
+	pObj->m_focalPos = focalPoint;				//ÉJÉÅÉâÇÃíçéãì_ÇÃê›íË
+	pObj->m_type = type;						//ÉAÉjÉÅÅ[ÉVÉáÉìÇÃéÌóﬁÇÃê›íË
+	pObj->SetPriority(5);						//ÉvÉâÉCÉIÉäÉeÉBÇÃê›íË
+
+	pObj->SetPos(D3DXVECTOR3((float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.5f, 0.0f));
+	pObj->SetSize(D3DXVECTOR2((float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.5f));
+
+	return pObj;
+}
+
+
+//=============================================================================
+//
+//							ÉvÉâÉCÉxÅ[Égä÷êî
+//
+//=============================================================================
+
+
+//ÉtÉFÅ[ÉhÉAÉEÉgÇÃä÷êî
+bool CAnimationFade::FadeOut(void)
+{
+	D3DXCOLOR col = GetColor();
+
+	col.a += DEFAULT_FADE_SPEED;
+
+	if (col.a >= 1.0f)
+	{
+		col.a = 1.0f;
+
+		m_phase = (FADE_PHASE)(m_phase + 1);
+
+		SetColor(col);
+
+		return true;
+	}
+
+	SetColor(col);
+
+	return false;
+}
+
+//ÉtÉFÅ[ÉhÉCÉìÇÃä÷êî
+bool CAnimationFade::FadeIn(void)
+{
+	D3DXCOLOR col = GetColor();
+
+	col.a -= DEFAULT_FADE_SPEED;
+
+	if (col.a <= 0.0f)
+	{
+		col.a = 0.0f;
+
+		m_phase = (FADE_PHASE)(m_phase + 1);
+
+		return true;
+	}
+
+	SetColor(col);
+
+	return false;
+}
+
+//ÉvÉâÉbÉgÉtÉHÅ[ÉÄÉAÉjÉÅÅ[ÉVÉáÉì
+void CAnimationFade::PlatformAnim(void)
 {
 	CCamera* pCamera = CApplication::GetCamera();
 
@@ -161,88 +268,60 @@ void CAnimationFade::Update(void)
 			break;
 		}
 	}
-
-	//äÓñ{ÉNÉâÉXÇÃçXêVèàóù
-	CObject_2D::Update();
-
 }
 
-
-//=============================================================================
-//
-//								ê√ìIä÷êî
-//
-//=============================================================================
-
-
-
-//ê∂ê¨èàóù
-CAnimationFade* CAnimationFade::Create(const D3DXVECTOR3 cameraPos, const D3DXVECTOR3 focalPoint, FADE_ANIMATION_TYPE type)
+//ïÅí ÇÃÉAÉjÉÅÅ[ÉVÉáÉì
+void CAnimationFade::NormalAnim(void)
 {
-	CAnimationFade* pObj = new CAnimationFade;			//ÉCÉìÉXÉ^ÉìÉXÇê∂ê¨Ç∑ÇÈ
-
-	if (FAILED(pObj->Init()))
-	{//èâä˙âªèàóù
-		return nullptr;
-	}
-
-	pObj->m_cameraPos = cameraPos;				//ÉJÉÅÉâÇÃà íuÇÃê›íË
-	pObj->m_focalPos = focalPoint;				//ÉJÉÅÉâÇÃíçéãì_ÇÃê›íË
-	pObj->m_type = type;						//ÉAÉjÉÅÅ[ÉVÉáÉìÇÃéÌóﬁÇÃê›íË
-	pObj->SetPriority(5);						//ÉvÉâÉCÉIÉäÉeÉBÇÃê›íË
-
-	pObj->SetPos(D3DXVECTOR3((float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.5f, 0.0f));
-	pObj->SetSize(D3DXVECTOR2((float)SCREEN_WIDTH * 0.5f, (float)SCREEN_HEIGHT * 0.5f));
-
-	return pObj;
-}
-
-
-//=============================================================================
-//
-//							ÉvÉâÉCÉxÅ[Égä÷êî
-//
-//=============================================================================
-
-
-//ÉtÉFÅ[ÉhÉAÉEÉgÇÃä÷êî
-bool CAnimationFade::FadeOut(void)
-{
-	D3DXCOLOR col = GetColor();
-
-	col.a += DEFAULT_FADE_SPEED;
-
-	if (col.a >= 1.0f)
+	switch (m_phase)
 	{
-		col.a = 1.0f;
 
-		m_phase = (FADE_PHASE)(m_phase + 1);
+	case CAnimationFade::START_OUT:
 
-		return true;
-	}
-
-	SetColor(col);
-
-	return false;
-}
-
-//ÉtÉFÅ[ÉhÉCÉìÇÃä÷êî
-bool CAnimationFade::FadeIn(void)
-{
-	D3DXCOLOR col = GetColor();
-
-	col.a -= DEFAULT_FADE_SPEED;
-
-	if (col.a <= 0.0f)
 	{
-		col.a = 0.0f;
-
-		m_phase = (FADE_PHASE)(m_phase + 1);
-
-		return true;
+		if (FadeOut())
+		{
+			m_phase = ANIM_PAUSE;
+		}
 	}
 
-	SetColor(col);
+	break;
 
-	return false;
+	case CAnimationFade::ANIM_PAUSE:
+
+	{
+		m_nAnimFrame++;
+
+		if (m_nAnimFrame >= DEFAULT_ANIM_FRAMES[m_type])
+		{
+			m_nAnimFrame = 0;
+
+			m_phase = END_IN;
+		}
+
+		D3DXCOLOR col = GetColor();
+	}
+
+	break;
+
+	case CAnimationFade::END_IN:
+
+	{
+		FadeIn();
+	}
+
+	break;
+
+	case CAnimationFade::PHASE_MAX:
+
+	{
+		Release();
+		return;
+	}
+
+	break;
+
+	default:
+		break;
+	}
 }

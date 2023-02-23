@@ -37,14 +37,16 @@ public:
 
 	void ChangeFog(void);
 	void SetDeepFog(const bool bFog);				//フォグの設定処理
+	void SetFogColor(const D3DXCOLOR col);			//フォグの色の設定処理
 
 private:
 	void DrawFPS(void);								//FPSの描画処理
-	void UpdateFog(void);
+	void UpdateFog(void);							//フォグの更新処理
+	void UpdateFogColor(void);						//フォグの色の更新処理
 
 private:
 
-	static const int DEFAULT_FOG_CHANGE_TIME = 180;	//フォグの変更フレーム数
+	static const int DEFAULT_FOG_CHANGE_TIME = 120;	//フォグの変更フレーム数
 	static const float DEFAULT_FOG_NEAR;			//フォグの開始距離
 	static const float DEFAULT_FOG_FAR;				//フォグの終了距離
 	static const float DEEP_FOG_NEAR;				//フォグの開始距離(密度高い)
@@ -55,11 +57,16 @@ private:
 	LPD3DXFONT m_pFont;								//フォント
 
 	int	  m_nCntFog;
+	int   m_nCntColorFog;
 	D3DXVECTOR2 m_fFrameFog;
+	D3DXCOLOR   m_targetCol;
+	D3DXCOLOR   m_fogColor;
+	D3DXCOLOR   m_colorSpeed;
 	float m_fFogNear;
 	float m_fFogFar;
 	float m_fFogTarget;
 	bool  m_bChangeFog;
+	bool  m_bChangeColor;
 	bool  m_bActive;
 
 	CMembraneShading* m_pMembrane;					//シェーダーのエフェクトへのポインタ

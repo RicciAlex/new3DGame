@@ -10,9 +10,12 @@
 //=============================================================================
 #include "goal.h"
 #include "application.h"
+#include "score.h"
 #include "game.h"
 #include "player.h"
 #include "magicCircleEffect.h"
+#include "object2D.h"
+#include <string>
 
 
 //=============================================================================
@@ -26,6 +29,9 @@ CGoal::CGoal()
 {
 	//メンバー変数をクリアする
 	m_nPresentGem = 0;
+	m_bCreate = false;
+
+	m_pGemNeeded = nullptr;
 }
 
 //デストラクタ
@@ -49,6 +55,13 @@ HRESULT CGoal::Init(void)
 //終了処理
 void CGoal::Uninit(void)
 {
+	//UIの破棄処理
+	if (m_pGemNeeded)
+	{//nullチェック
+		m_pGemNeeded->Release();		//メモリを解放する
+		m_pGemNeeded = nullptr;			//ポインタをnullにする
+	}
+
 	//基本クラスの終了処理
 	CModel::Uninit();
 }
@@ -56,6 +69,23 @@ void CGoal::Uninit(void)
 //更新処理
 void CGoal::Update(void)
 {
+	if (!m_bCreate && CApplication::GetModeInstance()->IsGame())
+	{
+		m_bCreate = true;
+
+		CObject_2D* pObj = CObject_2D::Create(5, D3DXVECTOR3(600.0f, 40.0f, 0.0f), D3DXVECTOR2(25.0f, 25.0f), CObject::TEXTURE_GEM_ICON);
+
+		if (pObj)
+		{
+			pObj->SetTextureParameter(1, 3, 2, INT_MAX);
+		}
+
+		if (!m_pGemNeeded)
+		{
+			m_pGemNeeded = CUIString::Create(D3DXVECTOR3(640.0f, 40.0f, 0.0f), D3DXVECTOR2(75.0f, 40.0f), ColorYellow, "0/3");
+		}
+	}
+
 	CGame* pGame = CApplication::GetGame();
 
 	if (pGame)
@@ -68,7 +98,32 @@ void CGoal::Update(void)
 
 			if (fDistance <= DEFAULT_RADIUS)
 			{
-				CApplication::SetFade(CApplication::MODE_RESULTS);
+				if (CApplication::GetMode() != CApplication::MODE_TUTORIAL)
+				{
+					CScore* pScore = CApplication::GetScore();
+					CMode* pMode = CApplication::GetModeInstance();
+
+					if (pScore && pMode)
+					{
+						if (pMode->IsGame())
+						{
+							pScore->SetTime(CApplication::GetGame()->GetTime());
+						}
+					}
+
+					if (CApplication::GetMode() == CApplication::MODE_FIRST_STAGE)
+					{
+						CApplication::SetFade(CApplication::MODE_RESULTS);
+					}
+					else if (CApplication::GetMode() == CApplication::MODE_SECOND_STAGE)
+					{
+						CApplication::SetFade(CApplication::MODE_BOSS_STAGE);
+					}
+				}
+				else
+				{
+					CApplication::SetFade(CApplication::MODE_STAGE_SELECT);
+				}
 			}
 		}
 	}
@@ -78,12 +133,26 @@ void CGoal::Update(void)
 void CGoal::AddGem(void)
 {
 	m_nPresentGem++;
+
+	if (m_pGemNeeded)
+	{
+		std::string str = std::to_string(3 - m_nPresentGem) + "/3";
+
+		m_pGemNeeded->ChangeString(str.c_str());
+	}
 }
 
 //宝石の減算処理
 void CGoal::SubtractGem(void)
 {
 	m_nPresentGem--;
+
+	if (m_pGemNeeded)
+	{
+		std::string str = std::to_string(3 - m_nPresentGem) + "/3";
+
+		m_pGemNeeded->ChangeString(str.c_str());
+	}
 }
 
 

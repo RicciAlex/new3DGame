@@ -33,6 +33,7 @@ CFogbot::CFogbot()
 {
 	//ƒƒ“ƒo[•Ï”‚ð‰Šú‰»‚·‚é
 	m_deathSpeed = Vec3Null;
+	m_nCntSound = 0;
 	m_fAnimAngle = 0.0f;
 	m_fRange = 0.0f;
 	m_bActive = false;
@@ -134,6 +135,9 @@ void CFogbot::Update(void)
 				StartRotation(D3DXVECTOR3((float)random(-10, 10) * 0.0005f * D3DX_PI, (float)random(-10, 10) * 0.0005f * D3DX_PI, 0.0f));
 
 				m_bDeath = true;
+
+				CApplication::GetSound()->Stop(CSound::SOUND_LABEL_SE_STEAM);
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_METAL_IMPACT);
 			}
 		}
 	}
@@ -264,6 +268,14 @@ void CFogbot::UpdateParticle(void)
 				}
 			}
 		}
+
+		m_nCntSound--;
+
+		if (m_nCntSound <= 0)
+		{
+			CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_STEAM);
+			m_nCntSound = 300;
+		}
 	}
 	else
 	{
@@ -286,6 +298,9 @@ void CFogbot::UpdateParticle(void)
 					pRenderer->SetDeepFog(false);
 				}
 			}
+
+			CApplication::GetSound()->Stop(CSound::SOUND_LABEL_SE_STEAM);
+			m_nCntSound = 0;
 		}
 	}
 }

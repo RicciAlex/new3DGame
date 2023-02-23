@@ -15,6 +15,7 @@
 #include "CylinderHitbox.h"
 #include "meshfield.h"
 #include "iceShard.h"
+#include "sound.h"
 
 //=============================================================================
 //								静的変数の初期化
@@ -53,7 +54,8 @@ HRESULT CIceBoulder::Init(void)
 
 	SetModel(CModel::MODEL_ICE_BOULDER);		//モデルの設定
 	StartRotation(D3DXVECTOR3(D3DX_PI * 0.0025f * (float)random(-500, 500), D3DX_PI * 0.0025f * (float)random(-500, 500), 0.0f));	//回転の開始処理
-	
+	SetDrawDistance(4000.0f);
+
 	return S_OK;
 }
 
@@ -134,10 +136,10 @@ void CIceBoulder::SetSpeed(void)
 	m_target = CApplication::GetGame()->GetPlayer()->GetPos();		//プレイヤーの位置の取得
 
 	m_move = m_target - GetPos();			//向きの計算
-	m_move.x /= (float)ATTACK_FRAME;		//速度のX座標の設定
-	m_move.z /= (float)ATTACK_FRAME;		//速度のZ座標の設定
+	m_move.x /= (float)(ATTACK_FRAME);		//速度のX座標の設定
+	m_move.z /= (float)(ATTACK_FRAME);		//速度のZ座標の設定
 
-	m_move.y = -DEFAULT_GRAVITY_ACCELERATION * ATTACK_FRAME * 0.5f;		//速度のY座標の設定
+	m_move.y = -DEFAULT_GRAVITY_ACCELERATION * (ATTACK_FRAME) * 0.5f;		//速度のY座標の設定
 }
 
 //ヒットボックスの更新処理
@@ -151,6 +153,8 @@ void CIceBoulder::UpdateHitbox(void)
 		{
 			CreateShard();		//破片の生成処理
 
+			CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_ICE_BOULDER);
+
 			Release();
 			return;
 		}
@@ -159,6 +163,8 @@ void CIceBoulder::UpdateHitbox(void)
 	if (CMeshfield::FieldInteraction(this))
 	{
 		CreateShard();			//破片の生成処理
+
+		CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_ICE_BOULDER);
 
 		Release();
 		return;

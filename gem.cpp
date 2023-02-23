@@ -13,6 +13,7 @@
 #include "application.h"
 #include "game.h"
 #include "goal.h"
+#include "sound.h"
 
 
 //=============================================================================
@@ -86,6 +87,7 @@ void CGem::Update(void)
 				SetScale(0.8f);
 				SetShadowDraw(false);
 				CApplication::GetGame()->GetGoal()->SubtractGem();
+				CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_GEM);
 			}
 			else
 			{

@@ -53,7 +53,7 @@ HRESULT CIcicle::Init(void)
 
 	m_nDelay = DEFAULT_DELAY;
 	m_fAlpha = 1.0f;
-	SetPriority(4);
+	SetPriority(5);
 
 	return S_OK;
 }

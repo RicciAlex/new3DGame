@@ -63,6 +63,8 @@ char*			CModel::m_pModelPass[MODEL_MAX] =
 	{ "data\\MODELS\\ClockNeedle.x" },							//MODEL_CLOCK_NEEDLE,
 	{ "data\\MODELS\\icicle.x" },								//MODEL_ICICLE,
 	{ "data\\MODELS\\Ruby.x" },									//MODEL_JEWEL,
+	{ "data\\MODELS\\Cannon.x" },								//MODEL_CANNON,
+	{ "data\\MODELS\\CannonBullet.x" },							//MODEL_CANNON_BULLET,
 
 	{ "data\\MODELS\\IceBoulder.x" },							//MODEL_ICE_BOULDER,
 	{ "data\\MODELS\\IceShard.x" },								//MODEL_ICE_SHARD,
@@ -614,6 +616,28 @@ CModel* CModel::Create(ModelType type, D3DXVECTOR3 pos)
 	pModel->m_LastPos = pos;							//前回の位置の設定
 	pModel->m_move = Vec3Null;							//移動量の設定
 	pModel->m_rot = Vec3Null;							//向きの設定
+	pModel->m_pMesh = m_pMeshAll[type];					//メッシュへのポインタの取得
+	pModel->m_pBuffMat = m_pBuffMatAll[type];			//マテリアルへのポインタの取得
+	pModel->m_nNumMat = m_nNumMatAll[type];				//マテリアル数の取得
+	pModel->m_type = type;								//種類の設定
+	pModel->m_fShadowHeight = pos.y + 0.1f;					//影の位置のY座標の設定
+
+	return pModel;										//生成したインスタンスを返す
+}
+
+CModel * CModel::Create(ModelType type, D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+{
+	CModel* pModel = new CModel(3);						//モデルを生成する
+
+	if (FAILED(pModel->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pModel->m_pos = pos;								//位置の設定
+	pModel->m_LastPos = pos;							//前回の位置の設定
+	pModel->m_move = Vec3Null;							//移動量の設定
+	pModel->m_rot = rot;								//向きの設定
 	pModel->m_pMesh = m_pMeshAll[type];					//メッシュへのポインタの取得
 	pModel->m_pBuffMat = m_pBuffMatAll[type];			//マテリアルへのポインタの取得
 	pModel->m_nNumMat = m_nNumMatAll[type];				//マテリアル数の取得

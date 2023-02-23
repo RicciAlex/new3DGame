@@ -35,6 +35,7 @@ public:
 
 	static CFirePipe* Create(const D3DXVECTOR3 pos);							//¶¬ˆ—
 	static CFirePipe* Create(const D3DXVECTOR3 pos, const int nFireTime);		//¶¬ˆ—
+	static CFirePipe* Create(const D3DXVECTOR3 pos, const int nFireTime, const int nStartDelay);		//¶¬ˆ—
 
 private:
 

@@ -69,42 +69,7 @@ void CCamera::Uninit(void)
 //çXêVèàóù
 void CCamera::Update(void)
 {
-	if (CInputKeyboard::GetKeyboardPress(DIK_UP))
-	{
-		D3DXVECTOR3 dir = m_posR - m_posV;
-		dir.y = 0.0f;
-		D3DXVec3Normalize(&dir, &dir);
-		D3DXVECTOR3 move = D3DXVECTOR3(2.5f * dir.x, 0.0f, 2.5f * dir.z);
-		m_posV += move;
-		m_posR += move;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_DOWN))
-	{
-		D3DXVECTOR3 dir = m_posR - m_posV;
-		dir.y = 0.0f;
-		D3DXVec3Normalize(&dir, &dir);
-		D3DXVECTOR3 move = D3DXVECTOR3(2.5f * ((dir.x * cosf(D3DX_PI)) - (dir.z * sinf((D3DX_PI)))), 0.0f, 2.5f * ((dir.z * cosf(D3DX_PI) + dir.x * sinf(D3DX_PI))));
-		m_posV += move;
-		m_posR += move;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_LEFT))
-	{
-		D3DXVECTOR3 dir = m_posR - m_posV;
-		dir.y = 0.0f;
-		D3DXVec3Normalize(&dir, &dir);
-		D3DXVECTOR3 move = D3DXVECTOR3(2.5f * ((dir.x * cosf(D3DX_PI * 0.5f)) - (dir.z * sinf((D3DX_PI * 0.5f)))), 0.0f, 2.5f * ((dir.z * cosf(D3DX_PI * 0.5f) + dir.x * sinf(D3DX_PI * 0.5f))));
-		m_posV += move;
-		m_posR += move;
-	}
-	if (CInputKeyboard::GetKeyboardPress(DIK_RIGHT))
-	{
-		D3DXVECTOR3 dir = m_posR - m_posV;
-		dir.y = 0.0f;
-		D3DXVec3Normalize(&dir, &dir);
-		D3DXVECTOR3 move = D3DXVECTOR3(2.5f * ((dir.x * cosf(-D3DX_PI * 0.5f)) - (dir.z * sinf((-D3DX_PI * 0.5f)))), 0.0f, 2.5f * ((dir.z * cosf(-D3DX_PI * 0.5f) + dir.x * sinf(-D3DX_PI * 0.5f))));
-		m_posV += move;
-		m_posR += move;
-	}
+	
 }
 
 //ê›íËèàóù

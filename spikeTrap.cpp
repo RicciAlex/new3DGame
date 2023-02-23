@@ -125,13 +125,6 @@ void CSpikeTrap::Update(void)
 		{//設定した時間が経ったら、カウンターを0に戻して、動くように設定する
 			m_nCntTime = 0;
 			m_bMoving = true;
-
-			D3DXVECTOR3 dist = CApplication::GetGame()->GetPlayer()->GetPos() - GetPos();
-
-			if (D3DXVec3Length(&dist) <= 2500.0f)
-			{
-				//CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_SLASH);
-			}
 		}
 	}
 

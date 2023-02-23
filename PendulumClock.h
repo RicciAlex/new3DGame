@@ -17,6 +17,7 @@
 //=============================================================================
 class CBoxHitbox;
 class CModelPart;
+class CObject_2D;
 
 
 class CPendulumClock : public CModel
@@ -47,12 +48,16 @@ private:
 	static const float DEFAULT_ANIM_FRAME_ANGLE;		//毎フレーム加算されている角度
 	static const float MIN_RANGE;			//最小の有効範囲
 
+	int				m_nCntSound;		//サウンド用のカウンター
 	float			m_fAnimAngle;		//アニメーション用の角度
 	float			m_fAnimCoeff;		//アニメーション用の角度
 	float			m_fRange;			//有効範囲
+	bool			m_bVisible;			//UIが表情されているかどうか
+	bool			m_bSound;			//サウンドが再生されているかどうか
 
 	CModelPart*		m_pPendulum;		//ペンジュラムのモデルへのポインタ
 	CModelPart*		m_pNeedle[NEEDLE_NUMBER];		//針へのポインタ
+	CObject_2D*		m_pUI;			//UIへのポインタ
 	CBoxHitbox* m_pHitbox;			//ヒットボックスへのポインタ
 };
 

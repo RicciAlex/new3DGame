@@ -21,7 +21,13 @@ char* CObject_2D::m_paTextPass[CObject::TEXTURE_TYPE_MAX] =
 
 	"data\\TEXTURE\\Block.png",								//TEXTURE_BLOCK,
 	"data\\TEXTURE\\Characters.png",						//TEXTURE_CHARACTERS,
-	"data\\TEXTURE\\TemporaryTitle.png",					//TEXTURE_CHARACTERS,
+	"data\\TEXTURE\\Title.png",								//TEXTURE_TITLE,
+	"data\\TEXTURE\\PressEnter.png",						//TEXTURE_PRESS_ENTER,
+	"data\\TEXTURE\\WASD_Key.png",							//TEXTURE_WASD_KEY,
+	"data\\TEXTURE\\PressKey.png",							//TEXTURE_PRESS_KEY,
+	"data\\TEXTURE\\SpaceButton.png",						//TEXTURE_SPACE_KEY
+	"data\\TEXTURE\\StageSelLogo.png",						//TEXTURE_STAGE_LOGO,
+	"data\\TEXTURE\\Jewel.png",								//TEXTURE_GEM_ICON,
 	"data\\TEXTURE\\Fog.png",								//TEXTURE_FOG,
 	"data\\TEXTURE\\Materials\\Steel.jpg",					//TEXTURE_METAL,
 	"data\\TEXTURE\\Materials\\Iron.jpg",					//TEXTURE_IRON,

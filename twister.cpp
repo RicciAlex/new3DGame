@@ -13,6 +13,7 @@
 #include "game.h"
 #include "player.h"
 #include "CylinderHitbox.h"
+#include "sound.h"
 
 
 //=============================================================================
@@ -20,7 +21,7 @@
 //=============================================================================
 const float CTwister::EFFECT_DISTANCE = 10.0f;					//エフェクトの距離
 const float CTwister::START_RANGE = 10.0f;						//はじめての半径
-const float CTwister::DEFAULT_SPEED = 1.5f;					//ディフォルトの速度
+const float CTwister::DEFAULT_SPEED = 2.0f;					//ディフォルトの速度
 const D3DXVECTOR3 CTwister::HITBOX_SIZE = { 25.0f, 150.0f, 25.0f };				//ヒットボックスのサイズ
 
 
@@ -67,6 +68,8 @@ HRESULT CTwister::Init(void)
 		m_fStartingAngle[nCnt] = random(0, (int)fMaxAngle) * 0.0001f;
 	}
 
+	CApplication::GetSound()->Play(CSound::SOUND_LABEL_SE_TWISTER);
+
 	return S_OK;
 }
 
@@ -98,6 +101,8 @@ void CTwister::Update(void)
 
 	if (m_nLife <= 0)
 	{
+		CApplication::GetSound()->Stop(CSound::SOUND_LABEL_SE_TWISTER);
+
 		Release();
 		return;
 	}
@@ -198,7 +203,7 @@ void CTwister::UpdatePos(void)
 	D3DXVECTOR3 move = playerPos - m_pos;
 	D3DXVec3Normalize(&move, &move);
 
-	pPlayer->SetPos(pPlayer->GetPos() + D3DXVECTOR3(-move.x, 0.0f, -move.z));
+	//pPlayer->SetPos(pPlayer->GetPos() + D3DXVECTOR3(-move.x, 0.0f, -move.z));
 
 	move.x *= DEFAULT_SPEED;
 	move.y = 0;

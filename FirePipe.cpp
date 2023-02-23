@@ -231,3 +231,40 @@ CFirePipe* CFirePipe::Create(const D3DXVECTOR3 pos, const int nFireTime)
 
 	return pPipe;				//生成したインスタンスを返す
 }
+
+CFirePipe * CFirePipe::Create(const D3DXVECTOR3 pos, const int nFireTime, const int nStartDelay)
+{
+	CFirePipe* pPipe = new CFirePipe;			//インスタンスを生成する
+
+	if (FAILED(pPipe->Init()))
+	{//初期化処理
+		return nullptr;
+	}
+
+	pPipe->SetModel(CModel::MODEL_PIPE);	//モデルの設定
+	pPipe->SetPos(pos);						//位置の設定
+	pPipe->SetShadowDraw(false);			//影を描画しないように設定する
+	pPipe->m_nCntTime = nStartDelay;		//初期時のディレイの設定
+
+	if (nFireTime >= MIN_FIRE_TIME)
+	{
+		pPipe->m_nFireTime = nFireTime;			//火を消す/付けるまでのフレーム数の設定
+	}
+	else
+	{
+		pPipe->m_nFireTime = MIN_FIRE_TIME;		//火を消す/付けるまでのフレーム数の設定
+	}
+
+	pPipe->m_pParticle = CFireParticle::Create(pos);			//パーティクルを生成する
+
+																//ヒットボックスの生成
+	pPipe->m_pHitbox = CCylinderHitbox::Create(pos + D3DXVECTOR3(0.0f, -1000.0f, 0.0f), Vec3Null, HITBOX_SIZE, CHitbox::TYPE_NEUTRAL, pPipe);
+	pPipe->m_pFireHitbox = CCylinderHitbox::Create(pos, Vec3Null, FIRE_HITBOX_SIZE, CHitbox::TYPE_OBSTACLE, -1, pPipe, CHitbox::EFFECT_BOUNCE);
+
+	if (pPipe->m_pFireHitbox)
+	{
+		pPipe->m_pFireHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
+	}
+
+	return pPipe;				//生成したインスタンスを返す
+}

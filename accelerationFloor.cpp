@@ -164,6 +164,8 @@ CAccelerationFloor* CAccelerationFloor::Create(const D3DXVECTOR3 pos, const D3DX
 	if (pFloor->m_pHitbox)
 	{
 		pFloor->m_pHitbox->SetAcceleration(D3DXVECTOR3(speed.x, 0.0f, speed.y));
+		pFloor->m_pHitbox->IgnoreAllCollision();
+		pFloor->m_pHitbox->SetOverlapResponse(CHitbox::TYPE_PLAYER, CHitbox::RESPONSE_OVERLAP);
 	}
 
 	return pFloor;

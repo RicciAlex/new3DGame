@@ -46,6 +46,8 @@ public:
 	void AddTime(const float fMilliseconds);		//時間の追加処理
 
 	void SetPlayer(CPlayer* pPlayer);		//プレイヤーの設定処理
+
+	const float GetTime(void);				//時間の取得処理
 	CPlayer* GetPlayer(void);				//プレイヤーの取得処理
 	CGoal* GetGoal(void);					//ゴールの取得処理
 
@@ -81,6 +83,7 @@ private:
 	void LoadPendulumClock(FILE* pFile);
 	void LoadGem(FILE* pFile);
 	void LoadIceWall(FILE* pFile);
+	void LoadGuideArrow(FILE* pFile);
 
 	CPlayer* m_pPlayer;				//プレイヤーへのポインタ
 	CTimer*  m_pTimer;				//タイマーへのポインタ

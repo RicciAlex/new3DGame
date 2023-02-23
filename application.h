@@ -23,8 +23,7 @@ class CDebugProc;
 class CMode;
 class CFade;
 class CGame;
-//class CMenu;
-//class CMessage;
+class CScore;
 
 //アプリケーションのクラス
 class CApplication
@@ -36,8 +35,10 @@ public:
 		MODE_STAGE_SELECT,
 		MODE_FIRST_STAGE,
 		MODE_SECOND_STAGE,
+		MODE_BOSS_STAGE,
 		MODE_RESULTS,
 		MODE_RANKING,
+		MODE_TUTORIAL,
 
 		MODE_MAX
 	};
@@ -69,7 +70,9 @@ public:
 
 	static Mode GetMode(void);							// モードの取得処理
 	static void SetMode(Mode mode);						//モードの設定処理
+	static CMode* GetModeInstance(void);				//モードインスタンスの取得処理
 	static CGame* GetGame(void);						//ゲームモードの取得処理
+	static CScore* GetScore(void);						//スコアの取得処理
 
 	static bool GetPause(void);							// ポーズの取得処理
 	static void SetPause(const bool bPause);			// ポーズの設定処理
@@ -91,6 +94,7 @@ private:
 	static CFade* m_pFade;								//フェードのインスタンスへのポインタ
 	static CCamera* m_pCamera;							//カメラのインスタンスへのポインタ
 	static CMode* m_pMode;								//モードのインスタンスへのポインタ
+	static CScore* m_pScore;							//スコアインスタンスへのポインタ
 	static CDebugProc* m_pDebug;						//デバッグテキストのインスタンス
 
 	static Mode m_mode;		//現在モード

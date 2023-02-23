@@ -37,11 +37,16 @@ CRenderer::CRenderer()
 	m_pFont = nullptr;		
 
 	m_nCntFog = 0;
+	m_nCntColorFog = 0;
 	m_fFrameFog = Vec2Null;
+	m_targetCol = ColorNull;
+	m_fogColor = ColorNull;
+	m_colorSpeed = ColorNull;
 	m_fFogNear = 0.0f;
 	m_fFogFar = 0.0f;
 	m_fFogTarget = 0.0f;
 	m_bChangeFog = false;
+	m_bChangeColor = false;
 	m_bActive = false;
 
 	m_pMembrane = nullptr;
@@ -136,6 +141,8 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 	m_fFogTarget = DEFAULT_FOG_NEAR;
 	m_pD3DDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&fFogStart));
 	m_pD3DDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&fFogEnd));
+	m_targetCol = ColorWhite;
+	m_fogColor = ColorWhite;
 
 	m_pMembrane = new CMembraneShading(m_pD3DDevice);
 
@@ -313,6 +320,21 @@ void CRenderer::SetDeepFog(const bool bFog)
 	}
 }
 
+//フォグの色の設定処理
+void CRenderer::SetFogColor(const D3DXCOLOR col)
+{
+	m_bChangeColor = true;
+	m_targetCol = col;
+	m_nCntColorFog = DEFAULT_FOG_CHANGE_TIME;
+
+	m_colorSpeed = (m_targetCol - m_fogColor);
+	m_colorSpeed.r /= DEFAULT_FOG_CHANGE_TIME;
+	m_colorSpeed.g /= DEFAULT_FOG_CHANGE_TIME;
+	m_colorSpeed.b /= DEFAULT_FOG_CHANGE_TIME;
+	m_colorSpeed.a = 0.0f;
+}
+
+//フォグの更新処理
 void CRenderer::UpdateFog(void)
 {
 	if (m_bActive)
@@ -341,6 +363,26 @@ void CRenderer::UpdateFog(void)
 
 		m_pD3DDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&m_fFogNear));
 		m_pD3DDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&m_fFogFar));
+	}
+	if (m_bChangeColor)
+	{
+		UpdateFogColor();
+	}
+}
+
+//フォグの色の更新処理
+void CRenderer::UpdateFogColor(void)
+{
+	m_fogColor += m_colorSpeed;
+
+	//フォグカラーの設定
+	m_pD3DDevice->SetRenderState(D3DRS_FOGCOLOR, m_fogColor);
+
+	m_nCntColorFog--;
+
+	if (m_nCntColorFog <= 0)
+	{
+		m_bChangeColor = false;
 	}
 }
 

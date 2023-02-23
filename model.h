@@ -62,6 +62,8 @@ public:
 		MODEL_CLOCK_NEEDLE,
 		MODEL_ICICLE,
 		MODEL_JEWEL,
+		MODEL_CANNON,
+		MODEL_CANNON_BULLET,
 
 		MODEL_ICE_BOULDER,
 		MODEL_ICE_SHARD,
@@ -114,6 +116,7 @@ public:
 	static void DestroyAllModels(void);													//‘S•”‚Ìƒ‚ƒfƒ‹‚Ì”jŠüˆ—
 
 	static CModel* Create(ModelType type, D3DXVECTOR3 pos);								//¶¬ˆ—
+	static CModel* Create(ModelType type, D3DXVECTOR3 pos, D3DXVECTOR3 rot);			//¶¬ˆ—
 	static CModel* Create(ModelType type, D3DXVECTOR3 pos, const int nPriority);		//¶¬ˆ—
 
 private:

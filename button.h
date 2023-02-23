@@ -34,6 +34,8 @@ public:
 
 	static CButton* Create(const D3DXVECTOR3 pos);															//¶¬ˆ—	
 	static CButton* Create(const D3DXVECTOR3 pos, const D3DXCOLOR normalCol, const D3DXCOLOR pressedCol);	//¶¬ˆ—	
+	static CButton* Create(const D3DXVECTOR3 pos, const bool bOnce);															//¶¬ˆ—	
+	static CButton* Create(const D3DXVECTOR3 pos, const D3DXCOLOR normalCol, const D3DXCOLOR pressedCol, const bool bOnce);	//¶¬ˆ—	
 
 private:
 

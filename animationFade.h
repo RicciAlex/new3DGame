@@ -19,7 +19,8 @@ public:
 
 	enum FADE_ANIMATION_TYPE
 	{
-		TYPE_PLATFORM = 0,
+		TYPE_NORMAL = 0,
+		TYPE_PLATFORM,
 
 		TYPE_MAX
 	};
@@ -51,6 +52,8 @@ private:
 
 	bool FadeOut(void);				//フェードアウトの関数
 	bool FadeIn(void);				//フェードインの関数
+	void PlatformAnim(void);		//プラットフォームアニメーション
+	void NormalAnim(void);			//普通のアニメーション
 
 	D3DXVECTOR3			m_startingPos;		//カメラの元の位置
 	D3DXVECTOR3			m_cameraPos;		//カメラの位置

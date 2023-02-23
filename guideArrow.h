@@ -22,6 +22,7 @@ public:
 	HRESULT Init(void) override;		//‰Šú‰»ˆ—
 
 	static CGuideArrow* Create(const D3DXVECTOR3 pos);		//¶¬ˆ—
+	static CGuideArrow* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot);		//¶¬ˆ—
 
 private:
 

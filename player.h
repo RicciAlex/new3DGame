@@ -102,6 +102,7 @@ public:
 	const D3DXVECTOR3 GetLastPos(void);									//前回の位置の取得処理
 	const D3DXVECTOR3 GetMove(void);									//速度の取得処理
 	const bool GetLanded(void);											//着地しているかどうかの取得処理
+	const int GetStarNumber(void);										//星の数の取得処理
 
 	static CPlayer* Create(const D3DXVECTOR3 pos,int nCntPlayer);		//生成処理
 	static D3DXCOLOR* GetPlayerColors(void);							//プレイヤーの色の取得処理
